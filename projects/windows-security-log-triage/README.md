@@ -67,7 +67,7 @@ Rather than manually paging through all 6,530 Security events, I filtered the ex
 
 ## Evidence Timeline
 <img src="images/evidence-timeline.svg" alt="Two correlated event clusters: account management and service authentication" width="900" />
-...
+
 
 | Time | Event ID | Observation | Analyst Assessment |
 |---|---:|---|---|
