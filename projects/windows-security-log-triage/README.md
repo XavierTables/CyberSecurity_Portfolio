@@ -68,8 +68,10 @@ Rather than manually paging through all 6,530 Security events, I filtered the ex
 ## Evidence Timeline
 <img src="images/evidence-timeline.svg" alt="Two correlated event clusters: account management and service authentication" width="900" />
 ...
+
 | Time | Event ID | Observation | Analyst Assessment |
 |---|---:|---|---|
+
 | 11/18/2021 9:31:21 PM | 4724 | Password-reset attempt targeting `Administrator` | Security-relevant account-management activity requiring validation |
 | 11/18/2021 9:31:21 PM | 4738 | `Administrator` account changed; Password Last Set matched the timestamp | Corroborates the password-reset activity |
 | 11/18/2021 9:35:47 PM | 4624 | `NT AUTHORITY\SYSTEM` logged on with Logon Type 5 through `services.exe` | Local service logon, not an interactive Administrator session |
