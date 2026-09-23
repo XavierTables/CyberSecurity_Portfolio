@@ -255,4 +255,4 @@ I also did not assign a MITRE ATT&CK technique because the available evidence di
 
 ---
 
-*All activity was performed in an authorized training environment. Screenshots and analysis are from my own lab session.*
+*All activity was performed in an authorized training environment. Screenshots and analysis are from my own lab session.the 2021 timestamps came from a preloaded uCertify training dataset.*
