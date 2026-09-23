@@ -74,7 +74,8 @@ I treated each record as evidence—not proof of malicious activity by itself—
 
 ### Event 4724 — Password-Reset Attempt
 
-![Event 4724 showing the Administrator password-reset attempt](images/02-event-4724-password-reset.png)
+<img width="2048" height="1317" alt="image" src="https://github.com/user-attachments/assets/ac5ea633-98af-448d-9494-0c9ae7b92020" />
+
 
 | Field | Observed Value |
 |---|---|
@@ -91,9 +92,11 @@ I treated each record as evidence—not proof of malicious activity by itself—
 
 ### Event 4738 — User Account Changed
 
-![Event 4738 showing the Administrator account change](images/03-event-4738-account-change.png)
+<img width="2048" height="1406" alt="image" src="https://github.com/user-attachments/assets/14b8b493-6ed4-4d86-b2e7-7dfeafe523d8" />
 
-![Event 4738 changed attributes](images/04-event-4738-attributes.png)
+
+<img width="2048" height="1159" alt="image" src="https://github.com/user-attachments/assets/45a70e3a-aa9f-4813-ae95-99d8b8b35233" />
+
 
 | Field | Observed Value |
 |---|---|
@@ -114,9 +117,11 @@ The activity was expected in this training environment. In production, however, 
 
 ### Event 4624 — Successful Logon
 
-![Event 4624 showing Logon Type 5](images/05-event-4624-service-logon.png)
+<img width="2048" height="1384" alt="image" src="https://github.com/user-attachments/assets/3747b13d-beef-4270-91ce-0629ea5762f8" />
 
-![Event 4624 process and network fields](images/06-event-4624-process-network.png)
+
+<img width="2040" height="1338" alt="image" src="https://github.com/user-attachments/assets/58554701-3442-490a-b343-e9d28a6551ae" />
+
 
 | Field | Observed Value |
 |---|---|
@@ -133,7 +138,8 @@ The activity was expected in this training environment. In production, however, 
 
 ### Event 4672 — Special Privileges Assigned
 
-![Event 4672 showing privileges assigned to SYSTEM](images/07-event-4672-privileges.png)
+<img width="2048" height="1261" alt="image" src="https://github.com/user-attachments/assets/f7b81dbf-abcb-4bbb-a7b1-7cf7179a4120" />
+
 
 Event 4672 occurred at the same timestamp and matched the SYSTEM account and Logon ID `0x3E7`. The assigned rights included sensitive privileges such as `SeDebugPrivilege`, `SeBackupPrivilege`, `SeRestorePrivilege`, and `SeImpersonatePrivilege`.
 
@@ -211,7 +217,8 @@ In a production investigation, I would:
 
 I exported the Security log as `security_logs.evtx` for preservation and possible analysis in another platform.
 
-![Exported Security event log](images/08-security-log-export.png)
+<img width="2048" height="1260" alt="image" src="https://github.com/user-attachments/assets/59c01585-3317-480e-815b-5e3ab20b748e" />
+
 
 I would review an exported log for sensitive usernames, hostnames, IP addresses, and organizational information before publishing it. For this portfolio, screenshots provide the necessary evidence without exposing the full event-log dataset.
 
