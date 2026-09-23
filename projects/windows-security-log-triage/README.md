@@ -63,7 +63,7 @@ I treated each record as evidence—not proof of malicious activity by itself—
 
 ## Filtering Methodology
 
-Rather than manually paging through all 6,530 Security events, I used Windows Event Viewer to locate and examine selected security-relevant Event IDs covering authentication, privileged logons, and account management. I then reviewed individually for relevance to the Administrator password-reset activity.
+Rather than manually paging through all 6,530 Security events, I used Windows Event Viewer to locate and examine selected security-relevant Event IDs covering authentication, privileged logons, and account management. I then reviewed each selected event individually for relevance to the Administrator password-reset activity.
 
 ## Evidence Timeline
 
