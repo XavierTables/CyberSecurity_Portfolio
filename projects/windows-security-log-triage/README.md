@@ -61,7 +61,11 @@ I reviewed selected records in Windows Event Viewer and compared the following f
 
 I treated each record as evidence—not proof of malicious activity by itself—and used the surrounding context to reach a disposition.
 
-## Evidence Timeline
+## Filtering Methodology
+
+Rather than manually paging through all 6,530 Security events, I filtered the exported log to a curated set of high-signal event IDs covering authentication, privileged logons, account management, and service installation. This reduced the dataset to a small number of candidate events, which I then reviewed individually for relevance to the Administrator password-reset activity.
+
+## Evidence Timeline Filtering Methodology
 
 | Time | Event ID | Observation | Analyst Assessment |
 |---|---:|---|---|
