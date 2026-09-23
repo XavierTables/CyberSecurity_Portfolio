@@ -34,7 +34,8 @@ The available evidence did **not** show a remote or interactive Administrator lo
 | Final disposition | Expected/authorized lab activity; no incident identified from available evidence |
 | Confidence | Moderate |
 
-![Windows Security log containing 6,530 events](images/01-security-log-overview.png)
+<img width="2048" height="1281" alt="image" src="https://github.com/user-attachments/assets/15148a3a-94cf-4fe9-ae0c-73f3a28623d8" />
+
 
 ## Investigation Objective
 
