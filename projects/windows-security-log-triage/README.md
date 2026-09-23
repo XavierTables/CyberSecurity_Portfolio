@@ -65,11 +65,10 @@ I treated each record as evidence—not proof of malicious activity by itself—
 
 Rather than manually paging through all 6,530 Security events, I filtered the exported log to a curated set of high-signal event IDs covering authentication, privileged logons, account management, and service installation. This reduced the dataset to a small number of candidate events, which I then reviewed individually for relevance to the Administrator password-reset activity.
 
-## Evidence Timeline Filtering Methodology
-
 ## Evidence Timeline
 <img src="images/evidence-timeline.svg" alt="Two correlated event clusters: account management and service authentication" width="900" />
 ...
+<img src="images/evidence-timeline.svg" alt="Two correlated event clusters: account management and service authentication" width="900" />
 | Time | Event ID | Observation | Analyst Assessment |
 |---|---:|---|---|
 | 11/18/2021 9:31:21 PM | 4724 | Password-reset attempt targeting `Administrator` | Security-relevant account-management activity requiring validation |
