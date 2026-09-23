@@ -63,7 +63,7 @@ I treated each record as evidence—not proof of malicious activity by itself—
 
 ## Filtering Methodology
 
-Rather than manually paging through all 6,530 Security events, I filtered the exported log to a curated set of high-signal event IDs covering authentication, privileged logons, account management, and service installation. This reduced the dataset to a small number of candidate events, which I then reviewed individually for relevance to the Administrator password-reset activity.
+Rather than manually paging through all 6,530 Security events,Rather than reviewing every event individually, I used Windows Event Viewer to locate and examine selected security-relevant Event IDs covering authentication, privileged logons, and account management. I then reviewed individually for relevance to the Administrator password-reset activity.
 
 ## Evidence Timeline
 <img src="images/evidence-timeline.svg" alt="Two correlated event clusters: account management and service authentication" width="900" />
