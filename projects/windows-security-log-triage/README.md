@@ -9,7 +9,7 @@ The Security log contained **6,530 events**. I manually triaged four relevant re
 1. An Administrator password reset and account-change event.
 2. A local SYSTEM service logon that received expected operating-system privileges.
 
-The available evidence did **not** show a remote or interactive Administrator logon. I classified the activity as **expected within the training environment**, with the important condition that an Administrator password reset would require change-ticket or owner validation in a production SOC.
+The four events I reviewed show an Administrator password reset and a separate SYSTEM service logon. None of these four records shows an Administrator logon. The training data does not let me verify why the password was reset or whether it had an approved request. In a production SOC, I would validate the reset and review nearby authentication events before closing the case.
 
 ## Project Highlights
 
@@ -31,7 +31,7 @@ The available evidence did **not** show a remote or interactive Administrator lo
 | Events in log | 6,530 |
 | Events manually triaged | 4 |
 | Initial priority | Medium — privileged-account password reset |
-| Final disposition | Expected/authorized lab activity; no incident identified from available evidence |
+| Final disposition | No incident confirmed in the four events reviewed; password-reset approval unverified |
 | Confidence | Moderate |
 
 <img width="2048" height="1281" alt="image" src="https://github.com/user-attachments/assets/15148a3a-94cf-4fe9-ae0c-73f3a28623d8" />
@@ -92,7 +92,7 @@ Rather than manually paging through all 6,530 Security events, I used Windows Ev
 | Subject account | `WIN-KRLBFUPGGRQ$` under SYSTEM context |
 | Subject Logon ID | `0x3E7` |
 | Target account | `Administrator` |
-| Target system | `WIN-KRLBFUPGGRQ` |
+| Event computer | `WIN-KRLBFUPGGRQ` |
 | Source IP | Not provided |
 | Message | An attempt was made to reset an account's password |
 
@@ -117,7 +117,7 @@ Rather than manually paging through all 6,530 Security events, I used Windows Ev
 
 Events 4724 and 4738 occurred at the same second and referenced the same Administrator account. The matching **Password Last Set** timestamp supports the conclusion that Event 4738 resulted from the password-reset activity. The old and new UAC values were identical, so I did not observe evidence of an account-control change in the captured record.
 
-The activity was expected in this training environment. In production, however, I would keep the case open until the reset was matched to an approved request or confirmed with the responsible administrator. A success audit indicates that the operation succeeded; it does not establish that the action was authorized.
+The training data did not include an approval record for this reset. In production, however, I would keep the case open until the reset was matched to an approved request or confirmed with the responsible administrator. A success audit indicates that the operation succeeded; it does not establish that the action was authorized.
 
 ## Finding 2: Privileged SYSTEM Service Logon
 
@@ -172,13 +172,13 @@ I grouped the evidence into two clusters rather than forcing all four events int
 
 - Event 4624: SYSTEM service logon
 - Event 4672: sensitive privileges assigned to the new SYSTEM session
-- Correlation basis: identical timestamp, account, computer, and Logon ID
+- Correlation basis: same timestamp, account, and computer. Both events show LocalSystem Logon ID `0x3E7`, but that ID alone does not uniquely link them to one service event.
 
 The service activity occurred several minutes after the password reset, but the available evidence did not establish a causal relationship between the two clusters. I therefore documented them separately.
 
 ## Triage Disposition
 
-**Final determination:** Expected activity in the authorized training environment; no security incident identified from the available evidence.
+Final determination: The reviewed SYSTEM service activity is consistent with normal Windows behavior. No incident was confirmed from the four events reviewed, but the Administrator password reset would require approval validation in production.
 
 **Reasoning:**
 
