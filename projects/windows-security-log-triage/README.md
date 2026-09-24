@@ -123,9 +123,6 @@ The activity was expected in this training environment. In production, however, 
 
 ### Event 4624 — Successful Logon
 
-<img width="2048" height="1384" alt="image" src="https://github.com/user-attachments/assets/3747b13d-beef-4270-91ce-0629ea5762f8" />
-
-
 <img width="2040" height="1338" alt="image" src="https://github.com/user-attachments/assets/58554701-3442-490a-b343-e9d28a6551ae" />
 
 
