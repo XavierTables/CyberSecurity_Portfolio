@@ -187,7 +187,7 @@ Final determination: The reviewed SYSTEM service activity is consistent with nor
 - Logon Type 5 and `services.exe` supported normal service activity.
 - No remote source address was recorded.
 - The privileged Event 4672 matched the expected SYSTEM session.
-- No captured event showed an interactive, network, or Remote Desktop logon by Administrator.
+- None of the four events reviewed showed an interactive, network, or Remote Desktop logon by Administrator.
 
 **Confidence: Moderate.** The Windows events support the disposition, but the lab did not provide production change records, EDR telemetry, SIEM correlation, or complete process lineage.
 
