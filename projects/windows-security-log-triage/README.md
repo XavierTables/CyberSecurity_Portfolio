@@ -92,7 +92,7 @@ Rather than manually paging through all 6,530 Security events, I used Windows Ev
 | Subject account | `WIN-KRLBFUPGGRQ$` under SYSTEM context |
 | Subject Logon ID | `0x3E7` |
 | Target account | `Administrator` |
-| Target system | `UCERTIFY-CV03` |
+| Target system | `WIN-KRLBFUPGGRQ` |
 | Source IP | Not provided |
 | Message | An attempt was made to reset an account's password |
 
