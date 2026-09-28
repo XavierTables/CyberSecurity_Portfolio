@@ -15,7 +15,7 @@ The four events I reviewed show an Administrator password reset and a separate S
 
 - Reviewed a Windows Security log containing **6,530 events**.
 - Triaged **four security-relevant events** across two activity clusters.
-- Correlated events using timestamps, accounts, Logon IDs, logon type, process path, and network fields.
+- Compared timestamps, accounts, Logon IDs, logon type, process path, and network fields; treated LocalSystem ID `0x3E7` as context, not a unique session identifier.
 - Distinguished a **service logon (Type 5)** from an interactive or remote user logon.
 - Documented an initial priority, analyst assessment, disposition, confidence level, and escalation criteria.
 - Exported the Security log as an `.evtx` file for preservation and further analysis.
@@ -30,11 +30,11 @@ The four events I reviewed show an Administrator password reset and a separate S
 | Tool used | Windows Event Viewer |
 | Events in log | 6,530 |
 | Events manually triaged | 4 |
-| Initial priority | Medium — privileged-account password reset |
-| Final disposition | No incident confirmed in the four events reviewed; password-reset approval unverified |
+| Initial priority | Medium (illustrative lab triage priority) — privileged-account password reset |
+| Final disposition | Service activity consistent with normal Windows behavior; password-reset approval unverified. No incident confirmed from four reviewed events. |
 | Confidence | Moderate |
 
-<img width="2048" height="1281" alt="image" src="https://github.com/user-attachments/assets/15148a3a-94cf-4fe9-ae0c-73f3a28623d8" />
+<img src="https://github.com/user-attachments/assets/15148a3a-94cf-4fe9-ae0c-73f3a28623d8" alt="Windows Security log overview in the authorized training VM" width="900" />
 
 
 ## Investigation Objective
@@ -63,7 +63,7 @@ I treated each record as evidence—not proof of malicious activity by itself—
 
 ## Filtering Methodology
 
-Rather than manually paging through all 6,530 Security events, I used Windows Event Viewer to locate and examine selected security-relevant Event IDs covering authentication, privileged logons, and account management. I then reviewed each selected event individually for relevance to the Administrator password-reset activity.
+Rather than manually paging through all 6,530 Security events, I used Windows Event Viewer to locate and examine selected security-relevant Event IDs covering authentication, privileged logons, and account management. I then reviewed each selected event individually for relevance to the Administrator password-reset activity. The 6,530 figure describes the source log size, **not** the number of events individually analyzed; this investigation is limited to the four documented records.
 
 ## Evidence Timeline
 
@@ -80,7 +80,7 @@ Rather than manually paging through all 6,530 Security events, I used Windows Ev
 
 ### Event 4724 — Password-Reset Attempt
 
-<img width="2048" height="1317" alt="image" src="https://github.com/user-attachments/assets/ac5ea633-98af-448d-9494-0c9ae7b92020" />
+<img src="https://github.com/user-attachments/assets/ac5ea633-98af-448d-9494-0c9ae7b92020" alt="Event 4724 showing Administrator password-reset attempt" width="900" />
 
 
 | Field | Observed Value |
@@ -98,10 +98,10 @@ Rather than manually paging through all 6,530 Security events, I used Windows Ev
 
 ### Event 4738 — User Account Changed
 
-<img width="2048" height="1406" alt="image" src="https://github.com/user-attachments/assets/14b8b493-6ed4-4d86-b2e7-7dfeafe523d8" />
+<img src="https://github.com/user-attachments/assets/14b8b493-6ed4-4d86-b2e7-7dfeafe523d8" alt="Event 4738 showing Administrator account-change record" width="900" />
 
 
-<img width="2048" height="1159" alt="image" src="https://github.com/user-attachments/assets/45a70e3a-aa9f-4813-ae95-99d8b8b35233" />
+<img src="https://github.com/user-attachments/assets/45a70e3a-aa9f-4813-ae95-99d8b8b35233" alt="Event 4738 showing account attributes and Password Last Set" width="900" />
 
 
 | Field | Observed Value |
@@ -123,7 +123,7 @@ The training data did not include an approval record for this reset. In producti
 
 ### Event 4624 — Successful Logon
 
-<img width="2040" height="1338" alt="image" src="https://github.com/user-attachments/assets/58554701-3442-490a-b343-e9d28a6551ae" />
+<img src="https://github.com/user-attachments/assets/58554701-3442-490a-b343-e9d28a6551ae" alt="Event 4624 showing successful SYSTEM service logon" width="900" />
 
 
 | Field | Observed Value |
@@ -141,7 +141,7 @@ The training data did not include an approval record for this reset. In producti
 
 ### Event 4672 — Special Privileges Assigned
 
-<img width="2048" height="1261" alt="image" src="https://github.com/user-attachments/assets/f7b81dbf-abcb-4bbb-a7b1-7cf7179a4120" />
+<img src="https://github.com/user-attachments/assets/f7b81dbf-abcb-4bbb-a7b1-7cf7179a4120" alt="Event 4672 showing sensitive privileges assigned to SYSTEM" width="900" />
 
 
 Event 4672 occurred at the same timestamp and matched the SYSTEM account and Logon ID `0x3E7`. The assigned rights included sensitive privileges such as `SeDebugPrivilege`, `SeBackupPrivilege`, `SeRestorePrivilege`, and `SeImpersonatePrivilege`.
@@ -174,11 +174,11 @@ I grouped the evidence into two clusters rather than forcing all four events int
 - Event 4672: sensitive privileges assigned to the new SYSTEM session
 - Correlation basis: same timestamp, account, and computer. Both events show LocalSystem Logon ID `0x3E7`, but that ID alone does not uniquely link them to one service event.
 
-The service activity occurred several minutes after the password reset, but the available evidence did not establish a causal relationship between the two clusters. I therefore documented them separately.
+The service activity occurred several minutes after the password reset, but the available evidence did not establish a causal relationship between the two clusters. I therefore documented them separately. Because `0x3E7` is the well-known LocalSystem logon session, the matching Logon ID alone is not evidence that a specific service activity resulted from the password reset.
 
 ## Triage Disposition
 
-Final determination: The reviewed SYSTEM service activity is consistent with normal Windows behavior. No incident was confirmed from the four events reviewed, but the Administrator password reset would require approval validation in production.
+Final determination: The reviewed SYSTEM service activity is consistent with normal Windows behavior. No incident was confirmed from the four events reviewed, but the Administrator password reset would require approval validation in production. **This limited result does not establish that the host was free of compromise.**
 
 **Reasoning:**
 
@@ -220,7 +220,7 @@ In a production investigation, I would:
 
 I exported the Security log as `security_logs.evtx` for preservation and possible analysis in another platform.
 
-<img width="2048" height="1260" alt="image" src="https://github.com/user-attachments/assets/59c01585-3317-480e-815b-5e3ab20b748e" />
+<img src="https://github.com/user-attachments/assets/59c01585-3317-480e-815b-5e3ab20b748e" alt="Windows Event Viewer Security log export" width="900" />
 
 
 I would review an exported log for sensitive usernames, hostnames, IP addresses, and organizational information before publishing it. For this portfolio, screenshots provide the necessary evidence without exposing the full event-log dataset.
