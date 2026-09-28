@@ -24,8 +24,8 @@
   <text x="182" y="206.5" font-size="13" fill="#1e293b">Account changed — Administrator</text>
 
   <line x1="115" y1="232" x2="495" y2="232" stroke="#bfdbfe" stroke-width="1"/>
-  <text x="115" y="252" font-size="11.5" font-style="italic" fill="#3b5bdb">Correlation basis: same timestamp and target</text>
-  <text x="115" y="268" font-size="11.5" font-style="italic" fill="#3b5bdb">account, and matching Password Last Set</text>
+  <text x="115" y="252" font-size="11.5" font-style="italic" fill="#3b5bdb">Correlation basis: same timestamp, target</text>
+  <text x="115" y="268" font-size="11.5" font-style="italic" fill="#3b5bdb">account, matching Password Last Set</text>
 
   <rect x="640" y="112" width="430" height="172" rx="14" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.5"/>
   <text x="665" y="142" font-size="15.5" font-weight="700" fill="#0f766e">Cluster B — Service Authentication</text>
@@ -39,8 +39,8 @@
   <text x="732" y="206.5" font-size="13" fill="#1e293b">Special privileges assigned to SYSTEM</text>
 
   <line x1="665" y1="232" x2="1045" y2="232" stroke="#99f6e4" stroke-width="1"/>
-  <text x="665" y="252" font-size="11.5" font-style="italic" fill="#0f766e">Correlation basis: identical timestamp,</text>
-  <text x="665" y="268" font-size="11.5" font-style="italic" fill="#0f766e">account; 0x3E7 is LocalSystem</text>
+  <text x="665" y="252" font-size="11.5" font-style="italic" fill="#0f766e">Correlation basis: same timestamp,</text>
+  <text x="665" y="268" font-size="11.5" font-style="italic" fill="#0f766e">account; 0x3E7 denotes LocalSystem</text>
 
   <line x1="305" y1="284" x2="305" y2="332" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4,3"/>
   <line x1="855" y1="284" x2="855" y2="332" stroke="#5eead4" stroke-width="2" stroke-dasharray="4,3"/>
