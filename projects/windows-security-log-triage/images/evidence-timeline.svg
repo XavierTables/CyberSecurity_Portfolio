@@ -24,7 +24,7 @@
   <text x="182" y="206.5" font-size="13" fill="#1e293b">Account changed — Administrator</text>
 
   <line x1="115" y1="232" x2="495" y2="232" stroke="#bfdbfe" stroke-width="1"/>
-  <text x="115" y="252" font-size="11.5" font-style="italic" fill="#3b5bdb">Correlation basis: identical timestamp, target</text>
+  <text x="115" y="252" font-size="11.5" font-style="italic" fill="#3b5bdb">Correlation basis: same timestamp and target</text>
   <text x="115" y="268" font-size="11.5" font-style="italic" fill="#3b5bdb">account, and matching Password Last Set</text>
 
   <rect x="640" y="112" width="430" height="172" rx="14" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.5"/>
@@ -40,7 +40,7 @@
 
   <line x1="665" y1="232" x2="1045" y2="232" stroke="#99f6e4" stroke-width="1"/>
   <text x="665" y="252" font-size="11.5" font-style="italic" fill="#0f766e">Correlation basis: identical timestamp,</text>
-  <text x="665" y="268" font-size="11.5" font-style="italic" fill="#0f766e">account, and Logon ID (0x3E7)</text>
+  <text x="665" y="268" font-size="11.5" font-style="italic" fill="#0f766e">account; 0x3E7 is LocalSystem</text>
 
   <line x1="305" y1="284" x2="305" y2="332" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4,3"/>
   <line x1="855" y1="284" x2="855" y2="332" stroke="#5eead4" stroke-width="2" stroke-dasharray="4,3"/>
@@ -61,8 +61,8 @@
   <line x1="70" y1="424" x2="1090" y2="424" stroke="#e2e8f0" stroke-width="1"/>
 
   <text x="115" y="456" font-size="14" font-weight="700" fill="#0f172a">Final disposition:</text>
-  <text x="238" y="456" font-size="14" fill="#334155">Expected/authorized lab activity — no incident identified.</text>
-  <text x="115" y="478" font-size="13" fill="#64748b">No causal relationship established between Cluster A and Cluster B from available evidence.</text>
+  <text x="238" y="456" font-size="14" fill="#334155">Service activity consistent with normal behavior.</text>
+  <text x="115" y="478" font-size="13" fill="#64748b">Password-reset approval unverified; no causal relationship established between clusters.</text>
 
   <rect x="925" y="500" width="165" height="30" rx="15" fill="#fef9c3" stroke="#fde68a" stroke-width="1"/>
   <text x="1007" y="520" text-anchor="middle" font-size="12.5" font-weight="700" fill="#92400e">Confidence: Moderate</text>
