@@ -1,5 +1,9 @@
 # Windows Security Log Triage: Administrator Password Reset & SYSTEM Activity
 
+![Certification](https://img.shields.io/badge/Certification-CompTIA%20Security%2B-555?style=flat-square)
+![Focus](https://img.shields.io/badge/Focus-Windows%20Security%20Log%20Triage-555?style=flat-square)
+![Environment](https://img.shields.io/badge/Environment-Authorized%20Training%20Lab-555?style=flat-square)
+
 ## Executive Summary
 
 I analyzed selected Windows Security events from an authorized uCertify training VM to determine whether an Administrator password reset and later privileged activity indicated unauthorized access.
