@@ -14,8 +14,8 @@ This repository documents my hands-on technical training, investigation methodol
 
 | Completed project | Evidence demonstrated | Hiring signal |
 |---|---|---|
-| [Windows Security Log Triage](./projects/windows-security-log-triage/README.md) | Windows Security events, account/process context, event correlation, documented disposition | SOC investigation and evidence-based reasoning |
-| [Nessus Vulnerability Assessment](./projects/nessus-vulnerability-assessment/README.md) | Authenticated scan workflow, result interpretation, severity context, remediation planning | Vulnerability assessment and disciplined reporting |
+| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | Windows Security events, account/process context, event correlation, documented disposition | SOC investigation and evidence-based reasoning |
+| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Authenticated scan workflow, result interpretation, severity context, remediation planning | Vulnerability assessment and disciplined reporting |
 
 **Current demonstrated strengths:** security-log analysis, vulnerability-assessment workflow, evidence handling, technical reporting, and clearly documented limitations.
 
@@ -29,7 +29,7 @@ This repository documents my hands-on technical training, investigation methodol
 
 **Status: Completed | Category: Security Operations**
 
-[View Full Investigation](./projects/windows-security-log-triage/README.md)
+[View Full Investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md)
 
 Investigated Windows Security events from an authorized uCertify training environment to determine whether privileged-account changes and subsequent service activity indicated unauthorized access.
 
@@ -59,7 +59,7 @@ The investigation includes event screenshots, an evidence timeline, documented f
 
 **Status: Completed | Category: Vulnerability Assessment**
 
-[View Full Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/nessus-vulnerability-assessment)
+[View Full Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md)
 
 Configured and executed a Basic Network Scan against the assigned host in an authorized uCertify lab. The assessment completed against one host in 23 minutes and displayed Auth: Pass.
 
@@ -71,16 +71,14 @@ The report explains the host severity distribution, the meaning of grouped and M
 
 ---
 
-## Project Portfolio
+## Upcoming Projects
 
 | Project | Focus | Status |
 |---|---|---|
-| [Windows Security Log Triage](./projects/windows-security-log-triage/README.md) | Security Operations / Log Analysis | Completed |
-| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/nessus-vulnerability-assessment) | Vulnerability Assessment / Result Triage | Completed |
 | SIEM Alert Investigation | Detection and Alert Triage | Planned |
 | Network Traffic Analysis | Wireshark / Network Security | Planned |
 
-Projects are documented using authorized training environments. Completed projects contain investigation findings and supporting evidence; projects in progress are being expanded and refined.
+The completed projects are summarized at the top of this portfolio and documented in full below. Upcoming projects will add SIEM and network-analysis evidence without duplicating the completed-project list.
 
 ---
 
