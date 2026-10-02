@@ -2,138 +2,74 @@
 
 **CompTIA Security+ Certified | Tri-C SecurePath Graduate | Entry-Level SOC & IT Support**
 
-Welcome to my cybersecurity portfolio. I'm an aspiring cybersecurity professional building practical experience in security operations, log analysis, incident response, vulnerability management, and IT troubleshooting.
+I document authorized lab work in Windows Security log analysis and vulnerability assessment, including the evidence, reasoning, and limits of each conclusion.
 
-I hold the CompTIA Security+ certification, completed Cuyahoga Community College's 14-week SecurePath cybersecurity bootcamp, and earned an Associate of Arts degree.
+**Location:** Cleveland, Ohio  
+**Career focus:** SOC Analyst I · IT Support · Help Desk · Desktop Support · NOC Technician
 
-This repository documents my hands-on technical training, investigation methodology, supporting evidence, and continued development as I pursue my first professional IT or cybersecurity role.
+## Completed Projects
 
-**Career Focus:** SOC Analyst I · IT Support · Help Desk · Desktop Support · NOC Technician
-
-## Portfolio Snapshot
-
-| Completed project | Evidence demonstrated | Hiring signal |
-|---|---|---|
-| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | Windows Security events, account/process context, event correlation, documented disposition | SOC investigation and evidence-based reasoning |
-| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Authenticated scan workflow, result interpretation, severity context, remediation planning | Vulnerability assessment and disciplined reporting |
-
-**Current demonstrated strengths:** security-log analysis, vulnerability-assessment workflow, evidence handling, technical reporting, and clearly documented limitations.
-
-**Next breadth targets:** SIEM alert investigation and network traffic analysis.
-
----
-
-## Featured Projects
-
-### Windows Security Log Triage: Privileged Account and Service Activity
-
-**Status: Completed | Category: Security Operations**
-
-[View Full Investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md)
-
-Investigated Windows Security events from an authorized uCertify training environment to determine whether privileged-account changes and subsequent service activity indicated unauthorized access.
-
-The Security log contained 6,530 events. I manually analyzed four security-relevant records and organized the evidence into two activity clusters.
-
-| Event ID | Investigation Focus |
+| Project | Skills demonstrated |
 |---|---|
-| 4724 | Administrator password-reset activity |
-| 4738 | Administrator account changes |
-| 4624 | Successful SYSTEM service logon |
-| 4672 | Special privileges assigned to the SYSTEM session |
+| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/windows-security-log-triage) | Event correlation, account and process context, evidence-based disposition, and escalation planning |
+| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/nessus-vulnerability-assessment) | Scan configuration, target authentication, result interpretation, and remediation planning |
 
-**Skills demonstrated:**
-- Windows Event Viewer and Security log analysis
-- Authentication and account-management event interpretation
-- Event correlation using timestamps, accounts, and Logon IDs
-- Distinguishing service activity from interactive or remote logons
-- Evidence-based triage, investigation documentation, and escalation planning
+## Project Summaries
 
-**Key finding:** The reviewed service activity was consistent with normal Windows behavior. The Administrator password reset was corroborated by an account-change event, but its authorization could not be verified from the available training evidence.
+### Windows Security Log Triage
 
-The investigation includes event screenshots, an evidence timeline, documented findings, confidence assessment, limitations, and recommended production follow-up.
+**Completed | Security Operations**
 
----
+Reviewed four Windows Security events—**4724, 4738, 4624, and 4672**—from an authorized uCertify training VM. I correlated an Administrator password reset with an account-change event and separately examined privileged SYSTEM service activity.
 
-### Nessus Vulnerability Assessment: Authenticated Baseline & Result Triage
+**Assessment:** The SYSTEM activity was consistent with normal service behavior. The password reset was corroborated, but its authorization remained unverified.
 
-**Status: Completed | Category: Vulnerability Assessment**
+The report includes event screenshots, an evidence timeline, analysis, a confidence assessment, and recommended investigative follow-up.
 
-[View Full Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md)
+[Read the full investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/windows-security-log-triage)
 
-Configured and executed a Basic Network Scan against the assigned host in an authorized uCertify lab. The assessment completed against one host in 23 minutes and displayed Auth: Pass.
+### Nessus Vulnerability Assessment
 
-The report explains the host severity distribution, the meaning of grouped and MIXED results, and the limits of aggregate scanner evidence. It includes five lab screenshots, an assessment workflow diagram, a final assessment, proposed remediation and verification steps, and file-integrity checksums.
+**Completed | Vulnerability Assessment**
 
-**Skills demonstrated:** Nessus configuration, target authentication, result interpretation, remediation planning, and evidence-based reporting.
+Configured and completed a Basic Network Scan against one assigned uCertify host using the supplied Windows target credentials. The scan completed in **23 minutes** and displayed **Auth: Pass**.
 
-**Key finding:** Critical and High scanner-reported results warranted detailed applicability review. Specific exploitability and remediation were not established by the available lab evidence.
+**Assessment:** Critical and High scanner-reported results warranted finding-level review. Specific applicability, exploitability, and remediation remained unverified.
 
----
+The report includes five lab screenshots, a workflow diagram, interpretation of severity and grouped results, proposed response steps, and file-integrity checksums.
 
-## Upcoming Projects
+[Read the full assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/nessus-vulnerability-assessment)
 
-| Project | Focus | Status |
-|---|---|---|
-| SIEM Alert Investigation | Detection and Alert Triage | Planned |
-| Network Traffic Analysis | Wireshark / Network Security | Planned |
+## Planned Projects
 
-The completed projects are summarized at the top of this portfolio and documented in full below. Upcoming projects will add SIEM and network-analysis evidence without duplicating the completed-project list.
-
----
-
-## Technical Skills & Tools
-
-| Area | Technologies & Skills |
+| Project | Focus |
 |---|---|
-| Security Operations | Windows Security Logs, Event Viewer, log analysis, alert triage fundamentals |
-| Network Security | TCP/IP, Wireshark, Nmap, network traffic analysis |
-| Vulnerability Assessment | Tenable Nessus, vulnerability identification and remediation prioritization |
-| Systems & Administration | Windows, Linux, macOS, Active Directory fundamentals |
-| Security Tools | Kali Linux, Nmap, Wireshark, Nessus |
-| Investigation & Documentation | Evidence collection, event correlation, technical reporting, incident response fundamentals |
+| SIEM Alert Investigation | Alert triage, supporting searches, event correlation, and a documented disposition |
+| Network Traffic Analysis | Wireshark investigation and evidence-based network analysis |
 
-My portfolio documents the specific tools and techniques used in each investigation. Additional technical experience is developed through coursework, labs, and independent practice.
+## Technical Foundation
 
----
+| Area | Training and tools |
+|---|---|
+| Security Operations | Windows Security logs, Event Viewer, log analysis, incident-response fundamentals |
+| Vulnerability Assessment | Tenable Nessus, CVSS interpretation, validation and remediation planning |
+| Networking | TCP/IP, Wireshark, Nmap, network traffic analysis |
+| Systems | Windows, Linux, Kali Linux, macOS, Active Directory fundamentals |
+| Documentation | Evidence collection, investigation timelines, technical reports, escalation recommendations |
 
-## Certifications & Education
+These tools reflect coursework and lab practice. Each project identifies the tools and techniques used in the completed work.
 
-**CompTIA Security+**  
-Certified
+## Certifications and Education
 
-**Tri-C SecurePath Cybersecurity Bootcamp**  
-Cuyahoga Community College | 2026  
-Completed 14 weeks of cybersecurity training covering security fundamentals and hands-on technical practice.
+- **CompTIA Security+:** certified.
+- **Tri-C SecurePath Cybersecurity Boot Camp:** completed 14 weeks of training at Cuyahoga Community College in 2026.
+- **Associate of Arts:** Cuyahoga Community College.
+- **Additional training:** CompTIA CySA+ coursework and hands-on labs.
 
-**Associate of Arts**  
-Cuyahoga Community College (Tri-C)
+## Lab Disclosure
 
----
+The completed projects use guided, authorized uCertify training environments. Lab providers supplied the systems and scenarios; the reports document my lab evidence, analysis, and understanding.
 
-## Professional Development
+Each report separates observations from proposed follow-up and states the limitations of the available evidence. Proprietary course instructions and assessment answers are not reproduced.
 
-My current focus is strengthening practical skills relevant to entry-level security operations and IT support, including:
-
-- Windows and Linux troubleshooting
-- Security log investigation and event correlation
-- SIEM alert analysis and detection fundamentals
-- Network traffic investigation
-- Vulnerability assessment and remediation
-- Technical communication and incident documentation
-
-I use this portfolio to demonstrate what I have performed, explain the reasoning behind my findings, and document the limitations of the available evidence.
-
----
-
-## Connect
-
-**GitHub:** [XavierTables](https://github.com/XavierTables)
-
-**Location:** Cleveland, Ohio
-
-**Career Interests:** Entry-level cybersecurity, SOC operations, IT support, desktop support, and network operations.
-
----
-
-*All security testing and investigation activities are performed in authorized lab or training environments.*
+**GitHub profile:** [XavierTables](https://github.com/XavierTables)
