@@ -10,6 +10,17 @@ This repository documents my hands-on technical training, investigation methodol
 
 **Career Focus:** SOC Analyst I · IT Support · Help Desk · Desktop Support · NOC Technician
 
+## Portfolio Snapshot
+
+| Completed project | Evidence demonstrated | Hiring signal |
+|---|---|---|
+| [Windows Security Log Triage](./projects/windows-security-log-triage/README.md) | Windows Security events, account/process context, event correlation, documented disposition | SOC investigation and evidence-based reasoning |
+| [Nessus Vulnerability Assessment](./projects/nessus-vulnerability-assessment/README.md) | Authenticated scan workflow, result interpretation, severity context, remediation planning | Vulnerability assessment and disciplined reporting |
+
+**Current demonstrated strengths:** security-log analysis, vulnerability-assessment workflow, evidence handling, technical reporting, and clearly documented limitations.
+
+**Next breadth targets:** SIEM alert investigation and network traffic analysis.
+
 ---
 
 ## Featured Projects
