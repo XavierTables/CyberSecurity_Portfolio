@@ -48,7 +48,7 @@ The investigation includes event screenshots, an evidence timeline, documented f
 
 **Status: Completed | Category: Vulnerability Assessment**
 
-[View Full Assessment](./projects/nessus-vulnerability-assessment/README.md)
+[View Full Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/nessus-vulnerability-assessment)
 
 Configured and executed a Basic Network Scan against the assigned host in an authorized uCertify lab. The assessment completed against one host in 23 minutes and displayed Auth: Pass.
 
@@ -65,7 +65,7 @@ The report explains the host severity distribution, the meaning of grouped and M
 | Project | Focus | Status |
 |---|---|---|
 | [Windows Security Log Triage](./projects/windows-security-log-triage/README.md) | Security Operations / Log Analysis | Completed |
-| [Nessus Vulnerability Assessment](./projects/nessus-vulnerability-assessment/README.md) | Vulnerability Assessment / Result Triage | Completed |
+| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/tree/main/projects/nessus-vulnerability-assessment) | Vulnerability Assessment / Result Triage | Completed |
 | SIEM Alert Investigation | Detection and Alert Triage | Planned |
 | Network Traffic Analysis | Wireshark / Network Security | Planned |
 
