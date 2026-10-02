@@ -12,7 +12,7 @@ This repository documents my hands-on technical training, investigation methodol
 
 ---
 
-## Featured Project
+## Featured Projects
 
 ### Windows Security Log Triage: Privileged Account and Service Activity
 
@@ -44,12 +44,28 @@ The investigation includes event screenshots, an evidence timeline, documented f
 
 ---
 
+### Nessus Vulnerability Assessment: Authenticated Baseline & Result Triage
+
+**Status: Completed | Category: Vulnerability Assessment**
+
+[View Full Assessment](./projects/nessus-vulnerability-assessment/README.md)
+
+Configured and executed a Basic Network Scan against the assigned host in an authorized uCertify lab. The assessment completed against one host in 23 minutes and displayed Auth: Pass.
+
+The report explains the host severity distribution, the meaning of grouped and MIXED results, and the limits of aggregate scanner evidence. It includes five lab screenshots, an assessment workflow diagram, a final assessment, proposed remediation and verification steps, and file-integrity checksums.
+
+**Skills demonstrated:** Nessus configuration, target authentication, result interpretation, remediation planning, and evidence-based reporting.
+
+**Key finding:** Critical and High scanner-reported results warranted detailed applicability review. Specific exploitability and remediation were not established by the available lab evidence.
+
+---
+
 ## Project Portfolio
 
 | Project | Focus | Status |
 |---|---|---|
 | [Windows Security Log Triage](./projects/windows-security-log-triage/README.md) | Security Operations / Log Analysis | Completed |
-| [Nessus Vulnerability Assessment](./Vulnerability%20Management%3A%20Network%20Scanning%20with%20Tenable%20Nessus) | Vulnerability Management | In Progress |
+| [Nessus Vulnerability Assessment](./projects/nessus-vulnerability-assessment/README.md) | Vulnerability Assessment / Result Triage | Completed |
 | SIEM Alert Investigation | Detection and Alert Triage | Planned |
 | Network Traffic Analysis | Wireshark / Network Security | Planned |
 
