@@ -46,6 +46,10 @@ The report includes five lab screenshots, a workflow diagram, interpretation of 
 |---|---|
 | SIEM Alert Investigation | Alert triage, supporting searches, event correlation, and a documented disposition |
 | Network Traffic Analysis | Wireshark investigation and evidence-based network analysis |
+| Malware Analysis | Safe sandbox observations, indicators, behavior, and defensive relevance |
+| Web App Security | Authorized vulnerability discovery, validation, risk explanation, and remediation guidance |
+
+Planned projects remain listed as planned until the supporting lab evidence and analysis are completed.
 
 ## Technical Foundation
 
