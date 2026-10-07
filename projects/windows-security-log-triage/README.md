@@ -64,7 +64,7 @@ To answer that question, I reviewed selected Windows Security events and compare
 - Account-change fields
 - Assigned privileges
 
-I treated each event as one piece of evidence rather than assuming that security-relevant activity was automatically malicious.
+I did not treat any single event as the answer. I compared the account, time, logon type, process, and surrounding context before deciding what the activity actually supported.
 
 ---
 
@@ -110,11 +110,9 @@ The **6,530** figure represents the total number of events in the source Securit
 
 ### My Analysis
 
-Event 4724 caught my attention because resetting the Administrator password is a privileged action. If an unauthorized person performed that reset, they could potentially gain or maintain control of a highly privileged account.
+Event 4724 stood out because an Administrator password reset is a privileged action. If it were unauthorized, it could be part of gaining or maintaining access to a powerful account.
 
-However, Event 4724 by itself does **not** prove that the system was hacked. A legitimate administrator or authorized support person could perform the same action during normal account administration.
-
-The event therefore required more context before I could make a security determination.
+At the same time, the event did not tell me *why* the reset happened. The same event can appear during legitimate administration, so I treated it as something that needed more context rather than calling it malicious on its own.
 
 ---
 
@@ -141,7 +139,7 @@ The matching **Password Last Set** timestamp supported the conclusion that the p
 
 The old and new UAC values were the same, so I did not observe an account-control change in this record.
 
-Most importantly, a technically successful password change does **not** prove that the action was authorized. The lab did not provide a help-desk ticket, change request, maintenance record, or administrator confirmation showing why the reset occurred.
+The matching timestamp told me the password reset took effect, but it still did not answer the authorization question. The lab did not include a help-desk ticket, change request, maintenance record, or administrator confirmation that explained why the reset happened.
 
 ---
 
@@ -177,7 +175,7 @@ The combination of:
 
 supported the conclusion that this was a Windows service logon rather than a remote Administrator login.
 
-No single field proved that the activity was safe. I used the account, logon type, process, and network context together to interpret the event.
+I did not rely on one field to call the activity normal. The SYSTEM account, Logon Type 5, `services.exe`, and the lack of a remote source all pointed in the same direction when viewed together.
 
 ---
 
@@ -194,19 +192,17 @@ Event 4672 occurred at the same timestamp and involved the SYSTEM account and Lo
 
 ### My Analysis
 
-Event 4672 initially required attention because powerful privileges were assigned to a logon session. I needed to determine which account received those privileges and whether that activity was expected.
+Event 4672 looked important at first because the session received powerful privileges. The next question for me was who actually owned that session.
 
-After comparing it with Event 4624, the activity became less suspicious. The session belonged to `NT AUTHORITY\SYSTEM`, and the related logon was a Type 5 service logon through `services.exe`.
-
-That context made the privileges consistent with normal SYSTEM activity rather than evidence that a malicious user had received elevated access.
+When I matched it back to Event 4624, the context changed. The session belonged to `NT AUTHORITY\SYSTEM` and came from a Type 5 service logon through `services.exe`. That made the privileges fit normal SYSTEM behavior much better than a malicious user gaining elevation.
 
 ---
 
 # Correlating the Events
 
-One of the main lessons from this project was that Windows Security events can tell a larger story when they are correlated, but each event still needs to be examined individually.
+The useful part of this project was seeing how separate Windows events can build a larger picture without automatically belonging to the same story.
 
-I organized the evidence into two clusters.
+I organized the evidence into two clusters so I could keep the correlations that were supported and avoid inventing a connection just because the timestamps were close.
 
 ## Cluster A — Account Management
 
@@ -285,11 +281,11 @@ For this portfolio, I used screenshots to demonstrate the investigation without 
 
 # What I Learned
 
-This project taught me that individual Windows Security events provide only pieces of an investigation.
+The biggest lesson from this project was that one Windows event rarely tells the whole story. The useful information came from comparing the account, timestamp, Logon ID, logon type, process, and nearby events instead of judging each record by its Event ID alone.
 
-By correlating accounts, timestamps, logon types, processes, and related events, I could build a broader picture of what occurred while still examining each event closely enough to understand what the evidence actually proved.
+It also taught me not to connect events just because they happen close together. The password-reset activity and the later SYSTEM service activity were both security-relevant, but the evidence did not support turning them into one attack chain.
 
-It also reinforced an important investigation principle: **security-relevant activity is not automatically malicious.** Context is necessary before reaching a conclusion.
+That became an important rule for how I investigate now: **interesting or privileged activity is not automatically malicious. Context has to support the conclusion.**
 
 ---
 
