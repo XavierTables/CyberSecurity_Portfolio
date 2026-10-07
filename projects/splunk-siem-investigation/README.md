@@ -48,7 +48,7 @@ This project was designed to answer two primary questions:
 
 **Did any VPN authentication activity significantly deviate from individual users' observed geographic behavior?**
 
-The goal was not to force either dataset into a malicious narrative. The goal was to follow the available evidence, correlate related events, test possible explanations, and document what the telemetry could and could not establish.
+I did not want to start with the assumption that either dataset showed an attack. I followed the evidence, correlated related events, tested different explanations, and documented where the telemetry was strong and where it still left questions.
 
 ---
 
@@ -115,7 +115,7 @@ Several account-management events appeared only once, including:
 - 4729 — member removed from a security-enabled global group
 - 4739 — domain policy changed
 
-Rare activity was treated as an investigative lead rather than evidence of malicious behavior.
+I treated the rare events as leads for deeper review, not as proof of malicious behavior.
 
 ![Windows Event ID distribution](evidence/02-windows-eventid-distribution.png)
 
@@ -157,7 +157,7 @@ The resulting event showed:
 | Target Logon ID | `0x551686` |
 | Elevated token | Yes |
 
-Logon Type 3 established that the session was a network logon. The matching Logon ID connected this authentication event to the later account-management activity.
+Logon Type 3 showed that this was a network logon. The matching Logon ID gave me the session anchor I needed to connect James's authentication to the later account-management activity.
 
 ![James successful network logon](evidence/03-james-network-logon.png)
 
@@ -218,11 +218,11 @@ The ProcessGuid and ParentProcessGuid values supported the parent-child relation
 
 ### Analysis
 
-This cross-source correlation increased confidence that the observed process activity was part of the broader authenticated session.
+Seeing the same process activity in Sysmon gave me more confidence that I was following the same authenticated session rather than looking at unrelated events.
 
-The combination of successful network authentication, elevated session context, WMI-associated process ancestry, `net.exe` and `net1.exe` execution, account creation, security-group membership changes, a failed password-reset attempt, account deletion, and session logoff made the activity security-relevant.
+At that point I could connect the network logon, elevated session context, WMI-associated process ancestry, `net.exe` and `net1.exe` execution, account creation, group membership changes, the failed password-reset attempt, account deletion, and logoff into one security-relevant sequence.
 
-However, the evidence did **not** establish whether James's activity was authorized. The presence of `WmiPrvSE.exe` as a parent process supports WMI-associated process execution, but it does not independently prove malicious remote WMI activity. The available evidence also did not establish that the security-enabled global group involved was privileged.
+What I still could not answer was whether James was supposed to be doing it. `WmiPrvSE.exe` in the process ancestry supports WMI-associated execution, but it does not prove malicious remote WMI by itself. I also could not confirm from the supplied data that the security-enabled global group was privileged.
 
 ### Windows Finding Disposition
 
@@ -275,7 +275,7 @@ Two accounts contained one rare-country event:
 
 *Figure 7. Per-user VPN country distribution showing two geographic outliers.*
 
-The anomalous country alone did not establish account compromise. It established an investigation candidate.
+I treated the rare country as a reason to investigate further, not as proof that the account was compromised.
 
 ---
 
@@ -304,9 +304,9 @@ This established an unusually stable observed pattern: **199 of 200 VPN events c
 
 I compared the rare-country event against the user's observed login-hour behavior.
 
-The Japanese event occurred at an otherwise normal hour for `jsmith`. This was an important negative finding: the login was geographically unusual, but it was **not significantly unusual by time of day**.
+The Japanese event happened at an otherwise normal login hour for `jsmith`. That mattered because one part of the event looked unusual while another part did not.
 
-That reduced the risk of incorrectly describing the event as anomalous across every available dimension.
+I kept that negative finding in the analysis instead of describing the login as suspicious across every dimension.
 
 ---
 
@@ -386,9 +386,9 @@ The `jsmith` event contained several characteristics that justified further revi
 - Normal US activity resumed 15 minutes afterward.
 - The login hour itself was not statistically unusual.
 
-The evidence supports a geographic inconsistency and an impossible-travel-style investigative signal. It does not independently prove credential theft or unauthorized access.
+By this point, I had a strong geographic inconsistency and an impossible-travel-style signal, but still not enough to call it credential theft or unauthorized access.
 
-Possible alternative explanations include corporate VPN or proxy routing, inaccurate IP geolocation, shared network infrastructure, legitimate remote-access behavior, travel-related factors, or another routing condition.
+There were several explanations I could not rule out from the VPN data alone, including corporate VPN or proxy routing, inaccurate IP geolocation, shared infrastructure, legitimate remote access, travel, or another routing condition.
 
 ### VPN Finding Disposition
 
@@ -487,17 +487,13 @@ For the `jsmith` anomaly, I would:
 
 # What I Learned
 
-This project changed how I think about both SPL and security investigations.
+Before this project, I mostly thought of Splunk as a place to search through logs. What clicked for me here was that every useful search can create the next question. I could start broad, find something unusual, and keep moving deeper depending on what the evidence showed.
 
-At first, one of the hardest parts of SPL was realizing how much depth and nuance could be created through the syntax. A search could begin broadly and continue deeper depending on the question I asked next. Once I understood that, Splunk felt less like a simple log viewer and more like an investigative environment where I could continue following evidence in different directions.
+The Windows investigation made that clear. A rare account-management event led me to a Logon ID, that Logon ID led me to James's network session, and then Security and Sysmon gave me different views of the same activity. I started to understand why correlation matters more than looking at one event by itself.
 
-One of my biggest realization points was seeing multiple searches continue down the same investigative path while allowing me to choose the next pivot. Shared Logon IDs, Windows Security events, Sysmon process relationships, VPN source countries, and user baselines all provided different ways to investigate the same underlying activity.
+The VPN side taught me a different lesson. The Japan login looked suspicious immediately, but its time of day was normal for `jsmith`. I did not want to ignore that just because it weakened the first impression. It showed me why an investigation has to test the parts that do not fit the theory too.
 
-The VPN investigation was especially useful because the rare Japanese login initially looked suspicious, but the login time itself was normal for the user. That reinforced the importance of testing multiple parts of an anomaly rather than assuming that every characteristic will support the same conclusion.
-
-I also improved my patience during investigations. Suspicious activity does not automatically mean malicious activity. Even highly anomalous behavior can require additional validation to determine whether it was authorized or whether another legitimate explanation exists.
-
-The biggest thing I learned from this project is that many security-relevant actions leave evidence that can later be searched, correlated, and reconstructed. The analyst's job is not only to find that evidence, but to understand its context before deciding what it means.
+The biggest lesson I took from the project was patience. Suspicious does not automatically mean malicious. My job as the analyst is to keep following the evidence, understand the context, and be clear about what I can prove and what still needs validation.
 
 ---
 
