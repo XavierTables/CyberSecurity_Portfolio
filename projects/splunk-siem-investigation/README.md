@@ -503,17 +503,39 @@ The biggest thing I learned from this project is that many security-relevant act
 
 # Evidence Index
 
+Each item below links directly to the screenshot used in the investigation.
+
 | Evidence | Purpose |
 |---|---|
-| `01-windows-data-overview.png` | Establish Windows dataset scope |
-| `02-windows-eventid-distribution.png` | Identify rare Windows activity |
-| `03-james-network-logon.png` | Correlate James authentication with Logon ID |
-| `04-security-session-timeline.png` | Reconstruct Windows Security activity |
-| `05-sysmon-process-correlation.png` | Corroborate process lineage using Sysmon |
-| `06-vpn-data-overview.png` | Establish VPN dataset scope |
-| `07-vpn-country-baseline.png` | Identify geographic outliers |
-| `08-jsmith-ip-baseline.png` | Establish `jsmith` source-IP baseline |
-| `09-vpn-rapid-country-switch-detection.png` | Detect rapid geographic transitions |
+| [`01-windows-data-overview.png`](./evidence/01-windows-data-overview.png) | Establish Windows dataset scope |
+| [`02-windows-eventid-distribution.png`](./evidence/02-windows-eventid-distribution.png) | Identify rare Windows activity |
+| [`03-james-network-logon.png`](./evidence/03-james-network-logon.png) | Correlate James authentication with Logon ID |
+| [`04-security-session-timeline.png`](./evidence/04-security-session-timeline.png) | Reconstruct Windows Security activity |
+| [`05-sysmon-process-correlation.png`](./evidence/05-sysmon-process-correlation.png) | Corroborate process lineage using Sysmon |
+| [`06-vpn-data-overview.png`](./evidence/06-vpn-data-overview.png) | Establish VPN dataset scope |
+| [`07-vpn-country-baseline.png`](./evidence/07-vpn-country-baseline.png) | Identify geographic outliers |
+| [`08-jsmith-ip-baseline.png`](./evidence/08-jsmith-ip-baseline.png) | Establish `jsmith` source-IP baseline |
+| [`09-vpn-rapid-country-switch-detection.png`](./evidence/09-vpn-rapid-country-switch-detection.png) | Detect rapid geographic transitions |
+
+### Evidence Preview
+
+![Windows dataset overview](./evidence/01-windows-data-overview.png)
+
+![Windows Event ID distribution](./evidence/02-windows-eventid-distribution.png)
+
+![James successful network logon](./evidence/03-james-network-logon.png)
+
+![Windows Security session timeline](./evidence/04-security-session-timeline.png)
+
+![Sysmon process correlation](./evidence/05-sysmon-process-correlation.png)
+
+![VPN dataset overview](./evidence/06-vpn-data-overview.png)
+
+![VPN geographic baseline](./evidence/07-vpn-country-baseline.png)
+
+![jsmith IP baseline](./evidence/08-jsmith-ip-baseline.png)
+
+![Rapid geographic switching detection](./evidence/09-vpn-rapid-country-switch-detection.png)
 
 ---
 
