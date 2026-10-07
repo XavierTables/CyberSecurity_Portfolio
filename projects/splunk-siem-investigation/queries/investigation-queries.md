@@ -1,8 +1,8 @@
 # SPL Investigation Query Log
 
-This file documents the primary SPL searches used during the Splunk SIEM investigation.
+This is the search trail I used during the Splunk SIEM investigation. I kept the queries in order so the pivots are visible instead of only showing the final searches that worked.
 
-The environment and datasets were provided through an authorized TryHackMe training lab. The searches, pivots, interpretation, and investigation notes below document my own analysis of the available evidence.
+TryHackMe provided the authorized lab environment and datasets. The SPL, investigative pivots, results, and notes below show how I worked through the available evidence.
 
 ---
 
