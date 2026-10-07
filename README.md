@@ -2,7 +2,7 @@
 
 **CompTIA Security+ Certified | Tri-C SecurePath Graduate | Entry-Level SOC & IT Support**
 
-I document authorized lab work in Windows Security log analysis, SIEM investigation, and vulnerability assessment, including the evidence, reasoning, and limits of each conclusion.
+I built this portfolio to show how I approach security work, not just which tools I have used. Each completed project includes the evidence I collected, how I worked through it, what I concluded, and what the lab data could not prove.
 
 **Location:** Cleveland, Ohio  
 **Career focus:** SOC Analyst I · IT Support · Help Desk · Desktop Support · NOC Technician
@@ -21,11 +21,11 @@ I document authorized lab work in Windows Security log analysis, SIEM investigat
 
 **Completed | Security Operations**
 
-Reviewed four Windows Security events—**4724, 4738, 4624, and 4672**—from an authorized uCertify training VM. I correlated an Administrator password reset with an account-change event and separately examined privileged SYSTEM service activity.
+I reviewed four Windows Security events—**4724, 4738, 4624, and 4672**—from an authorized uCertify training VM. I connected an Administrator password reset to the matching account-change event, then separately worked through privileged SYSTEM service activity so I would not force unrelated events into one story.
 
 **Assessment:** The SYSTEM activity was consistent with normal service behavior. The password reset was corroborated, but its authorization remained unverified.
 
-The report includes event screenshots, an evidence timeline, analysis, a confidence assessment, and recommended investigative follow-up.
+The project includes the event screenshots I used, an evidence timeline, my reasoning, a confidence assessment, and the follow-up I would take in a real environment.
 
 [Read the full investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md)
 
@@ -33,11 +33,11 @@ The report includes event screenshots, an evidence timeline, analysis, a confide
 
 **Completed | Vulnerability Assessment**
 
-Configured and completed a Basic Network Scan against one assigned uCertify host using the supplied Windows target credentials. The scan completed in **23 minutes** and displayed **Auth: Pass**.
+I configured and completed a Basic Network Scan against one assigned uCertify host using the supplied Windows target credentials. The scan completed in **23 minutes** and displayed **Auth: Pass**.
 
 **Assessment:** Critical and High scanner-reported results warranted finding-level review. Specific applicability, exploitability, and remediation remained unverified.
 
-The report includes five lab screenshots, a workflow diagram, interpretation of severity and grouped results, proposed response steps, and file-integrity checksums.
+The project includes five lab screenshots, a workflow diagram, my interpretation of the severity and grouped results, the response steps I would take next, and file-integrity checksums.
 
 [Read the full assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md)
 
@@ -45,11 +45,11 @@ The report includes five lab screenshots, a workflow diagram, interpretation of 
 
 **Completed | Security Operations / SIEM**
 
-Used Splunk and SPL in an authorized TryHackMe environment to investigate Windows Security, Sysmon, and VPN telemetry. I correlated a network-authenticated Windows session through Logon ID `0x551686`, reconstructed account-management activity, corroborated process ancestry across Security and Sysmon data, and built reusable VPN geographic-anomaly searches.
+I used Splunk and SPL in an authorized TryHackMe environment to investigate Windows Security, Sysmon, and VPN telemetry. I followed Logon ID `0x551686` from a network authentication into related account-management activity, checked the process relationships in Sysmon, and built reusable searches for unusual VPN geography.
 
 **Assessment:** The Windows activity was suspicious administrative behavior with authorization unverified. The VPN analysis identified geographically inconsistent authentication patterns that required identity validation, but the available telemetry did not confirm compromise.
 
-The report includes nine evidence screenshots, an 11-query SPL investigation log, findings, limitations, and production SOC follow-up.
+The project includes nine evidence screenshots, the 11-query SPL trail I used, my findings and limitations, and the follow-up I would take in a production SOC.
 
 [Read the full SIEM investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)
 
@@ -61,7 +61,7 @@ The report includes nine evidence screenshots, an 11-query SPL investigation log
 | Malware Analysis | Safe sandbox observations, indicators, behavior, and defensive relevance |
 | Web App Security | Authorized vulnerability discovery, validation, risk explanation, and remediation guidance |
 
-Planned projects remain listed as planned until the supporting lab evidence and analysis are completed.
+I keep future projects labeled as planned until I have actually completed the lab work and have evidence to support what I publish.
 
 ## Technical Foundation
 
@@ -73,7 +73,7 @@ Planned projects remain listed as planned until the supporting lab evidence and 
 | Systems | Windows, Linux, Kali Linux, macOS, Active Directory fundamentals |
 | Documentation | Evidence collection, investigation timelines, technical reports, escalation recommendations |
 
-These tools reflect coursework and lab practice. Each project identifies the tools and techniques used in the completed work.
+These tools come from coursework and hands-on lab practice. The completed projects show where I actually used them instead of treating the skills list as proof by itself.
 
 ## Certifications and Education
 
@@ -84,8 +84,8 @@ These tools reflect coursework and lab practice. Each project identifies the too
 
 ## Lab Disclosure
 
-The completed projects use guided, authorized training environments, including uCertify and TryHackMe. Lab providers supplied systems, scenarios, or datasets; the reports document my lab evidence, searches, analysis, and understanding.
+The completed projects use authorized training environments such as uCertify and TryHackMe. Those platforms supplied the systems, scenarios, or datasets; the portfolio shows the evidence I worked with, the searches and analysis I performed, and how I reached each conclusion.
 
-Each report separates observations from proposed follow-up and states the limitations of the available evidence. Proprietary course instructions, credentials, and assessment answers are not reproduced.
+I keep the lab boundaries clear, separate what I observed from what I would do next in production, and do not publish course answers or credentials.
 
 **GitHub profile:** [XavierTables](https://github.com/XavierTables)
