@@ -4,6 +4,12 @@ This is the search trail I used during the Splunk SIEM investigation. I kept the
 
 TryHackMe provided the authorized lab environment and datasets. The SPL, investigative pivots, results, and notes below show how I worked through the available evidence.
 
+## Scope and Evidence Notes
+
+The searches below preserve the SPL I executed in the lab. The published captures used **All time**; the displayed time zone and full dataset bounds were not recorded. The Windows authentication anchor shows `Hostname=Micheal.Beaven`, but the session and Sysmon table searches do not constrain or display the computer name. Before reproducing them in production, I would verify the event computer, time window, and subject/target Logon ID fields. See [the report's search-scope note](../README.md#search-scope-and-reproducibility).
+
+Nine screenshots support the investigation, while this log records eleven searches. The country-percentage and two-hour thresholds are choices for this training dataset. Production tuning would require sufficient user history, missing-field handling, reliable timestamps, and review of false positives.
+
 ---
 
 ## Query 01 — Windows Dataset Overview
@@ -136,13 +142,13 @@ EventID IN (4624,4672,4627,4688,4728,4720,4724,4729,4726,4634)
 
 ### Result
 
-The Security record sequence showed special-logon context, successful network authentication, group-membership information, process creation, group membership changes, `Alberto` account creation, a failed password-reset attempt, account deletion, and session logoff.
+The Security record sequence showed special-logon context, successful network authentication, group-membership information, process creation, group membership changes, `Alberto` account creation, a password-reset attempt, account deletion, and session logoff. The published table does not display the audit outcome of Event 4724, so it does not establish whether the reset attempt succeeded.
 
 The relevant events occurred within the same displayed second, so Security `RecordNumber` provided the clearest available ordering within that channel.
 
 ### Why It Mattered
 
-This transformed isolated Windows events into a session-level timeline associated with the same authenticated user context.
+This organized the Security records associated with the Logon ID into a timeline. The computer and time-window validation described above remains necessary when reproducing the correlation.
 
 ### Next Pivot
 
@@ -183,7 +189,7 @@ The ProcessGuid and ParentProcessGuid values supported the parent-child relation
 
 ### Why It Mattered
 
-Sysmon independently corroborated the process lineage observed in Windows Security process-creation events. The available evidence supported WMI-associated process ancestry but did not independently establish malicious WMI execution or authorization status.
+Sysmon corroborated the process relationships for the same account and displayed second. The ProcessGuid matches supported the parent-child relationships; matching the event computer and session boundaries would strengthen the cross-source correlation. The available evidence supported WMI-associated ancestry while leaving authorization and malicious intent unresolved.
 
 ### Next Pivot
 
@@ -305,7 +311,7 @@ index=vpnlogs user=jsmith
 - `72.14.201.12` / US — **199 events**
 - `103.5.140.67` / Japan — **1 event**
 
-The US source appeared throughout the observed period, while the Japanese source IP appeared only once.
+The US source appeared throughout the observed period, while the Japan-labelled source IP appeared once for `jsmith` within that scope.
 
 ### Why It Mattered
 

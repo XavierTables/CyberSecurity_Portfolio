@@ -9,9 +9,9 @@
 
 I used Splunk and SPL in an authorized TryHackMe training environment to investigate two security-relevant activity patterns: correlated Windows account-management activity and anomalous VPN authentication behavior.
 
-The Windows investigation began with 12,256 events. I profiled the available Event IDs, isolated rare account-management activity, and correlated a successful network logon for `James` with Windows Security and Sysmon telemetry. The shared Logon ID `0x551686` connected the authenticated session to process creation and subsequent activity involving the `Alberto` account. Sysmon independently corroborated a process relationship involving `WmiPrvSE.exe`, `net.exe`, `conhost.exe`, and `net1.exe`.
+The Windows investigation began with 12,256 events. I profiled the available Event IDs, isolated rare account-management activity, and found a successful network logon for `James`. Searching Logon ID `0x551686` surfaced process creation and activity involving the `Alberto` account. Sysmon corroborated process relationships involving `WmiPrvSE.exe`, `net.exe`, `conhost.exe`, and `net1.exe`. The published searches support this activity cluster; confirming the host and session boundaries remains a follow-up step.
 
-The VPN investigation analyzed 2,000 authentication events. Behavioral baselining identified two users with rare-country logins. I selected `jsmith` for deeper review because 199 of 200 observed events came from one US source IP while a single event originated from a unique Japanese IP. Normal US activity occurred 25 minutes before and 15 minutes after the Japanese login.
+The VPN investigation analyzed 2,000 authentication events. Behavioral baselining identified two users with rare-country logins. I selected `jsmith` for deeper review because 199 of 200 observed events came from one US-labelled source IP while a single event came from a Japan-labelled source IP. The US-labelled source appeared 25 minutes before and 15 minutes after that event.
 
 Neither investigation provided enough evidence to confirm compromise. Both demonstrated activity that warranted additional validation in a production SOC.
 
@@ -32,7 +32,17 @@ Neither investigation provided enough evidence to confirm compromise. Both demon
 | VPN events | 2,000 |
 | Primary telemetry | Windows Security, Sysmon, VPN authentication |
 | Investigation focus | Session correlation, process analysis, behavioral baselining, geographic anomaly detection |
+| Executed search scope | All time in the supplied historical datasets |
+| Displayed time zone | Not established by the published captures |
 | Final disposition | Suspicious activity requiring additional validation |
+
+### Search Scope and Reproducibility
+
+The Windows authentication capture shows `Hostname=Micheal.Beaven` and an event time of `2022-04-15 08:06:02`. The rapid-country-switch results show VPN events on `2026-02-26` and `2026-03-13`. These are historical dataset timestamps; the October 2026 search times are when I worked through the lab.
+
+I used **All time** to explore the supplied data. The published captures do not establish the complete earliest/latest dataset bounds or the Splunk display time zone, so I do not label those timestamps as UTC or Cleveland local time.
+
+The recorded session searches use the Logon ID without a hostname filter, and the Security and Sysmon result tables do not display the computer name. When reproducing this investigation, I would verify the same event computer, constrain the time window, and distinguish subject and target Logon IDs before treating the correlation as a production finding. A Windows Logon ID is unique only between reboots on the same computer. [Microsoft Logon ID guidance][logoff]
 
 ---
 
@@ -54,23 +64,12 @@ I did not want to start with the assumption that either dataset showed an attack
 
 ## Skills Demonstrated
 
-- Splunk Search & Reporting
-- SPL filtering and field selection
-- Event-frequency analysis
-- Windows Event ID interpretation
-- Logon ID correlation
-- Windows Security session reconstruction
-- Sysmon process analysis
-- Cross-source event correlation
-- Parent/child process relationships
-- Behavioral baselining
-- VPN authentication analysis
-- Geographic anomaly detection
-- `stats`, `eventstats`, `eval`, `where`, and `streamstats`
-- Chronological event analysis
-- Evidence-based incident triage
-- Investigation documentation
-- Limitations and escalation planning
+- SPL dataset profiling, filtering, field selection, and event-frequency analysis
+- Windows authentication and account-management event interpretation
+- Logon ID investigation and Security/Sysmon process comparison
+- Parent/child process analysis using ProcessGuid and ParentProcessGuid
+- VPN behavioral baselining and geographic detection using `stats`, `eventstats`, `eval`, `where`, and `streamstats`
+- Evidence-based triage, investigation documentation, and escalation planning
 
 The primary SPL searches used during the investigation are documented in [the SPL Investigation Query Log](./queries/investigation-queries.md).
 
@@ -184,7 +183,7 @@ The observed sequence included:
 - Event 4726 — `Alberto` account deleted
 - Event 4634 — James session logged off
 
-The Event 4724 record was marked as an audit failure. I therefore interpreted it as a **password-reset attempt**, not proof that the password was successfully changed.
+Event 4724 establishes a **password-reset attempt**. The published timeline does not display its audit-success/failure field, so the public evidence does not establish whether that attempt succeeded. I would preserve the event's audit outcome before making a stronger claim. [Microsoft Event 4724 guidance][reset]
 
 ![Windows Security session timeline](evidence/04-security-session-timeline.png)
 
@@ -218,9 +217,9 @@ The ProcessGuid and ParentProcessGuid values supported the parent-child relation
 
 ### Analysis
 
-Seeing the same process activity in Sysmon gave me more confidence that I was following the same authenticated session rather than looking at unrelated events.
+The Sysmon records showed the same account and displayed second as the Security activity, and the ProcessGuid relationships made the process ancestry clear. That supported the process comparison. I would still verify the event computer and session boundaries when reproducing it, as described in the search-scope note above.
 
-At that point I could connect the network logon, elevated session context, WMI-associated process ancestry, `net.exe` and `net1.exe` execution, account creation, group membership changes, the failed password-reset attempt, account deletion, and logoff into one security-relevant sequence.
+The evidence let me examine network authentication, elevated session context, WMI-associated process ancestry, `net.exe` and `net1.exe` execution, account creation, group membership changes, a password-reset attempt, account deletion, and logoff as a related activity cluster.
 
 What I still could not answer was whether James was supposed to be doing it. `WmiPrvSE.exe` in the process ancestry supports WMI-associated execution, but it does not prove malicious remote WMI by itself. I also could not confirm from the supplied data that the security-enabled global group was privileged.
 
@@ -300,16 +299,6 @@ This established an unusually stable observed pattern: **199 of 200 VPN events c
 
 ---
 
-## Time-of-Day Validation
-
-I compared the rare-country event against the user's observed login-hour behavior.
-
-The Japanese event happened at an otherwise normal login hour for `jsmith`. That mattered because one part of the event looked unusual while another part did not.
-
-I kept that negative finding in the analysis instead of describing the login as suspicious across every dimension.
-
----
-
 ## Reusable Rare-Country Detection
 
 I converted the manual country observation into a reusable SPL detection.
@@ -381,10 +370,9 @@ The `jsmith` event contained several characteristics that justified further revi
 
 - 199 of 200 VPN events came from one US source IP.
 - Only one event originated from Japan.
-- The Japanese source IP appeared only once in the dataset.
+- The Japan-labelled source IP appeared once in `jsmith`'s observed history.
 - Normal US activity occurred 25 minutes before the Japanese login.
 - Normal US activity resumed 15 minutes afterward.
-- The login hour itself was not statistically unusual.
 
 By this point, I had a strong geographic inconsistency and an impossible-travel-style signal, but still not enough to call it credential theft or unauthorized access.
 
@@ -400,17 +388,12 @@ In a production SOC, I would escalate the activity for identity and device valid
 
 # Final Assessment
 
-This investigation identified two security-relevant patterns within the supplied datasets.
+| Finding | Supported assessment | Validation still needed |
+|---|---|---|
+| Windows activity | Security records associated with James's Logon ID and supporting Sysmon process relationships form a suspicious administrative activity cluster. | Verify host/session boundaries, administrative approval, affected group privileges, and surrounding endpoint activity. |
+| VPN activity | `jsmith` and `kbrown` show rapid changes in country labels against stable observed baselines. | Verify account owner, device, MFA, source infrastructure, and geolocation reliability. |
 
-The Windows investigation reconstructed an authenticated session associated with `James` and Logon ID `0x551686`. Windows Security telemetry linked the session to process and account-management activity, while Sysmon independently corroborated the observed process relationships.
-
-The evidence justified classifying the activity as suspicious administrative behavior requiring authorization validation. It did not establish malicious intent or confirmed compromise.
-
-The VPN investigation established normal geographic behavior before identifying rare-country authentication events. For `jsmith`, 199 of 200 events came from one US source IP, while one event came from a unique Japanese IP. Normal US activity occurred 25 minutes before and 15 minutes after the Japanese event.
-
-The VPN evidence justified identity validation but did not independently prove credential theft.
-
-**Overall disposition: Suspicious activity identified in both datasets, with additional validation required before either case could be classified as a confirmed security incident.**
+**Overall disposition: Suspicious activity requiring further validation. The supplied telemetry does not confirm compromise.**
 
 ---
 
@@ -430,6 +413,9 @@ The available evidence did not establish:
 - whether the WMI-associated execution was malicious
 - whether the affected security-enabled global group was privileged
 - whether additional endpoint activity occurred outside the supplied telemetry
+- the audit outcome of the password-reset attempt from the published timeline
+
+The public session and process tables omit the computer name, and the executed searches use All time. Host-scoped reproduction and an explicit time zone remain follow-up validation steps.
 
 One working query exposed a training-lab password inside a command-line field. That screenshot was intentionally excluded from the public evidence set.
 
@@ -491,7 +477,7 @@ Before this project, I mostly thought of Splunk as a place to search through log
 
 The Windows investigation made that clear. A rare account-management event led me to a Logon ID, that Logon ID led me to James's network session, and then Security and Sysmon gave me different views of the same activity. I started to understand why correlation matters more than looking at one event by itself.
 
-The VPN side taught me a different lesson. The Japan login looked suspicious immediately, but its time of day was normal for `jsmith`. I did not want to ignore that just because it weakened the first impression. It showed me why an investigation has to test the parts that do not fit the theory too.
+The VPN side taught me a different lesson. The Japan-labelled event looked suspicious, and the nearby US-labelled events made it worth a closer look. I still kept VPN routing, inaccurate geolocation, and other explanations open. It showed me why an investigation has to test the theory instead of treating an unusual country as the answer.
 
 The biggest lesson I took from the project was patience. Suspicious does not automatically mean malicious. My job as the analyst is to keep following the evidence, understand the context, and be clear about what I can prove and what still needs validation.
 
@@ -513,25 +499,20 @@ Each item below links directly to the screenshot used in the investigation.
 | [`08-jsmith-ip-baseline.png`](./evidence/08-jsmith-ip-baseline.png) | Establish `jsmith` source-IP baseline |
 | [`09-vpn-rapid-country-switch-detection.png`](./evidence/09-vpn-rapid-country-switch-detection.png) | Detect rapid geographic transitions |
 
-### Evidence Preview
+The nine screenshots appear once alongside the relevant analysis. The query log records the full search trail; individual captures do not independently establish every interpretation in that trail.
 
-![Windows dataset overview](./evidence/01-windows-data-overview.png)
+---
 
-![Windows Event ID distribution](./evidence/02-windows-eventid-distribution.png)
+# Technical References
 
-![James successful network logon](./evidence/03-james-network-logon.png)
+- [Microsoft: Event 4624 — successful logon](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624)
+- [Microsoft: Event 4634 — logoff and Logon ID scope][logoff]
+- [Microsoft: Event 4724 — password-reset attempt][reset]
+- [Splunk: streamstats](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/9.4/search-commands/streamstats)
+- [Splunk: sort](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/9.4/search-commands/sort)
 
-![Windows Security session timeline](./evidence/04-security-session-timeline.png)
-
-![Sysmon process correlation](./evidence/05-sysmon-process-correlation.png)
-
-![VPN dataset overview](./evidence/06-vpn-data-overview.png)
-
-![VPN geographic baseline](./evidence/07-vpn-country-baseline.png)
-
-![jsmith IP baseline](./evidence/08-jsmith-ip-baseline.png)
-
-![Rapid geographic switching detection](./evidence/09-vpn-rapid-country-switch-detection.png)
+[logoff]: https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634
+[reset]: https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4724
 
 ---
 

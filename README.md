@@ -7,15 +7,29 @@ I built this portfolio to show how I approach security work, not just which tool
 **Location:** Cleveland, Ohio  
 **Career focus:** SOC Analyst I · IT Support · Help Desk · Desktop Support · NOC Technician
 
+**LinkedIn:** [Xavier Tables](https://www.linkedin.com/in/xaviertables/)
+
 ## Completed Projects
 
 | Project | Skills demonstrated |
 |---|---|
-| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | Event correlation, account and process context, evidence-based disposition, and escalation planning |
-| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Scan configuration, target authentication, result interpretation, and remediation planning |
 | [Splunk SIEM Investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md) | SPL investigation, session correlation, Security/Sysmon process analysis, behavioral baselining, and VPN anomaly detection |
+| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | Event correlation, account and process context, evidence-based disposition, and escalation planning |
+| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Scan configuration, target authentication, aggregate-result interpretation, and proposed validation/remediation workflow |
 
 ## Project Summaries
+
+### Splunk SIEM Investigation
+
+**Completed | Security Operations / SIEM**
+
+I used Splunk and SPL in an authorized TryHackMe environment to investigate Windows Security, Sysmon, and VPN telemetry. I followed Logon ID `0x551686` from a network authentication into related account-management activity, checked the process relationships in Sysmon, and built reusable searches for unusual VPN geography.
+
+**Assessment:** The Windows activity warranted authorization validation. The VPN analysis identified geographically inconsistent authentication patterns that required identity and device validation; the available telemetry did not confirm compromise.
+
+The project includes nine evidence screenshots, my 11-query SPL trail, the scope and limitations of the recorded searches, and the follow-up I would take in a production SOC.
+
+[Read the full SIEM investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)
 
 ### Windows Security Log Triage
 
@@ -31,7 +45,7 @@ The project includes the event screenshots I used, an evidence timeline, my reas
 
 ### Nessus Vulnerability Assessment
 
-**Completed | Vulnerability Assessment**
+**Completed baseline | Guided Vulnerability Assessment**
 
 I configured and completed a Basic Network Scan against one assigned uCertify host using the supplied Windows target credentials. The scan completed in **23 minutes** and displayed **Auth: Pass**.
 
@@ -40,18 +54,6 @@ I configured and completed a Basic Network Scan against one assigned uCertify ho
 The project includes five lab screenshots, a workflow diagram, my interpretation of the severity and grouped results, the response steps I would take next, and file-integrity checksums.
 
 [Read the full assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md)
-
-### Splunk SIEM Investigation
-
-**Completed | Security Operations / SIEM**
-
-I used Splunk and SPL in an authorized TryHackMe environment to investigate Windows Security, Sysmon, and VPN telemetry. I followed Logon ID `0x551686` from a network authentication into related account-management activity, checked the process relationships in Sysmon, and built reusable searches for unusual VPN geography.
-
-**Assessment:** The Windows activity was suspicious administrative behavior with authorization unverified. The VPN analysis identified geographically inconsistent authentication patterns that required identity validation, but the available telemetry did not confirm compromise.
-
-The project includes nine evidence screenshots, the 11-query SPL trail I used, my findings and limitations, and the follow-up I would take in a production SOC.
-
-[Read the full SIEM investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)
 
 ## Planned Projects
 
