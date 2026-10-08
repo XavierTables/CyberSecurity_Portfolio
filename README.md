@@ -9,6 +9,19 @@ I built this portfolio to show how I approach security work, not just which tool
 
 **LinkedIn:** [Xavier Tables](https://www.linkedin.com/in/xaviertables/)
 
+## Featured SOC Investigation — Splunk SIEM Triage
+
+**[Read the full Splunk investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)** · **[View the SPL investigation query log](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/queries/investigation-queries.md)**
+
+In an authorized TryHackMe environment, I analyzed **12,256 Windows events** and **2,000 VPN authentication events** using Splunk and SPL. The investigation followed two leads:
+
+- **Windows authentication and account activity:** Pivoted from a network logon and Logon ID to account-management events, then examined supporting Windows Security and Sysmon process relationships. Host/session-boundary verification remains necessary before treating the correlation as a production finding.
+- **VPN geographic anomaly:** Baselined account behavior and identified a user with **199 US-labelled events and one Japan-labelled event**, with US-labelled activity 25 minutes before and 15 minutes after the outlier. Flagged the sequence for identity/device and routing validation rather than declaring account compromise.
+
+**Documented evidence:** Nine screenshots, reproducible SPL searches, investigative reasoning, final dispositions, limitations, and recommended SOC escalation/validation steps.
+
+**Outcome:** Suspicious activity identified; **compromise not confirmed** by the available training telemetry. This case demonstrates evidence-based triage without overstating what the data proves.
+
 ## Completed Projects
 
 | Project | Skills demonstrated |
@@ -17,19 +30,7 @@ I built this portfolio to show how I approach security work, not just which tool
 | [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | Event correlation, account and process context, evidence-based disposition, and escalation planning |
 | [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Scan configuration, target authentication, aggregate-result interpretation, and proposed validation/remediation workflow |
 
-## Project Summaries
-
-### Splunk SIEM Investigation
-
-**Completed | Security Operations / SIEM**
-
-I used Splunk and SPL in an authorized TryHackMe environment to investigate Windows Security, Sysmon, and VPN telemetry. I followed Logon ID `0x551686` from a network authentication into related account-management activity, checked the process relationships in Sysmon, and built reusable searches for unusual VPN geography.
-
-**Assessment:** The Windows activity warranted authorization validation. The VPN analysis identified geographically inconsistent authentication patterns that required identity and device validation; the available telemetry did not confirm compromise.
-
-The project includes nine evidence screenshots, my 11-query SPL trail, the scope and limitations of the recorded searches, and the follow-up I would take in a production SOC.
-
-[Read the full SIEM investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)
+## Other Completed Investigation Summaries
 
 ### Windows Security Log Triage
 
