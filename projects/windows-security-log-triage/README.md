@@ -4,6 +4,8 @@
 ![Focus](https://img.shields.io/badge/Focus-Windows%20Security%20Log%20Triage-555?style=flat-square)
 ![Environment](https://img.shields.io/badge/Environment-Authorized%20Training%20Lab-555?style=flat-square)
 
+**Jump to:** [Timeline](#evidence-timeline) · [Password reset](#finding-1-administrator-password-reset) · [SYSTEM activity](#finding-2-privileged-system-service-activity) · [Assessment](#final-assessment) · [Follow-up](#what-i-would-do-next-in-a-production-soc) · [Evidence handling](#log-export-and-evidence-handling) · [Limitations](#scope-and-limitations)
+
 ## Executive Summary
 
 I analyzed selected Windows Security events from an authorized uCertify training VM to determine whether an Administrator password reset and later privileged activity indicated unauthorized access.
@@ -26,6 +28,9 @@ The Administrator password reset was corroborated by a matching account-change e
 | Field | Details |
 |---|---|
 | Case ID | `LAB-WIN-001` |
+| Status | Completed lab investigation |
+| Author | Xavier Tables |
+| Documentation updated | October 8, 2026 |
 | Environment | Authorized uCertify Windows training VM |
 | Data source | Windows Security Event Log |
 | Tool | Windows Event Viewer |
@@ -89,9 +94,9 @@ The **6,530** figure represents the total number of events in the source Securit
 
 ---
 
-# Finding 1: Administrator Password Reset
+## Finding 1: Administrator Password Reset
 
-## Event 4724 — Password-Reset Activity
+### Event 4724 — Password-Reset Activity
 
 <img src="https://github.com/user-attachments/assets/ac5ea633-98af-448d-9494-0c9ae7b92020" alt="Event 4724 showing Administrator password-reset attempt" width="900" />
 
@@ -108,7 +113,7 @@ The **6,530** figure represents the total number of events in the source Securit
 | Source IP | Not provided |
 | Message | An attempt was made to reset an account's password |
 
-### My Analysis
+#### My Analysis
 
 Event 4724 stood out because an Administrator password reset is a privileged action. If it were unauthorized, it could be part of gaining or maintaining access to a powerful account.
 
@@ -116,7 +121,7 @@ At the same time, the event did not tell me *why* the reset happened. The same e
 
 ---
 
-## Event 4738 — Administrator Account Changed
+### Event 4738 — Administrator Account Changed
 
 <img src="https://github.com/user-attachments/assets/14b8b493-6ed4-4d86-b2e7-7dfeafe523d8" alt="Event 4738 showing Administrator account-change record" width="900" />
 
@@ -131,7 +136,7 @@ At the same time, the event did not tell me *why* the reset happened. The same e
 | New UAC value | `0x210` |
 | Message | A user account was changed |
 
-### My Analysis
+#### My Analysis
 
 Event 4738 strengthened the investigation because it showed that the Administrator account changed at the same time as the 4724 password-reset activity.
 
@@ -143,9 +148,9 @@ The matching timestamp told me the password reset took effect, but it still did 
 
 ---
 
-# Finding 2: Privileged SYSTEM Service Activity
+## Finding 2: Privileged SYSTEM Service Activity
 
-## Event 4624 — Successful SYSTEM Logon
+### Event 4624 — Successful SYSTEM Logon
 
 <img src="https://github.com/user-attachments/assets/58554701-3442-490a-b343-e9d28a6551ae" alt="Event 4624 showing successful SYSTEM service logon" width="900" />
 
@@ -162,7 +167,7 @@ The matching timestamp told me the password reset took effect, but it still did 
 | Authentication package | `Negotiate` |
 | Source IP and port | Not provided (`-`) |
 
-### My Analysis
+#### My Analysis
 
 Event 4624 showed a successful logon involving `NT AUTHORITY\SYSTEM`.
 
@@ -179,7 +184,7 @@ I did not rely on one field to call the activity normal. The SYSTEM account, Log
 
 ---
 
-## Event 4672 — Special Privileges Assigned
+### Event 4672 — Special Privileges Assigned
 
 <img src="https://github.com/user-attachments/assets/f7b81dbf-abcb-4bbb-a7b1-7cf7179a4120" alt="Event 4672 showing sensitive privileges assigned to SYSTEM" width="900" />
 
@@ -190,7 +195,7 @@ Event 4672 occurred at the same timestamp and involved the SYSTEM account and Lo
 - `SeRestorePrivilege`
 - `SeImpersonatePrivilege`
 
-### My Analysis
+#### My Analysis
 
 Event 4672 looked important at first because the session received powerful privileges. The next question for me was who actually owned that session.
 
@@ -198,13 +203,13 @@ When I matched it back to Event 4624, the context changed. The session belonged 
 
 ---
 
-# Correlating the Events
+## Correlating the Events
 
 The useful part of this project was seeing how separate Windows events can build a larger picture without automatically belonging to the same story.
 
 I organized the evidence into two clusters so I could keep the correlations that were supported and avoid inventing a connection just because the timestamps were close.
 
-## Cluster A — Account Management
+### Cluster A — Account Management
 
 - **4724:** Administrator password-reset activity
 - **4738:** Administrator account changed
@@ -214,7 +219,7 @@ Together, these events supported the conclusion that the Administrator password 
 
 They did **not** prove that the reset had been authorized.
 
-## Cluster B — Service Authentication
+### Cluster B — Service Authentication
 
 - **4624:** SYSTEM service logon
 - **4672:** sensitive privileges assigned to the SYSTEM session
@@ -222,7 +227,7 @@ They did **not** prove that the reset had been authorized.
 
 The evidence was consistent with normal Windows service behavior.
 
-## Why I Did Not Combine Both Clusters Into One Attack Story
+### Why I Did Not Combine Both Clusters Into One Attack Story
 
 The service activity occurred only several minutes after the password reset, but timing alone was not enough to prove that one event caused the other.
 
@@ -232,7 +237,7 @@ I therefore kept the two clusters separate rather than claiming a connection tha
 
 ---
 
-# Final Assessment
+## Final Assessment
 
 Based on the four events reviewed:
 
@@ -251,7 +256,7 @@ This result is limited to the evidence I reviewed. It does not establish that th
 
 ---
 
-# What I Would Do Next in a Production SOC
+## What I Would Do Next in a Production SOC
 
 If this occurred in a real environment, I would:
 
@@ -267,7 +272,7 @@ I would escalate the case if the reset could not be matched to an authorized act
 
 ---
 
-# Log Export and Evidence Handling
+## Log Export and Evidence Handling
 
 I exported the Security log as `security_logs.evtx` for preservation and possible analysis in another platform.
 
@@ -279,7 +284,7 @@ For this portfolio, I used screenshots to demonstrate the investigation without 
 
 ---
 
-# What I Learned
+## What I Learned
 
 The biggest lesson from this project was that one Windows event rarely tells the whole story. The useful information came from comparing the account, timestamp, Logon ID, logon type, process, and nearby events instead of judging each record by its Event ID alone.
 
@@ -289,7 +294,7 @@ That became an important rule for how I investigate now: **interesting or privil
 
 ---
 
-# Scope and Limitations
+## Scope and Limitations
 
 This investigation used selected Windows events from an authorized uCertify training VM.
 
@@ -301,7 +306,7 @@ I did not assign a MITRE ATT&CK technique because the reviewed evidence did not 
 
 ---
 
-# References
+## References
 
 - [Microsoft Learn: Event 4624 — An account was successfully logged on](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624)
 - [Microsoft Learn: Event 4672 — Special privileges assigned to new logon](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4672)

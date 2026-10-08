@@ -9,6 +9,8 @@ I built this portfolio to show how I approach security work, not just which tool
 
 **LinkedIn:** [Xavier Tables](https://www.linkedin.com/in/xaviertables/)
 
+**Jump to:** [Featured case](#featured-soc-investigation--splunk-siem-triage) · [Projects](#completed-projects) · [Skills](#technical-foundation) · [Credentials](#certifications-and-education)
+
 ## Featured SOC Investigation — Splunk SIEM Triage
 
 **[Read the full Splunk investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)** · **[View the SPL investigation query log](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/queries/investigation-queries.md)**
@@ -18,9 +20,9 @@ In an authorized TryHackMe environment, I analyzed **12,256 Windows events** and
 - **Windows authentication and account activity:** Pivoted from a network logon and Logon ID to account-management events, then examined supporting Windows Security and Sysmon process relationships. Host/session-boundary verification remains necessary before treating the correlation as a production finding.
 - **VPN geographic anomaly:** Baselined account behavior and identified a user with **199 US-labelled events and one Japan-labelled event**, with US-labelled activity 25 minutes before and 15 minutes after the outlier. Flagged the sequence for identity/device and routing validation rather than declaring account compromise.
 
-**Documented evidence:** Nine screenshots, reproducible SPL searches, investigative reasoning, final dispositions, limitations, and recommended SOC escalation/validation steps.
+**Evidence:** Nine screenshots and an 11-query SPL investigation trail, with findings, limitations, and recommended follow-up.
 
-**Outcome:** Suspicious activity identified; **compromise not confirmed** by the available training telemetry. This case demonstrates evidence-based triage without overstating what the data proves.
+**Outcome:** Suspicious activity identified; **compromise not confirmed** by the available training telemetry.
 
 ## Completed Projects
 
@@ -36,11 +38,11 @@ In an authorized TryHackMe environment, I analyzed **12,256 Windows events** and
 
 **Completed | Security Operations**
 
-I reviewed four Windows Security events—**4724, 4738, 4624, and 4672**—from an authorized uCertify training VM. I connected an Administrator password reset to the matching account-change event, then separately worked through privileged SYSTEM service activity so I would not force unrelated events into one story.
+I reviewed Windows Security events **4724, 4738, 4624, and 4672** in a uCertify training VM. I separated the Administrator password reset from later SYSTEM service activity.
 
 **Assessment:** The SYSTEM activity was consistent with normal service behavior. The password reset was corroborated, but its authorization remained unverified.
 
-The project includes the event screenshots I used, an evidence timeline, my reasoning, a confidence assessment, and the follow-up I would take in a real environment.
+**Evidence:** Event screenshots, a timeline, analysis, and recommended follow-up.
 
 [Read the full investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md)
 
@@ -52,19 +54,9 @@ I configured and completed a Basic Network Scan against one assigned uCertify ho
 
 **Assessment:** Critical and High scanner-reported results warranted finding-level review. Specific applicability, exploitability, and remediation remained unverified.
 
-The project includes five lab screenshots, a workflow diagram, my interpretation of the severity and grouped results, the response steps I would take next, and file-integrity checksums.
+**Evidence:** Five screenshots, a workflow diagram, result interpretation, and file-integrity checksums.
 
 [Read the full assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md)
-
-## Planned Projects
-
-| Project | Focus |
-|---|---|
-| Network Traffic Analysis | Wireshark investigation and evidence-based network analysis |
-| Malware Analysis | Safe sandbox observations, indicators, behavior, and defensive relevance |
-| Web App Security | Authorized vulnerability discovery, validation, risk explanation, and remediation guidance |
-
-I keep future projects labeled as planned until I have actually completed the lab work and have evidence to support what I publish.
 
 ## Technical Foundation
 
@@ -76,7 +68,7 @@ I keep future projects labeled as planned until I have actually completed the la
 | Systems | Windows, Linux, Kali Linux, macOS, Active Directory fundamentals |
 | Documentation | Evidence collection, investigation timelines, technical reports, escalation recommendations |
 
-These tools come from coursework and hands-on lab practice. The completed projects show where I actually used them instead of treating the skills list as proof by itself.
+These skills reflect coursework and hands-on lab practice. Each project report identifies the tools I used in that investigation.
 
 ## Certifications and Education
 
@@ -84,6 +76,14 @@ These tools come from coursework and hands-on lab practice. The completed projec
 - **Tri-C SecurePath Cybersecurity Boot Camp:** completed 14 weeks of training at Cuyahoga Community College in 2026.
 - **Associate of Arts:** Cuyahoga Community College.
 - **Additional training:** CompTIA CySA+ coursework and hands-on labs.
+
+## Planned Projects
+
+| Project | Focus |
+|---|---|
+| Network Traffic Analysis | Wireshark investigation and evidence-based network analysis |
+| Malware Analysis | Safe sandbox observations, indicators, behavior, and defensive relevance |
+| Web App Security | Authorized vulnerability discovery, validation, risk explanation, and remediation guidance |
 
 ## Lab Disclosure
 

@@ -5,6 +5,8 @@
 ![Query Language](https://img.shields.io/badge/Query%20Language-SPL-555?style=flat-square)
 ![Environment](https://img.shields.io/badge/Environment-Authorized%20TryHackMe%20Lab-555?style=flat-square)
 
+**Jump to:** [Windows investigation](#part-1--windows-investigation) · [VPN investigation](#part-2--vpn-authentication-investigation) · [Assessment](#final-assessment) · [SPL queries](queries/investigation-queries.md) · [Evidence](#evidence-index) · [Limitations](#scope-and-limitations)
+
 ## Executive Summary
 
 I used Splunk and SPL in an authorized TryHackMe training environment to investigate two security-relevant activity patterns: correlated Windows account-management activity and anomalous VPN authentication behavior.
@@ -12,8 +14,6 @@ I used Splunk and SPL in an authorized TryHackMe training environment to investi
 The Windows investigation began with 12,256 events. I profiled the available Event IDs, isolated rare account-management activity, and found a successful network logon for `James`. Searching Logon ID `0x551686` surfaced process creation and activity involving the `Alberto` account. Sysmon corroborated process relationships involving `WmiPrvSE.exe`, `net.exe`, `conhost.exe`, and `net1.exe`. The published searches support this activity cluster; confirming the host and session boundaries remains a follow-up step.
 
 The VPN investigation analyzed 2,000 authentication events. Behavioral baselining identified two users with rare-country logins. I selected `jsmith` for deeper review because 199 of 200 observed events came from one US-labelled source IP while a single event came from a Japan-labelled source IP. The US-labelled source appeared 25 minutes before and 15 minutes after that event.
-
-Neither investigation provided enough evidence to confirm compromise. Both demonstrated activity that warranted additional validation in a production SOC.
 
 **Final disposition:** Suspicious activity identified in both datasets; additional authorization, identity, and endpoint validation would be required before classifying either case as a confirmed security incident.
 
@@ -23,8 +23,12 @@ Neither investigation provided enough evidence to confirm compromise. Both demon
 
 | Field | Details |
 |---|---|
+| Case ID | `LAB-SIEM-003` |
+| Status | Completed lab investigation |
+| Author | Xavier Tables |
+| Documentation updated | October 8, 2026 |
 | Environment | Authorized TryHackMe training environment |
-| SIEM platform | Splunk |
+| Tool | Splunk |
 | Query language | SPL |
 | Windows dataset | `index=windowslogs` |
 | Windows events | 12,256 |
@@ -75,9 +79,9 @@ The primary SPL searches used during the investigation are documented in [the SP
 
 ---
 
-# Part 1 — Windows Investigation
+## Part 1 — Windows Investigation
 
-## Dataset Exploration
+### Dataset Exploration
 
 I began with the complete Windows dataset rather than immediately searching for a specific security event.
 
@@ -93,7 +97,7 @@ The dataset contained **12,256 events** and exposed security-relevant fields inc
 
 ---
 
-## Event ID Profiling
+### Event ID Profiling
 
 I counted events by Event ID to identify both common and unusual activity.
 
@@ -122,9 +126,9 @@ I treated the rare events as leads for deeper review, not as proof of malicious 
 
 ---
 
-# Finding 1 — Correlated Windows Account-Management Activity
+### Finding 1 — Correlated Windows Account-Management Activity
 
-## Initial Account-Management Cluster
+#### Initial Account-Management Cluster
 
 Reviewing the rare account-management activity revealed a cluster involving:
 
@@ -139,7 +143,7 @@ A nearby Event 4739 password-policy change used different host and session conte
 
 ---
 
-## James Network Authentication
+#### James Network Authentication
 
 I searched for Event ID 4624 using the Logon ID observed in the account-management events.
 
@@ -164,7 +168,7 @@ Logon Type 3 showed that this was a network logon. The matching Logon ID gave me
 
 ---
 
-## Security Session Reconstruction
+#### Security Session Reconstruction
 
 I reconstructed the relevant Windows Security events using the shared session identifier.
 
@@ -191,7 +195,7 @@ Event 4724 establishes a **password-reset attempt**. The published timeline does
 
 ---
 
-## Cross-Source Process Correlation
+#### Cross-Source Process Correlation
 
 Windows Security Event ID 4688 showed process-creation activity associated with the session.
 
@@ -215,7 +219,7 @@ The ProcessGuid and ParentProcessGuid values supported the parent-child relation
 
 *Figure 5. Sysmon process telemetry corroborating the process relationship under `Cybertees\James`.*
 
-### Analysis
+#### Analysis
 
 The Sysmon records showed the same account and displayed second as the Security activity, and the ProcessGuid relationships made the process ancestry clear. That supported the process comparison. I would still verify the event computer and session boundaries when reproducing it, as described in the search-scope note above.
 
@@ -223,7 +227,7 @@ The evidence let me examine network authentication, elevated session context, WM
 
 What I still could not answer was whether James was supposed to be doing it. `WmiPrvSE.exe` in the process ancestry supports WMI-associated execution, but it does not prove malicious remote WMI by itself. I also could not confirm from the supplied data that the security-enabled global group was privileged.
 
-### Windows Finding Disposition
+#### Windows Finding Disposition
 
 **Suspicious administrative activity — authorization unverified.**
 
@@ -231,9 +235,9 @@ The session would warrant escalation or authorization validation in a production
 
 ---
 
-# Part 2 — VPN Authentication Investigation
+## Part 2 — VPN Authentication Investigation
 
-## VPN Dataset Overview
+### VPN Dataset Overview
 
 I next examined the VPN dataset.
 
@@ -249,9 +253,9 @@ The dataset contained **2,000 events**, **10 users**, **12 source IP addresses**
 
 ---
 
-# Finding 2 — VPN Geographic Authentication Anomaly
+### Finding 2 — VPN Geographic Authentication Anomaly
 
-## Country Baseline
+#### Country Baseline
 
 I grouped VPN activity by user and source country.
 
@@ -278,7 +282,7 @@ I treated the rare country as a reason to investigate further, not as proof that
 
 ---
 
-## jsmith Behavioral Baseline
+#### jsmith Behavioral Baseline
 
 I selected `jsmith` for deeper investigation.
 
@@ -299,7 +303,7 @@ This established an unusually stable observed pattern: **199 of 200 VPN events c
 
 ---
 
-## Reusable Rare-Country Detection
+#### Reusable Rare-Country Detection
 
 I converted the manual country observation into a reusable SPL detection.
 
@@ -322,7 +326,7 @@ The 5% value was used as an investigative threshold for this training dataset an
 
 ---
 
-## Rapid Geographic Switching
+#### Rapid Geographic Switching
 
 I then created an SPL search that compared each VPN event with the user's immediately previous event.
 
@@ -364,21 +368,13 @@ US
 
 If the geographic labels accurately reflected physical user location, this sequence would be physically implausible.
 
-### Analysis
+#### Analysis
 
-The `jsmith` event contained several characteristics that justified further review:
-
-- 199 of 200 VPN events came from one US source IP.
-- Only one event originated from Japan.
-- The Japan-labelled source IP appeared once in `jsmith`'s observed history.
-- Normal US activity occurred 25 minutes before the Japanese login.
-- Normal US activity resumed 15 minutes afterward.
-
-By this point, I had a strong geographic inconsistency and an impossible-travel-style signal, but still not enough to call it credential theft or unauthorized access.
+The baseline and rapid-switch results gave me a strong geographic inconsistency and an impossible-travel-style signal, but still not enough to call it credential theft or unauthorized access.
 
 There were several explanations I could not rule out from the VPN data alone, including corporate VPN or proxy routing, inaccurate IP geolocation, shared infrastructure, legitimate remote access, travel, or another routing condition.
 
-### VPN Finding Disposition
+#### VPN Finding Disposition
 
 **Suspicious geographic inconsistency — identity validation required; insufficient evidence to confirm account compromise.**
 
@@ -386,7 +382,7 @@ In a production SOC, I would escalate the activity for identity and device valid
 
 ---
 
-# Final Assessment
+## Final Assessment
 
 | Finding | Supported assessment | Validation still needed |
 |---|---|---|
@@ -397,13 +393,13 @@ In a production SOC, I would escalate the activity for identity and device valid
 
 ---
 
-# Scope and Limitations
+## Scope and Limitations
 
 This investigation was performed in an authorized TryHackMe training environment using supplied Windows and VPN datasets.
 
 The analysis is limited to the available telemetry.
 
-## Windows Limitations
+### Windows Limitations
 
 The available evidence did not establish:
 
@@ -415,11 +411,11 @@ The available evidence did not establish:
 - whether additional endpoint activity occurred outside the supplied telemetry
 - the audit outcome of the password-reset attempt from the published timeline
 
-The public session and process tables omit the computer name, and the executed searches use All time. Host-scoped reproduction and an explicit time zone remain follow-up validation steps.
+The host, time-window, and time-zone validation still needed is documented in [Search Scope and Reproducibility](#search-scope-and-reproducibility).
 
 One working query exposed a training-lab password inside a command-line field. That screenshot was intentionally excluded from the public evidence set.
 
-## VPN Limitations
+### VPN Limitations
 
 The VPN dataset did not provide:
 
@@ -437,9 +433,9 @@ The geographic anomaly therefore cannot independently establish credential compr
 
 ---
 
-# Recommended Production SOC Follow-Up
+## Recommended Production SOC Follow-Up
 
-## Windows Activity
+### Windows Activity
 
 In a production environment, I would:
 
@@ -454,7 +450,7 @@ In a production environment, I would:
 9. Review subsequent activity involving `Alberto`.
 10. Escalate the session if authorization could not be confirmed.
 
-## VPN Activity
+### VPN Activity
 
 For the `jsmith` anomaly, I would:
 
@@ -471,7 +467,7 @@ For the `jsmith` anomaly, I would:
 
 ---
 
-# What I Learned
+## What I Learned
 
 Before this project, I mostly thought of Splunk as a place to search through logs. What clicked for me here was that every useful search can create the next question. I could start broad, find something unusual, and keep moving deeper depending on what the evidence showed.
 
@@ -483,7 +479,7 @@ The biggest lesson I took from the project was patience. Suspicious does not aut
 
 ---
 
-# Evidence Index
+## Evidence Index
 
 Each item below links directly to the screenshot used in the investigation.
 
@@ -503,7 +499,7 @@ The nine screenshots appear once alongside the relevant analysis. The query log 
 
 ---
 
-# Technical References
+## Technical References
 
 - [Microsoft: Event 4624 — successful logon](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624)
 - [Microsoft: Event 4634 — logoff and Logon ID scope][logoff]
@@ -516,7 +512,7 @@ The nine screenshots appear once alongside the relevant analysis. The query log 
 
 ---
 
-# Lab Disclosure
+## Lab Disclosure
 
 This project was completed in an authorized TryHackMe training environment.
 
