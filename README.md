@@ -15,22 +15,21 @@ I built this portfolio to show how I approach security work, not just which tool
 
 **[Read the full Splunk investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)** · **[View the SPL investigation query log](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/queries/investigation-queries.md)**
 
-In an authorized TryHackMe environment, I analyzed **12,256 Windows events** and **2,000 VPN authentication events** using Splunk and SPL. The investigation followed two leads:
+I investigated Windows authentication and account activity and isolated **two rare-country VPN events**, with **four rapid country-label transitions** around them.
 
-- **Windows authentication and account activity:** Pivoted from a network logon and Logon ID to account-management events, then examined supporting Windows Security and Sysmon process relationships. Host/session-boundary verification remains necessary before treating the correlation as a production finding.
-- **VPN geographic anomaly:** Baselined account behavior and identified a user with **199 US-labelled events and one Japan-labelled event**, with US-labelled activity 25 minutes before and 15 minutes after the outlier. Flagged the sequence for identity/device and routing validation rather than declaring account compromise.
+- **Windows evidence:** Account-management records and Sysmon process relationships provided leads for authorization review. Cross-source host/session linkage remains unverified.
+- **VPN evidence:** `jsmith` had 199 US-labelled events and one Japan-labelled event; `kbrown` had 199 Germany-labelled events and one Australia-labelled event. Transition gaps were 15–57 minutes.
+- **Final disposition:** Suspicious activity; **compromise unconfirmed**. Documented administrative-approval checks and VPN identity, device, MFA, and routing validation.
 
-**Evidence:** Nine screenshots and an 11-query SPL investigation trail, with findings, limitations, and recommended follow-up.
-
-**Outcome:** Suspicious activity identified; **compromise not confirmed** by the available training telemetry.
+**Scope and evidence:** Authorized TryHackMe lab; 12,256 Windows events and 2,000 VPN events in the supplied datasets, nine screenshots, and an 11-query SPL investigation trail.
 
 ## Completed Projects
 
-| Project | Skills demonstrated |
-|---|---|
-| [Splunk SIEM Investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md) | SPL investigation, session correlation, Security/Sysmon process analysis, behavioral baselining, and VPN anomaly detection |
-| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | Event correlation, account and process context, evidence-based disposition, and escalation planning |
-| [Nessus Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Scan configuration, target authentication, aggregate-result interpretation, and proposed validation/remediation workflow |
+| Project | Outcome | Skills demonstrated |
+|---|---|---|
+| [Splunk SIEM Investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md) | Two rare-country VPN events; four transitions; compromise unconfirmed | SPL, Windows/Sysmon analysis, behavioral baselining, and validation planning |
+| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | SYSTEM service activity consistent with normal behavior; reset approval unverified | Event correlation, account context, evidence-based disposition, and escalation planning |
+| [Nessus Guided Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Guided baseline complete; finding validation and remediation open | Scan configuration, authentication evidence, aggregate-result interpretation, and proposed follow-up |
 
 ## Other Completed Investigation Summaries
 

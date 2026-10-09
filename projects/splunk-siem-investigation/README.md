@@ -5,7 +5,21 @@
 ![Query Language](https://img.shields.io/badge/Query%20Language-SPL-555?style=flat-square)
 ![Environment](https://img.shields.io/badge/Environment-Authorized%20TryHackMe%20Lab-555?style=flat-square)
 
-**Jump to:** [Windows investigation](#part-1--windows-investigation) · [VPN investigation](#part-2--vpn-authentication-investigation) · [Assessment](#final-assessment) · [SPL queries](queries/investigation-queries.md) · [Evidence](#evidence-index) · [Limitations](#scope-and-limitations)
+## 60 Second View
+
+**Problem:** Investigate Windows account-management activity and VPN logins that deviated from each user's observed country baseline in authorized training data.
+
+**Evidence:** Windows Security records and Sysmon process relationships provided investigative leads. VPN baselining isolated **two rare-country events**: one Japan-labelled event for `jsmith` and one Australia-labelled event for `kbrown`, each 1 of 200 events. SPL identified **four rapid country-label transitions** around those two outliers, with gaps of **15–57 minutes**.
+
+**Final disposition:** Suspicious activity; **compromise unconfirmed**. Windows host/session linkage and administrative approval require validation. VPN follow-up requires identity, device, MFA, and routing checks.
+
+[![SPL results showing four country-label transitions around two rare-country VPN events](evidence/09-vpn-rapid-country-switch-detection.png)](evidence/09-vpn-rapid-country-switch-detection.png)
+
+*Key screenshot: four transition rows around two outlier events, not four separate rare-country logins. Full evidence and analysis follow below.*
+
+---
+
+**Jump to:** [60 second view](#60-second-view) · [Windows investigation](#part-1--windows-investigation) · [VPN investigation](#part-2--vpn-authentication-investigation) · [Assessment](#final-assessment) · [SPL queries](queries/investigation-queries.md) · [Evidence](#evidence-index) · [Limitations](#scope-and-limitations)
 
 ## Executive Summary
 
@@ -26,7 +40,7 @@ The VPN investigation analyzed 2,000 authentication events. Behavioral baselinin
 | Case ID | `LAB-SIEM-003` |
 | Status | Completed lab investigation |
 | Author | Xavier Tables |
-| Documentation updated | October 8, 2026 |
+| Documentation updated | October 9, 2026 |
 | Environment | Authorized TryHackMe training environment |
 | Tool | Splunk |
 | Query language | SPL |
@@ -76,6 +90,20 @@ I did not want to start with the assumption that either dataset showed an attack
 - Evidence-based triage, investigation documentation, and escalation planning
 
 The primary SPL searches used during the investigation are documented in [the SPL Investigation Query Log](./queries/investigation-queries.md).
+
+---
+
+## Technical Choices and Their Limits
+
+| Term | Why I used it in this case |
+|---|---|
+| `streamstats` | After `sort 0 user _time`, `current=f` and `last(...)` retained each user's previous country, IP, and time. Comparing consecutive events produced four transition rows around two outliers. Country labels require routing and geolocation validation. |
+| `ProcessGuid` | Identifies a specific process instance in Sysmon and helps avoid ambiguity when Windows reuses numeric process IDs. I used it to examine process ancestry. |
+| Parent-child relationships | Matching a child's `ParentProcessGuid` to its parent's `ProcessGuid` supports ancestry within Sysmon. The observed WMI-associated ancestry does not establish malicious intent or a verified Security-to-Sysmon session link. |
+| Logon Type 3 | Indicates network authentication. It led me to review the source IP, account, and Logon ID; it does not establish Remote Desktop access or malicious activity. |
+| Windows Event 4724 | Records a password-reset attempt. I reviewed the subject and target accounts; the published Splunk timeline omits the audit outcome, so I did not claim that reset succeeded. |
+
+Definitions: [Splunk streamstats](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/9.4/search-commands/streamstats), [Microsoft Sysmon](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon), [Microsoft Event 4624](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624), and [Microsoft Event 4724][reset].
 
 ---
 
@@ -495,7 +523,7 @@ Each item below links directly to the screenshot used in the investigation.
 | [`08-jsmith-ip-baseline.png`](./evidence/08-jsmith-ip-baseline.png) | Establish `jsmith` source-IP baseline |
 | [`09-vpn-rapid-country-switch-detection.png`](./evidence/09-vpn-rapid-country-switch-detection.png) | Detect rapid geographic transitions |
 
-The nine screenshots appear once alongside the relevant analysis. The query log records the full search trail; individual captures do not independently establish every interpretation in that trail.
+Nine distinct screenshots accompany the relevant analysis; the rapid-switch capture is also featured in the 60 second view. The query log records the full search trail; individual captures do not independently establish every interpretation in that trail.
 
 ---
 

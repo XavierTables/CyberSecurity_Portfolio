@@ -4,7 +4,21 @@
 ![Focus](https://img.shields.io/badge/Focus-Windows%20Security%20Log%20Triage-555?style=flat-square)
 ![Environment](https://img.shields.io/badge/Environment-Authorized%20Training%20Lab-555?style=flat-square)
 
-**Jump to:** [Timeline](#evidence-timeline) · [Password reset](#finding-1-administrator-password-reset) · [SYSTEM activity](#finding-2-privileged-system-service-activity) · [Assessment](#final-assessment) · [Follow-up](#what-i-would-do-next-in-a-production-soc) · [Evidence handling](#log-export-and-evidence-handling) · [Limitations](#scope-and-limitations)
+## 60 Second View
+
+**Problem:** Determine whether an Administrator password reset and later privileged SYSTEM activity indicated unauthorized access.
+
+**Evidence:** Reviewed **four Windows Security events**: 4724 and 4738 corroborated an Administrator password change; 4624 and 4672 showed a separate SYSTEM service logon. The service account, Logon Type 5, and `services.exe` supported expected service behavior.
+
+**Final disposition:** **No incident confirmed from the four reviewed events.** The SYSTEM activity was consistent with normal service authentication. Password-reset authorization remained unverified and would require approval checks before closure.
+
+<img src="https://github.com/user-attachments/assets/45a70e3a-aa9f-4813-ae95-99d8b8b35233" alt="Event 4738 showing Administrator Password Last Set matching the password-reset timestamp" width="900" />
+
+*Key screenshot: Event 4738 corroborates the password-change timing; it does not establish approval. Full evidence and analysis follow below.*
+
+---
+
+**Jump to:** [60 second view](#60-second-view) · [Timeline](#evidence-timeline) · [Password reset](#finding-1-administrator-password-reset) · [SYSTEM activity](#finding-2-privileged-system-service-activity) · [Assessment](#final-assessment) · [Follow-up](#what-i-would-do-next-in-a-production-soc) · [Evidence handling](#log-export-and-evidence-handling) · [Limitations](#scope-and-limitations)
 
 ## Executive Summary
 
@@ -30,7 +44,7 @@ The Administrator password-reset attempt was strongly corroborated by a matching
 | Case ID | `LAB-WIN-001` |
 | Status | Completed lab investigation |
 | Author | Xavier Tables |
-| Documentation updated | October 8, 2026 |
+| Documentation updated | October 9, 2026 |
 | Environment | Authorized uCertify Windows training VM |
 | Data source | Windows Security Event Log |
 | Tool | Windows Event Viewer |
