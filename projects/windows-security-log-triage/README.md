@@ -15,7 +15,7 @@ The Security log contained **6,530 events**. I manually analyzed four security-r
 1. An Administrator password reset and account-change event.
 2. A local SYSTEM service logon that received expected operating-system privileges.
 
-The Administrator password reset was corroborated by a matching account-change event, but the available training evidence did not show whether the reset had been approved. The later privileged activity belonged to `NT AUTHORITY\SYSTEM`, not Administrator, and was consistent with normal Windows service authentication.
+The Administrator password-reset attempt was strongly corroborated by a matching account-change event and Password Last Set timestamp, but subsequent authentication was not independently tested and authorization was unverified. The later privileged activity belonged to `NT AUTHORITY\SYSTEM`, not Administrator, and was consistent with normal Windows service authentication.
 
 **Final assessment:** No incident was confirmed from the four events reviewed. In a production SOC, I would keep the Administrator password-reset activity open until its authorization was validated.
 
@@ -88,7 +88,7 @@ The **6,530** figure represents the total number of events in the source Securit
 | Time | Event ID | Observation | Initial Interpretation |
 |---|---:|---|---|
 | 11/18/2021 9:31:21 PM | 4724 | Password-reset activity targeting `Administrator` | Privileged account activity requiring validation |
-| 11/18/2021 9:31:21 PM | 4738 | `Administrator` account changed; Password Last Set matched the timestamp | Supported that the reset took effect |
+| 11/18/2021 9:31:21 PM | 4738 | `Administrator` account changed; Password Last Set matched the timestamp | Strongly corroborated a password change; authentication untested |
 | 11/18/2021 9:35:47 PM | 4624 | `NT AUTHORITY\SYSTEM` logged on using Logon Type 5 through `services.exe` | Consistent with a local service logon |
 | 11/18/2021 9:35:47 PM | 4672 | Sensitive privileges assigned to the SYSTEM session | Expected context for a privileged SYSTEM session |
 
@@ -140,11 +140,11 @@ At the same time, the event did not tell me *why* the reset happened. The same e
 
 Event 4738 strengthened the investigation because it showed that the Administrator account changed at the same time as the 4724 password-reset activity.
 
-The matching **Password Last Set** timestamp supported the conclusion that the password reset took effect.
+The matching **Password Last Set** timestamp strongly corroborated that the Administrator password changed at the recorded time. I did not independently test subsequent authentication.
 
 The old and new UAC values were the same, so I did not observe an account-control change in this record.
 
-The matching timestamp told me the password reset took effect, but it still did not answer the authorization question. The lab did not include a help-desk ticket, change request, maintenance record, or administrator confirmation that explained why the reset happened.
+The matching timestamp strongly supported a completed password change, but did not independently verify subsequent authentication or answer the authorization question. The lab did not include a help-desk ticket, change request, maintenance record, or administrator confirmation that explained why the reset happened.
 
 ---
 
@@ -215,7 +215,7 @@ I organized the evidence into two clusters so I could keep the correlations that
 - **4738:** Administrator account changed
 - **Correlation basis:** same timestamp, same target account, and matching Password Last Set value
 
-Together, these events supported the conclusion that the Administrator password reset took effect.
+Together, these events strongly supported that the Administrator password changed at the recorded time; subsequent authentication was not independently tested.
 
 They did **not** prove that the reset had been authorized.
 
@@ -241,7 +241,7 @@ I therefore kept the two clusters separate rather than claiming a connection tha
 
 Based on the four events reviewed:
 
-- The Administrator password reset occurred and was supported by the matching account-change event.
+- The Administrator password-reset attempt and matching account-change record strongly corroborated a password change; subsequent authentication was not independently verified.
 - The available lab evidence did not establish whether the password reset was authorized.
 - The later successful logon belonged to SYSTEM, not Administrator.
 - Logon Type 5 and `services.exe` supported normal Windows service activity.
