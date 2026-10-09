@@ -11,7 +11,7 @@
 
 I used Splunk and SPL in an authorized TryHackMe training environment to investigate two security-relevant activity patterns: correlated Windows account-management activity and anomalous VPN authentication behavior.
 
-The Windows investigation began with 12,256 events. I profiled the available Event IDs, isolated rare account-management activity, and found a successful network logon for `James`. Searching Logon ID `0x551686` surfaced process creation and activity involving the `Alberto` account. Sysmon corroborated process relationships involving `WmiPrvSE.exe`, `net.exe`, `conhost.exe`, and `net1.exe`. The published searches support this activity cluster; confirming the host and session boundaries remains a follow-up step.
+The Windows investigation began with 12,256 events. I profiled the available Event IDs, isolated rare account-management activity, and found a successful network logon for `James`. Searching Logon ID `0x551686` surfaced process creation and activity involving the `Alberto` account. Sysmon showed process relationships involving `WmiPrvSE.exe`, `net.exe`, `conhost.exe`, and `net1.exe`. Security and Sysmon provide complementary evidence involving the same account and time period; the shared host and session boundaries remain unverified.
 
 The VPN investigation analyzed 2,000 authentication events. Behavioral baselining identified two users with rare-country logins. I selected `jsmith` for deeper review because 199 of 200 observed events came from one US-labelled source IP while a single event came from a Japan-labelled source IP. The US-labelled source appeared 25 minutes before and 15 minutes after that event.
 
@@ -160,7 +160,7 @@ The resulting event showed:
 | Target Logon ID | `0x551686` |
 | Elevated token | Yes |
 
-Logon Type 3 showed that this was a network logon. The matching Logon ID gave me the session anchor I needed to connect James's authentication to the later account-management activity.
+Logon Type 3 showed that this was a network logon. The matching Logon ID suggested a session link between James's authentication and the account-management activity. The published timeline does not display or filter the hostname, so the host and session boundaries still need verification.
 
 ![James successful network logon](evidence/03-james-network-logon.png)
 
@@ -221,7 +221,7 @@ The ProcessGuid and ParentProcessGuid values supported the parent-child relation
 
 #### Analysis
 
-The Sysmon records showed the same account and displayed second as the Security activity, and the ProcessGuid relationships made the process ancestry clear. That supported the process comparison. I would still verify the event computer and session boundaries when reproducing it, as described in the search-scope note above.
+The Sysmon records showed the same account and displayed second as the Security activity. ProcessGuid relationships support the process ancestry within Sysmon. This complements the Security timeline but does not independently prove both sources describe the same host-bound session; I would verify the event computer and session boundaries.
 
 The evidence let me examine network authentication, elevated session context, WMI-associated process ancestry, `net.exe` and `net1.exe` execution, account creation, group membership changes, a password-reset attempt, account deletion, and logoff as a related activity cluster.
 
@@ -386,7 +386,7 @@ In a production SOC, I would escalate the activity for identity and device valid
 
 | Finding | Supported assessment | Validation still needed |
 |---|---|---|
-| Windows activity | Security records associated with James's Logon ID and supporting Sysmon process relationships form a suspicious administrative activity cluster. | Verify host/session boundaries, administrative approval, affected group privileges, and surrounding endpoint activity. |
+| Windows activity | Security records matching James's Logon ID and complementary Sysmon process relationships suggest a suspicious administrative activity cluster; cross-source host/session linkage remains unverified. | Verify host/session boundaries, administrative approval, affected group privileges, and surrounding endpoint activity. |
 | VPN activity | `jsmith` and `kbrown` show rapid changes in country labels against stable observed baselines. | Verify account owner, device, MFA, source infrastructure, and geolocation reliability. |
 
 **Overall disposition: Suspicious activity requiring further validation. The supplied telemetry does not confirm compromise.**
