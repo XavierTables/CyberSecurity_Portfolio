@@ -20,23 +20,6 @@
 
 **Jump to:** [60 second view](#60-second-view) · [Timeline](#evidence-timeline) · [Password reset](#finding-1-administrator-password-reset) · [SYSTEM activity](#finding-2-privileged-system-service-activity) · [Assessment](#final-assessment) · [Follow-up](#what-i-would-do-next-in-a-production-soc) · [Evidence handling](#log-export-and-evidence-handling) · [Limitations](#scope-and-limitations)
 
-## Executive Summary
-
-I analyzed selected Windows Security events from an authorized uCertify training VM to determine whether an Administrator password reset and later privileged activity indicated unauthorized access.
-
-The Security log contained **6,530 events**. I manually analyzed four security-relevant records—**4724, 4738, 4624, and 4672**—and grouped them into two activity clusters:
-
-1. An Administrator password reset and account-change event.
-2. A local SYSTEM service logon that received expected operating-system privileges.
-
-The Administrator password-reset attempt was strongly corroborated by a matching account-change event and Password Last Set timestamp, but subsequent authentication was not independently tested and authorization was unverified. The later privileged activity belonged to `NT AUTHORITY\SYSTEM`, not Administrator, and was consistent with normal Windows service authentication.
-
-**Final assessment:** No incident was confirmed from the four events reviewed. In a production SOC, I would keep the Administrator password-reset activity open until its authorization was validated.
-
-> This conclusion applies only to the evidence reviewed. It does not prove the entire host was free from compromise.
-
----
-
 ## Project Overview
 
 | Field | Details |
