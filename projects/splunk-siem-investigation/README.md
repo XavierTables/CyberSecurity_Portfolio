@@ -489,13 +489,11 @@ For the `jsmith` anomaly, I would:
 
 ## What I Learned
 
-Before this project, I mostly thought of Splunk as a place to search through logs. What clicked for me here was that every useful search can create the next question. I could start broad, find something unusual, and keep moving deeper depending on what the evidence showed.
+The next useful question often came from the last search result. I started by looking for unusual Windows events, followed a Logon ID, and then compared the Security events with Sysmon process activity. On the VPN side, a single Japan-labelled event stood out more once I looked at the surrounding US-labelled logins.
 
-The Windows investigation made that clear. A rare account-management event led me to a Logon ID, that Logon ID led me to James's network session, and then Security and Sysmon provided complementary evidence involving the same account and time period, without independently proving every host and session boundary. I started to understand why correlation matters more than looking at one event by itself.
+If I could redo one part of this project, I would scope the Windows session searches by computer and time from the start. The published searches gave me leads, but that missing check limits how confidently I can connect the Security and Sysmon records.
 
-The VPN side taught me a different lesson. The Japan-labelled event looked suspicious, and the nearby US-labelled events made it worth a closer look. I still kept VPN routing, inaccurate geolocation, and other explanations open. It showed me why an investigation has to test the theory instead of treating an unusual country as the answer.
-
-The biggest lesson I took from the project was patience. Suspicious does not automatically mean malicious. My job as the analyst is to keep following the evidence, understand the context, and be clear about what I can prove and what still needs validation.
+The country changes were worth investigating, but I couldn't rule out routing or geolocation issues. I finished the lab with questions to validate, not proof of compromise.
 
 ---
 
