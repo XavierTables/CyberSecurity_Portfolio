@@ -13,6 +13,8 @@ I built this portfolio to show how I approach security work, not just which tool
 
 ## Featured SOC Investigation — Splunk SIEM Triage
 
+**[Read the one-page SOC case brief](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-incident-brief.md)** · **[Review the validation plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md)**
+
 **[Read the full Splunk investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)** · **[View the SPL investigation query log](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/queries/investigation-queries.md)**
 
 I investigated Windows authentication and account activity and isolated **two rare-country VPN events**, with **four rapid country-label transitions** around them.
@@ -75,6 +77,15 @@ These skills reflect coursework and hands-on lab practice. Each project report i
 - **Tri-C SecurePath Cybersecurity Boot Camp:** completed 14 weeks of training at Cuyahoga Community College in 2026.
 - **Associate of Arts:** Cuyahoga Community College.
 - **Additional training:** CompTIA CySA+ coursework and hands-on labs.
+
+## Professional Readiness Materials (Practice, Not Completed Work)
+
+The completed investigations above are evidence of performed lab work. The resources below are **training plans and interview preparation**, not evidence of executed Microsoft Sentinel or AD support cases:
+
+- **[Microsoft Sentinel / KQL lab workbook](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/practice-labs/sentinel-kql/README.md)** — proposed queries, evidence requirements, and a simulated incident-ticket template. **Not yet executed.**
+- **[Active Directory help desk lab workbook](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/practice-labs/helpdesk-ad/README.md)** — planned account/access troubleshooting and ticket closeout. **Not yet executed.**
+- **[SOC Analyst I interview drill](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/soc-interview-drill.md)** — technical questions tied to existing evidence and limitations.
+- **[Splunk host/session revalidation plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md)** — proposed queries to test the unresolved cross-source correlation. **Not yet executed.**
 
 ## Planned Projects
 
