@@ -31,12 +31,22 @@ SecurityEvent
 | order by TimeGenerated asc
 ```
 
-**C. Baseline sign-ins by observed IP (not a compromise verdict)**
+**C. Count sign-ins from each observed user/IP pair (not a compromise verdict)**
 ```kusto
 SigninLogs
 | where TimeGenerated > ago(7d)
-| summarize events=count(), distinctIPs=dcount(IPAddress) by UserPrincipalName, IPAddress
+| where isnotempty(UserPrincipalName) and isnotempty(IPAddress)
+| summarize events=count() by UserPrincipalName, IPAddress
 | order by UserPrincipalName asc, events desc
+```
+
+To see how many distinct source IPs each account used during the same window:
+```kusto
+SigninLogs
+| where TimeGenerated > ago(7d)
+| where isnotempty(UserPrincipalName) and isnotempty(IPAddress)
+| summarize events=count(), distinctIPs=dcount(IPAddress) by UserPrincipalName
+| order by distinctIPs desc
 ```
 
 **Important:** These are examples of KQL syntax, not confirmed alert detections. Tune date windows, thresholds and field availability after inspecting the data; `ResultType` does not tell the full story of MFA and conditional access.
