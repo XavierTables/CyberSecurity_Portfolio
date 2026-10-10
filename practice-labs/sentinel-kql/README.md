@@ -1,9 +1,9 @@
-# Microsoft Sentinel + KQL Incident Triage — Lab Workbook
+# Microsoft Sentinel + KQL — Practice Plan
 
-> **STATUS: NOT COMPLETED / NOT CLAIMED AS A PORTFOLIO PROJECT.** This workbook is a plan and query starter. No Sentinel workspace, log ingestion, detections or results have been verified for this account. Do not add Sentinel or KQL as hands-on work to a resume until you actually run and document the exercises.
+> **Planned exercise — not completed.** These are starter queries and a checklist for a future Sentinel investigation. I haven't added executed results or screenshots.
 
 ## Goal
-Demonstrate a second SIEM and a ticketed security investigation using **real authorized training telemetry** (or explicitly labelled synthetic data). Investigate a sign-in anomaly, test explanations and submit a defensible analyst handoff.
+Practice investigating a sign-in anomaly in a different SIEM from Splunk. The aim is to test an alert against the available logs, consider alternative explanations, and write a clear handoff.
 
 ## Setup and safety
 1. Use a permitted Microsoft Sentinel practice workspace with relevant data already connected. Check Azure billing/free-trial conditions; do not deploy paid resources without understanding costs.
@@ -72,4 +72,4 @@ SigninLogs
 - [Microsoft: SecurityEvent fields](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/securityevent)
 - [Microsoft: KQL documentation](https://learn.microsoft.com/en-us/kusto/query/)
 
-**Publishing rule:** Move into completed projects only after you perform, verify and document the lab, and rewrite this README with actual results. Never label these sample queries as executed.
+Once I've run the queries, I'll replace the placeholders with the actual data source, screenshots, findings, and limitations. Until then, this stays in the practice folder.
