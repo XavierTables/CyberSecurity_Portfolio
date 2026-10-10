@@ -1,9 +1,9 @@
-# Windows / Active Directory Help Desk Case — Lab Workbook
+# Active Directory Help Desk — Practice Plan
 
-> **STATUS: NOT COMPLETED / NOT CLAIMED AS NEW EXPERIENCE.** This is a repeatable practice scenario and blank ticket package. The resume already lists school-based AD labs, but this separate support-case workflow has not been performed or verified.
+> **Planned exercise — not completed.** This is a file-share troubleshooting scenario and ticket template. I haven't run this specific support case yet.
 
 ## Goal
-Show Tier-1 support ability to diagnose, communicate, document, verify and close (or correctly escalate) an access problem in a safe lab.
+Practice handling one help desk ticket from intake to troubleshooting, an approved fix or escalation, and final verification in a safe Windows lab.
 
 ## Lab environment
 Use a Windows Server evaluation VM with Active Directory Domain Services, a Windows client joined to your lab domain, and test-only users and groups. Ensure sufficient VM resources, use a host-only/private lab network, and snapshot before changes. **Do not operate on someone else's production domain.**
@@ -36,5 +36,5 @@ Create a test-only account unlock/password-reset scenario. Record identity verif
 **Validation result:** ___ | **Customer-facing resolution:** ___  
 **Status:** Open / Escalated / Closed | **Evidence:** ___
 
-## Resume honesty rule
-After this lab has been performed and screenshots/tickets are verified, you may add a bullet indicating **lab** experience documenting AD troubleshooting and resolution. Until then, keep it out of your completed-project list.
+## When this becomes a completed project
+After I run the case, I'll add the actual ticket, screenshots, commands, and verification results. For now, it's a practice outline, not completed project evidence.
