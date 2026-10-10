@@ -5,6 +5,8 @@
 ![Query Language](https://img.shields.io/badge/Query%20Language-SPL-555?style=flat-square)
 ![Environment](https://img.shields.io/badge/Environment-Authorized%20TryHackMe%20Lab-555?style=flat-square)
 
+**[Retrospective triage ticket](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-retrospective-triage-ticket.md)** (training exercise, not a production ticket)
+
 **Recruiter-ready summary:** [SOC case brief](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-incident-brief.md) · **Unresolved validation:** [Proposed host/session test plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md) (**not executed**)
 
 ## 60 Second View
