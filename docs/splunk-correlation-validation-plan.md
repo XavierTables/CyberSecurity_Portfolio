@@ -1,6 +1,6 @@
 # Splunk Host/Session Correlation — Revalidation Plan
 
-> **STATUS: PROPOSED TESTS, NOT EXECUTED.** The original training dataset is not available for independent re-query here. These examples do **not** repair the historical evidence or confirm that Security and Sysmon events came from one host/session.
+> **Not yet run.** This is the checklist I would use if I can access the training dataset again. The existing screenshots don't verify that every Security and Sysmon event came from the same host and session.
 
 ## Why this matters
 The recorded search `"0x551686" Channel=Security` operates over historical data without a host or time filter; the Sysmon query also lacks a matching computer constraint. Windows logon IDs can be reused across hosts and after restarts. A shared account and timestamp is suggestive, not definitive cross-source identity.
