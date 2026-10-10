@@ -13,7 +13,7 @@ I built this portfolio to show how I approach security work, not just which tool
 
 ## Featured SOC Investigation — Splunk SIEM Triage
 
-**[Read the one-page SOC case brief](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-incident-brief.md)** · **[Review the validation plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md)**
+**[Retrospective SOC triage ticket](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-retrospective-triage-ticket.md)** · **[Read the one-page SOC case brief](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-incident-brief.md)** · **[Review the validation plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md)**
 
 **[Read the full Splunk investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)** · **[View the SPL investigation query log](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/queries/investigation-queries.md)**
 
