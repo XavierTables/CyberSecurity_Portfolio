@@ -1,104 +1,41 @@
-# Xavier Tables | Cybersecurity & IT Portfolio
+# Xavier Tables | Security Operations Portfolio
 
-**CompTIA Security+ Certified | Tri-C SecurePath Graduate | Entry-Level SOC & IT Support**
+**CompTIA Security+ | Tri-C SecurePath graduate | Cleveland, Ohio**
 
-I built this portfolio to show how I approach security work, not just which tools I have used. Each completed project includes the evidence I collected, how I worked through it, what I concluded, and what the lab data could not prove.
+I'm working toward my first SOC Analyst I or IT support role. This repository contains three completed security labs. Each report links to the searches or screenshots I used, what I found, and what I couldn't confirm.
 
-**Location:** Cleveland, Ohio  
-**Career focus:** SOC Analyst I · IT Support · Help Desk · Desktop Support · NOC Technician
+[LinkedIn](https://www.linkedin.com/in/xaviertables/) · [GitHub profile](https://github.com/XavierTables)
 
-**LinkedIn:** [Xavier Tables](https://www.linkedin.com/in/xaviertables/)
+## Featured investigation: Splunk SIEM
 
-**Jump to:** [Featured case](#featured-soc-investigation--splunk-siem-triage) · [Projects](#completed-projects) · [Skills](#technical-foundation) · [Credentials](#certifications-and-education)
+**[Full investigation](projects/splunk-siem-investigation/README.md)** · **[SPL query log](projects/splunk-siem-investigation/queries/investigation-queries.md)** · **[Short case brief](docs/splunk-incident-brief.md)**
 
-## Featured SOC Investigation — Splunk SIEM Triage
+I used Splunk to work through two sets of training logs: **12,256 Windows events** and **2,000 VPN events**.
 
-**[Retrospective SOC triage ticket](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-retrospective-triage-ticket.md)** · **[Read the one-page SOC case brief](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-incident-brief.md)** · **[Review the validation plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md)**
+- **Windows:** Followed a network logon into account-management activity and compared Security events with Sysmon process relationships. The searches were not consistently scoped to one host and time window, so the cross-source session link needs further validation.
+- **VPN:** Found two accounts with one unusual country-labelled event each. An SPL search showed four rapid country changes around those two events, with gaps of 15–57 minutes. I documented other possible explanations, including routing and IP geolocation.
+- **Result:** Both patterns deserved follow-up. The available evidence did **not** confirm compromise.
 
-**[Read the full Splunk investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md)** · **[View the SPL investigation query log](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/queries/investigation-queries.md)**
+The full report includes **11 SPL searches**, nine screenshots, and the reasoning behind the findings.
 
-I investigated Windows authentication and account activity and isolated **two rare-country VPN events**, with **four rapid country-label transitions** around them.
+## Completed projects
 
-- **Windows evidence:** Account-management records and Sysmon process relationships provided leads for authorization review. Cross-source host/session linkage remains unverified.
-- **VPN evidence:** `jsmith` had 199 US-labelled events and one Japan-labelled event; `kbrown` had 199 Germany-labelled events and one Australia-labelled event. Transition gaps were 15–57 minutes.
-- **Final disposition:** Suspicious activity; **compromise unconfirmed**. Documented administrative-approval checks and VPN identity, device, MFA, and routing validation.
-
-**Scope and evidence:** Authorized TryHackMe lab; 12,256 Windows events and 2,000 VPN events in the supplied datasets, nine screenshots, and an 11-query SPL investigation trail.
-
-## Completed Projects
-
-| Project | Outcome | Skills demonstrated |
-|---|---|---|
-| [Splunk SIEM Investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/splunk-siem-investigation/README.md) | Two rare-country VPN events; four transitions; compromise unconfirmed | SPL, Windows/Sysmon analysis, behavioral baselining, and validation planning |
-| [Windows Security Log Triage](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md) | SYSTEM service activity consistent with normal behavior; reset approval unverified | Event correlation, account context, evidence-based disposition, and escalation planning |
-| [Nessus Guided Vulnerability Assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md) | Guided baseline complete; finding validation and remediation open | Scan configuration, authentication evidence, aggregate-result interpretation, and proposed follow-up |
-
-## Other Completed Investigation Summaries
-
-### Windows Security Log Triage
-
-**Completed | Security Operations**
-
-I reviewed Windows Security events **4724, 4738, 4624, and 4672** in a uCertify training VM. I separated the Administrator password reset from later SYSTEM service activity.
-
-**Assessment:** The SYSTEM activity was consistent with normal service behavior. The password reset was corroborated, but its authorization remained unverified.
-
-**Evidence:** Event screenshots, a timeline, analysis, and recommended follow-up.
-
-[Read the full investigation](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/windows-security-log-triage/README.md)
-
-### Nessus Vulnerability Assessment
-
-**Completed baseline | Guided Vulnerability Assessment**
-
-I configured and completed a Basic Network Scan against one assigned uCertify host using the supplied Windows target credentials. The scan completed in **23 minutes** and displayed **Auth: Pass**.
-
-**Assessment:** Critical and High scanner-reported results warranted finding-level review. Specific applicability, exploitability, and remediation remained unverified.
-
-**Evidence:** Five screenshots, a workflow diagram, result interpretation, and file-integrity checksums.
-
-[Read the full assessment](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/projects/nessus-vulnerability-assessment/README.md)
-
-## Technical Foundation
-
-| Area | Training and tools |
+| Project | What I did |
 |---|---|
-| Security Operations | Windows Security logs, Event Viewer, Splunk, SPL, Sysmon, log analysis, session correlation, behavioral baselining, incident-response fundamentals |
-| Vulnerability Assessment | Tenable Nessus, CVSS interpretation, validation and remediation planning |
-| Networking | TCP/IP, Wireshark, Nmap, network traffic analysis |
-| Systems | Windows, Linux, Kali Linux, macOS, Active Directory fundamentals |
-| Documentation | Evidence collection, investigation timelines, technical reports, escalation recommendations |
+| **[Splunk SIEM investigation](projects/splunk-siem-investigation/README.md)** | Investigated Windows authentication and VPN activity using SPL, Windows Security logs, and Sysmon. |
+| **[Windows Security log triage](projects/windows-security-log-triage/README.md)** | Reviewed an Administrator password reset and separate SYSTEM service activity using Events 4724, 4738, 4624, and 4672. The reset's authorization was not available in the lab. |
+| **[Nessus vulnerability assessment](projects/nessus-vulnerability-assessment/README.md)** | Ran a guided, credentialed baseline scan of one lab host and reviewed the reported severity counts. Individual findings and remediation weren't verified. |
 
-These skills reflect coursework and hands-on lab practice. Each project report identifies the tools I used in that investigation.
+## Technical background
 
-## Certifications and Education
+**Used in the published labs:** Splunk, SPL, Windows Event Viewer and Security logs, Sysmon, Nessus, account/session investigation, process analysis, and VPN baselining.
 
-- **CompTIA Security+:** certified.
-- **Tri-C SecurePath Cybersecurity Boot Camp:** completed 14 weeks of training at Cuyahoga Community College in 2026.
-- **Associate of Arts:** Cuyahoga Community College.
-- **Additional training:** CompTIA CySA+ coursework and hands-on labs.
+**Additional coursework and training:** Active Directory fundamentals, networking (TCP/IP, DNS, DHCP), Wireshark, Nmap, Windows, and Linux.
 
-## Professional Readiness Materials (Practice, Not Completed Work)
+**Education and certification:** CompTIA Security+ (2026); Tri-C SecurePath cybersecurity boot camp (14 weeks, completed June 2026); Associate of Arts, Cuyahoga Community College (2022). Additional CySA+ coursework.
 
-The completed investigations above are evidence of performed lab work. The resources below are **training plans and interview preparation**, not evidence of executed Microsoft Sentinel or AD support cases:
+## About the lab work
 
-- **[Microsoft Sentinel / KQL lab workbook](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/practice-labs/sentinel-kql/README.md)** — proposed queries, evidence requirements, and a simulated incident-ticket template. **Not yet executed.**
-- **[Active Directory help desk lab workbook](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/practice-labs/helpdesk-ad/README.md)** — planned account/access troubleshooting and ticket closeout. **Not yet executed.**
-- **[SOC Analyst I interview drill](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/soc-interview-drill.md)** — technical questions tied to existing evidence and limitations.
-- **[Splunk host/session revalidation plan](https://github.com/XavierTables/CyberSecurity_Portfolio/blob/main/docs/splunk-correlation-validation-plan.md)** — proposed queries to test the unresolved cross-source correlation. **Not yet executed.**
+These projects used authorized TryHackMe and uCertify environments. The reports distinguish what I actually observed from follow-up steps that would need other data, tools, or approvals. They're training investigations, not production incidents.
 
-## Planned Projects
-
-| Project | Focus |
-|---|---|
-| Network Traffic Analysis | Wireshark investigation and evidence-based network analysis |
-| Malware Analysis | Safe sandbox observations, indicators, behavior, and defensive relevance |
-| Web App Security | Authorized vulnerability discovery, validation, risk explanation, and remediation guidance |
-
-## Lab Disclosure
-
-The completed projects use authorized training environments such as uCertify and TryHackMe. Those platforms supplied the systems, scenarios, or datasets; the portfolio shows the evidence I worked with, the searches and analysis I performed, and how I reached each conclusion.
-
-I keep the lab boundaries clear, separate what I observed from what I would do next in production, and do not publish course answers or credentials.
-
-**GitHub profile:** [XavierTables](https://github.com/XavierTables)
+For the Splunk case, I also wrote a [retrospective example triage ticket](docs/splunk-retrospective-triage-ticket.md) and a [host/session revalidation plan](docs/splunk-correlation-validation-plan.md). The ticket wasn't handled in a live SOC, and the proposed revalidation tests haven't been run.
