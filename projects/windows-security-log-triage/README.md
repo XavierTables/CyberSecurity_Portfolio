@@ -283,11 +283,9 @@ For this portfolio, I used screenshots to demonstrate the investigation without 
 
 ## What I Learned
 
-The biggest lesson from this project was that one Windows event rarely tells the whole story. The useful information came from comparing the account, timestamp, Logon ID, logon type, process, and nearby events instead of judging each record by its Event ID alone.
+The account and logon context mattered more than the fact that all four events looked security-relevant. The Administrator password reset and the later SYSTEM service logon happened close together, but the evidence didn't justify combining them into one attack story.
 
-It also taught me not to connect events just because they happen close together. The password-reset activity and the later SYSTEM service activity were both security-relevant, but the evidence did not support turning them into one attack chain.
-
-That became an important rule for how I investigate now: **interesting or privileged activity is not automatically malicious. Context has to support the conclusion.**
+I could explain the SYSTEM activity from the logon type and service process. I couldn't answer whether the password reset was approved, so that remained the follow-up question.
 
 ---
 
