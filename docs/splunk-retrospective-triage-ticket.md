@@ -1,6 +1,6 @@
 # SOC Triage Ticket — Retrospective Training Case
 
-> **STATUS: RETROSPECTIVELY DOCUMENTED EXERCISE.** This ticket was assembled after the authorized TryHackMe investigation using the published evidence. It was **not** opened in a production SOC queue, assigned to a real responder, escalated to an organization, or closed under a service-level agreement.
+> **Training exercise, written after the investigation.** I organized my existing TryHackMe findings in a ticket format to practice handoffs. This was not a production ticket, and no real-world escalation or containment occurred.
 
 | Field | Entry |
 |---|---|
@@ -42,4 +42,4 @@
 - [Concise case brief](splunk-incident-brief.md)
 - [Proposed revalidation plan — unexecuted](splunk-correlation-validation-plan.md)
 
-**Honesty rule:** This document demonstrates retrospective ticket writing from known lab evidence; it does not demonstrate real queue operations, SLA handling or an actual incident response.
+This ticket format is a documentation exercise based on the completed lab. It doesn't represent experience working a live alert queue or meeting production SLAs.
