@@ -25,18 +25,6 @@
 
 **Jump to:** [60 second view](#60-second-view) · [Windows investigation](#part-1--windows-investigation) · [VPN investigation](#part-2--vpn-authentication-investigation) · [Assessment](#final-assessment) · [SPL queries](queries/investigation-queries.md) · [Evidence](#evidence-index) · [Limitations](#scope-and-limitations)
 
-## Executive Summary
-
-I used Splunk and SPL in an authorized TryHackMe training environment to investigate two security-relevant activity patterns: correlated Windows account-management activity and anomalous VPN authentication behavior.
-
-The Windows investigation began with 12,256 events. I profiled the available Event IDs, isolated rare account-management activity, and found a successful network logon for `James`. Searching Logon ID `0x551686` surfaced process creation and activity involving the `Alberto` account. Sysmon showed process relationships involving `WmiPrvSE.exe`, `net.exe`, `conhost.exe`, and `net1.exe`. Security and Sysmon provide complementary evidence involving the same account and time period; the shared host and session boundaries remain unverified.
-
-The VPN investigation analyzed 2,000 authentication events. Behavioral baselining identified two users with rare-country logins. I selected `jsmith` for deeper review because 199 of 200 observed events came from one US-labelled source IP while a single event came from a Japan-labelled source IP. The US-labelled source appeared 25 minutes before and 15 minutes after that event.
-
-**Final disposition:** Suspicious activity identified in both datasets; additional authorization, identity, and endpoint validation would be required before classifying either case as a confirmed security incident.
-
----
-
 ## Project Overview
 
 | Field | Details |
