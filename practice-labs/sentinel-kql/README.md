@@ -1,28 +1,30 @@
-# Microsoft Sentinel + KQL — Practice Plan
+# Sentinel and KQL: Practice Plan
 
-> **Planned exercise — not completed.** These are starter queries and a checklist for a future Sentinel investigation. I haven't added executed results or screenshots.
+**Status: Planned; not executed.** The queries below are starting points awaiting schema checks and actual results.
 
-## Goal
-Practice investigating a sign-in anomaly in a different SIEM from Splunk. The aim is to test an alert against the available logs, consider alternative explanations, and write a clear handoff.
+## Goal and setup
 
-## Setup and safety
-1. Use a permitted Microsoft Sentinel practice workspace with relevant data already connected. Check Azure billing/free-trial conditions; do not deploy paid resources without understanding costs.
-2. Inspect the tables available to you. `SigninLogs` requires the appropriate Microsoft Entra diagnostic data; `SecurityEvent` requires Windows Security ingestion. If your workspace lacks either table, **do not claim these searches returned results**.
-3. Capture a table schema/field inventory and a documented time window. Protect real names and IPs before publishing.
+Investigate a sign-in anomaly and write a short handoff using an authorized training workspace. Use an existing practice environment where possible; confirm billing conditions before creating Azure resources.
 
-## KQL starter searches — proposed, not executed
+Inspect available tables and fields first. `SigninLogs` needs Entra sign-in data; `SecurityEvent` needs Windows Security data. Record the actual query window and time zone.
 
-**A. Count failed Entra sign-ins by user in 30-minute buckets**
+## Proposed queries
+
+### 1. Count unsuccessful sign-ins in 30-minute buckets
+
 ```kusto
 SigninLogs
 | where TimeGenerated > ago(7d)
-| where ResultType != "0"
+| where isnotempty(ResultType) and ResultType != "0"
 | summarize failures=count(), sourceIPs=dcount(IPAddress) by UserPrincipalName, bin(TimeGenerated, 30m)
 | where failures >= 5
 | order by failures desc
 ```
 
-**B. Inspect Windows logon and account-management events when SecurityEvent is present**
+Five events is a practice threshold to evaluate against the data. Inspect result codes and surrounding sign-ins before treating a count as an alert; MFA and conditional-access outcomes need additional context.
+
+### 2. Inspect Windows authentication/account events
+
 ```kusto
 SecurityEvent
 | where TimeGenerated > ago(7d)
@@ -31,7 +33,8 @@ SecurityEvent
 | order by TimeGenerated asc
 ```
 
-**C. Count sign-ins from each observed user/IP pair (not a compromise verdict)**
+### 3. Baseline user/IP pairs
+
 ```kusto
 SigninLogs
 | where TimeGenerated > ago(7d)
@@ -40,7 +43,8 @@ SigninLogs
 | order by UserPrincipalName asc, events desc
 ```
 
-To see how many distinct source IPs each account used during the same window:
+### 4. Count distinct source IPs per user
+
 ```kusto
 SigninLogs
 | where TimeGenerated > ago(7d)
@@ -49,27 +53,19 @@ SigninLogs
 | order by distinctIPs desc
 ```
 
-**Important:** These are examples of KQL syntax, not confirmed alert detections. Tune date windows, thresholds and field availability after inspecting the data; `ResultType` does not tell the full story of MFA and conditional access.
+An unusual IP count is a lead for context checks, rather than a compromise verdict.
 
-## Required evidence before marking the lab complete
-- Workspace or authorized exercise description and data source, without exposing credentials.
-- Three **executed** KQL queries with screenshots or redacted result exports.
-- One candidate alert and a timeline with normalized timestamps.
-- Alternative explanations and what observations favor or weaken each.
-- A simulated incident ticket: asset/user, alert time, severity rationale, disposition, evidence, recommended handoff.
-- A limitations section specifying missing telemetry and anything not tested.
+## Evidence to publish after execution
 
-## Fill-in incident ticket
-**Case ID:** LAB-SENT-___ | **Analyst:** ___ | **Lab date:** ___  
-**Alert / rule:** ___ | **Data source:** ___ | **Time zone:** ___  
-**Affected identity/device:** ___ | **Severity + rationale:** ___  
-**Detection query:** ___ | **Observed evidence:** ___  
-**What would change my assessment:** ___ | **Disposition:** ___  
-**Escalation / next owner:** ___ | **Evidence references:** ___
+- Workspace/data-source description and verified table schema.
+- Executed queries with sanitized screenshots or result exports.
+- One candidate finding, a timestamped timeline, and alternative explanations.
+- A sample ticket covering affected entities, evidence, severity rationale, conclusion, open questions, and recommended next owner.
 
-## Official schema reference
-- [Microsoft: SigninLogs fields](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/signinlogs)
-- [Microsoft: SecurityEvent fields](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/securityevent)
-- [Microsoft: KQL documentation](https://learn.microsoft.com/en-us/kusto/query/)
+Record actual findings and limitations after running the exercise.
 
-Once I've run the queries, I'll replace the placeholders with the actual data source, screenshots, findings, and limitations. Until then, this stays in the practice folder.
+## Official references
+
+- [Microsoft: SigninLogs schema](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/signinlogs)
+- [Microsoft: SecurityEvent schema](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/securityevent)
+- [Microsoft: KQL](https://learn.microsoft.com/en-us/kusto/query/)

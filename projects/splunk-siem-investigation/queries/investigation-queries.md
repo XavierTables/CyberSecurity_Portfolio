@@ -1,52 +1,26 @@
-# SPL Investigation Query Log
+# SPL Query Log
 
-This is the search trail I used during the Splunk SIEM investigation. I kept the queries in order so the pivots are visible instead of only showing the final searches that worked.
+These are the **11 searches executed** during the [Splunk investigation](../README.md), in their original order. The SPL blocks preserve the original commands.
 
-TryHackMe provided the authorized lab environment and datasets. The SPL, investigative pivots, results, and notes below show how I worked through the available evidence.
+## Search scope
 
-## Scope and Evidence Notes
+The screenshots used **All time**. The complete dataset bounds and display time zone were not recorded. The Windows session/Sysmon searches did not consistently constrain or display the event computer.
 
-The searches below preserve the SPL I executed in the lab. The published captures used **All time**; the displayed time zone and full dataset bounds were not recorded. The Windows authentication anchor shows `Hostname=Micheal.Beaven`, but the session and Sysmon table searches do not constrain or display the computer name. Before reproducing them in production, I would verify the event computer, time window, and subject/target Logon ID fields. See [the report's search-scope note](../README.md#search-scope-and-reproducibility).
+Nine screenshots accompany the report. They document selected results, while this log also preserves searches without a dedicated capture. The [validation plan](../../../docs/splunk-correlation-validation-plan.md) describes the host, time, and event-specific Logon ID checks still needed.
 
-Nine screenshots support the investigation, while this log records eleven searches. The country-percentage and two-hour thresholds are choices for this training dataset. Production tuning would require sufficient user history, missing-field handling, reliable timestamps, and review of false positives.
+## 01: Windows dataset overview
 
----
-
-## Query 01 — Windows Dataset Overview
-
-### Purpose
-
-Establish the scope of the Windows dataset and review the available telemetry before narrowing the investigation.
-
-### SPL
+Inspect the available Windows data before narrowing the search.
 
 ```spl
 index=windowslogs
 ```
 
-### Result
+Recorded result: 12,256 events, with authentication, account, host, process, and network fields available.
 
-The search returned **12,256 Windows events**.
+## 02: Event ID distribution
 
-Available fields included security-relevant information such as EventID, Hostname, User / AccountName, Image, process information, network information, and Windows Security and Sysmon telemetry.
-
-### Why It Mattered
-
-Starting with the complete dataset allowed me to understand the available evidence before selecting specific events for deeper analysis.
-
-### Next Pivot
-
-Determine which Windows Event IDs were present and how frequently they occurred.
-
----
-
-## Query 02 — Windows Event ID Distribution
-
-### Purpose
-
-Identify common and rare Windows Event IDs within the dataset.
-
-### SPL
+Count records by Event ID to find less common activity.
 
 ```spl
 index=windowslogs
@@ -54,84 +28,32 @@ index=windowslogs
 | sort - count
 ```
 
-### Result
+Recorded result: 55 distinct Event IDs. Events 4720, 4724, 4726, 4728, 4729, and 4739 appeared once each. Their rarity provided leads for review.
 
-The dataset contained **55 distinct Event IDs**.
+## 03: Account-management activity
 
-Several account-management events appeared only once, including 4720, 4724, 4726, 4728, 4729, and 4739.
-
-### Why It Mattered
-
-The low-frequency account-management events provided a focused starting point for investigation. Rare activity was treated as an investigative lead rather than automatically malicious behavior.
-
-### Next Pivot
-
-Isolate the rare account-management events and determine whether they shared common users, sessions, hosts, or target accounts.
-
----
-
-## Query 03 — Rare Account-Management Activity
-
-### Purpose
-
-Review the rare account-management events together and determine whether they formed a related activity cluster.
-
-### SPL
+Review the rare account-management events together.
 
 ```spl
 index=windowslogs EventID IN (4720,4724,4726,4728,4729,4739)
 | sort _time
 ```
 
-### Result
+The recorded findings involved subject account James, target account Alberto, and Logon ID 0x551686. A nearby 4739 event had different host/session context and was excluded from that cluster.
 
-Five events were strongly connected through common evidence involving subject account `James`, Subject Logon ID `0x551686`, the target SID associated with `Alberto`, and host `Micheal.Beaven`.
+## 04: James network logon
 
-The 4739 password-policy event had different host and session context and was not treated as part of the same activity chain.
-
-### Why It Mattered
-
-This search identified a coherent account-management cluster while preventing an unrelated nearby event from being forced into the same narrative.
-
-### Next Pivot
-
-Identify the authentication session associated with Logon ID `0x551686`.
-
----
-
-## Query 04 — James Successful Network Logon
-
-### Purpose
-
-Identify the successful authentication event associated with the Logon ID used during the account-management activity.
-
-### SPL
+Look for an authentication record matching the observed Logon ID.
 
 ```spl
 index=windowslogs EventID=4624 "0x551686"
 ```
 
-### Result
+Recorded result: one 4624 event for James, with TargetLogonId 0x551686, Type 3, source IP 172.90.12.11, Kerberos, and an elevated token. This suggested a possible session connection to the account activity; host and time-window checks remain necessary.
 
-One successful logon event was returned with account `James`, domain `Cybertees.LOCAL`, Target Logon ID `0x551686`, Logon Type 3, source IP `172.90.12.11`, Kerberos authentication, and an elevated token.
+## 05: Security timeline
 
-### Why It Mattered
-
-The matching Logon ID connected James's successful network authentication to the later account-management activity. Logon Type 3 established network authentication but did not by itself establish malicious remote access.
-
-### Next Pivot
-
-Reconstruct the Security-channel activity associated with the session.
-
----
-
-## Query 05 — Security Session Timeline
-
-### Purpose
-
-Reconstruct the Windows Security activity associated with Logon ID `0x551686`.
-
-### SPL
+Collect Security records matching the Logon ID and inspect their order.
 
 ```spl
 index=windowslogs "0x551686" Channel=Security
@@ -140,29 +62,11 @@ EventID IN (4624,4672,4627,4688,4728,4720,4724,4729,4726,4634)
 | table RecordNumber EventTime EventID Category SubjectUserName TargetUserName SubjectLogonId TargetLogonId LogonType IpAddress Message
 ```
 
-### Result
+The published result contained 12 rows, including authentication, process creation, account/group changes, a password-reset attempt, and logoff. RecordNumber helped order records within the Security log, subject to confirming the event computer/log instance. The table omitted the password-reset audit outcome.
 
-The Security record sequence showed special-logon context, successful network authentication, group-membership information, process creation, group membership changes, `Alberto` account creation, a password-reset attempt, account deletion, and session logoff. The published table does not display the audit outcome of Event 4724, so it does not establish whether the reset attempt succeeded.
+## 06: Sysmon process relationships
 
-The relevant events occurred within the same displayed second, so Security `RecordNumber` provided the clearest available ordering within that channel.
-
-### Why It Mattered
-
-This organized the Security records associated with the Logon ID into a timeline. The computer and time-window validation described above remains necessary when reproducing the correlation.
-
-### Next Pivot
-
-Investigate the processes created within the session.
-
----
-
-## Query 06 — Sysmon Process Correlation
-
-### Purpose
-
-Use Sysmon telemetry to independently verify the process activity observed in Windows Security Event 4688.
-
-### SPL
+Inspect process fields for James and compare them with the Security findings.
 
 ```spl
 index=windowslogs EventID=1 User="Cybertees\\James"
@@ -171,65 +75,21 @@ index=windowslogs EventID=1 User="Cybertees\\James"
 | table _time User Image ParentImage ProcessId ParentProcessId ProcessGuid ParentProcessGuid
 ```
 
-### Result
+The rows showed net.exe with parent image WmiPrvSE.exe, plus conhost.exe and net1.exe with GUID relationships matching that net.exe process. This supported ancestry within the Sysmon results. It did not verify a common host/session with the Security records.
 
-Sysmon showed the process relationship:
+## 07: VPN dataset overview
 
-```text
-WmiPrvSE.exe
-    |
-    +-- net.exe
-          |
-          +-- conhost.exe
-          |
-          +-- net1.exe
-```
-
-The ProcessGuid and ParentProcessGuid values supported the parent-child relationship.
-
-### Why It Mattered
-
-Sysmon corroborated the process relationships for the same account and displayed second. The ProcessGuid matches supported the parent-child relationships; matching the event computer and session boundaries would strengthen the cross-source correlation. The available evidence supported WMI-associated ancestry while leaving authorization and malicious intent unresolved.
-
-### Next Pivot
-
-Move to the VPN dataset and establish normal user authentication behavior.
-
----
-
-## Query 07 — VPN Dataset Overview
-
-### Purpose
-
-Establish the scope and available fields within the VPN authentication dataset.
-
-### SPL
+Inspect the available VPN data.
 
 ```spl
 index=vpnlogs
 ```
 
-### Result
+Recorded result: 2,000 events, 10 users, 12 source IPs, and 6 countries. The investigation used user, src_ip, src_country, and _time.
 
-The dataset contained **2,000 VPN events**, **10 users**, **12 source IP addresses**, and **6 source countries**.
+## 08: Per-user country baseline
 
-### Why It Mattered
-
-The dataset contained sufficient user, IP, country, and timestamp information to perform behavioral baselining and geographic anomaly analysis.
-
-### Next Pivot
-
-Determine each user's normal country distribution.
-
----
-
-## Query 08 — VPN Country Baseline
-
-### Purpose
-
-Compare each user's VPN activity by source country.
-
-### SPL
+Count each user's events by country.
 
 ```spl
 index=vpnlogs
@@ -237,30 +97,11 @@ index=vpnlogs
 | sort user - count
 ```
 
-### Result
+Recorded result: jsmith had 199 US-labelled events and one Japan-labelled event; kbrown had 199 Germany-labelled events and one Australia-labelled event. These became candidates for follow-up.
 
-Most users showed consistent geographic behavior. Two accounts contained one rare-country event:
+## 09: Rare-country search
 
-- `jsmith` — 199 US events / 1 Japan event
-- `kbrown` — 199 Germany events / 1 Australia event
-
-### Why It Mattered
-
-This established two geographic anomaly candidates while preserving the distinction between unusual and malicious activity.
-
-### Next Pivot
-
-Determine whether the rare source IPs were also unusual within the dataset.
-
----
-
-## Query 09 — Reusable Rare-Country Detection
-
-### Purpose
-
-Automatically identify countries representing a small percentage of an individual user's observed VPN activity.
-
-### SPL
+Calculate each country's share of a user's recorded events.
 
 ```spl
 index=vpnlogs
@@ -272,30 +113,11 @@ index=vpnlogs
 | table user src_country count user_total country_pct
 ```
 
-### Result
+The search returned the two outliers at 0.50% each (1 of 200 events). The 5% cutoff was a training-data choice; its suitability for other datasets was not tested.
 
-The search automatically identified:
+## 10: jsmith source-IP baseline
 
-- `jsmith` / Japan — 1 of 200 events — **0.50%**
-- `kbrown` / Australia — 1 of 200 events — **0.50%**
-
-### Why It Mattered
-
-This converted the manually observed geographic anomalies into a reusable behavioral detection method. The 5% threshold was used only as an investigative threshold for this training dataset.
-
-### Next Pivot
-
-Deeply investigate one candidate account and establish its IP baseline.
-
----
-
-## Query 10 — jsmith IP Baseline
-
-### Purpose
-
-Determine whether `jsmith` normally used consistent VPN source infrastructure.
-
-### SPL
+Compare IP/country counts and the first/last observed times for jsmith.
 
 ```spl
 index=vpnlogs user=jsmith
@@ -304,32 +126,11 @@ index=vpnlogs user=jsmith
 | sort - count
 ```
 
-### Result
+Recorded result: 72.14.201.12 / US had 199 events; 103.5.140.67 / Japan had one. The unusual source was assessed within the supplied dataset's scope.
 
-`jsmith` showed:
+## 11: Rapid country changes
 
-- `72.14.201.12` / US — **199 events**
-- `103.5.140.67` / Japan — **1 event**
-
-The US source appeared throughout the observed period, while the Japan-labelled source IP appeared once for `jsmith` within that scope.
-
-### Why It Mattered
-
-The result established an extremely stable observed IP/country baseline for `jsmith` with one clear geographic deviation.
-
-### Next Pivot
-
-Determine whether the rare-country login occurred close to logins from the user's normal country.
-
----
-
-## Query 11 — Rapid Country-Switch Detection
-
-### Purpose
-
-Automatically identify consecutive VPN events where a user's source country changed within two hours.
-
-### SPL
+Compare each event with the previous event for that user.
 
 ```spl
 index=vpnlogs
@@ -340,25 +141,10 @@ index=vpnlogs
 | table _time user previous_country previous_ip src_country src_ip delta_minutes
 ```
 
-### Result
+Recorded result: jsmith US to Japan in 25 minutes and Japan to US in 15; kbrown Germany to Australia in 17 and Australia to Germany in 57. Four transitions surrounded two rare-country events. The 120-minute threshold was chosen for the lab; routing and geolocation context remained unresolved.
 
-The detection identified four rapid geographic transitions:
+## Reproduction notes
 
-- `jsmith`: US → Japan in **25 minutes**
-- `jsmith`: Japan → US in **15 minutes**
-- `kbrown`: Germany → Australia in **17 minutes**
-- `kbrown`: Australia → Germany in **57 minutes**
+Before reusing these searches, inspect the field schema, bound the time window, check missing values and timestamp ties, and tune thresholds against sufficient user history. In Windows events, verify the computer and the meaning of subject versus target Logon IDs.
 
-### Why It Mattered
-
-The search independently detected geographically inconsistent consecutive logins without hard-coding the known anomaly timestamps.
-
-If the geolocation labels accurately reflected physical location, the observed transitions would be physically implausible. The VPN data alone could not distinguish among credential misuse, VPN/proxy routing, geolocation error, shared infrastructure, travel-related factors, or other explanations.
-
----
-
-## Investigation Safety Note
-
-One working search displayed a training-lab password in a process command-line field. That screenshot was excluded from the public evidence set.
-
-The final public evidence and queries were selected to preserve useful investigative context without exposing visible credentials.
+A working screenshot that displayed a training password was excluded from the public evidence.

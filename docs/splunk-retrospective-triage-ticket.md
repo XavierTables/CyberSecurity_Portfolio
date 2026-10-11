@@ -1,45 +1,34 @@
-# SOC Triage Ticket — Retrospective Training Case
+# Sample SOC Triage Ticket
 
-> **Training exercise, written after the investigation.** I organized my existing TryHackMe findings in a ticket format to practice handoffs. This was not a production ticket, and no real-world escalation or containment occurred.
+**Training handoff exercise:** Written after the completed TryHackMe investigation, using its existing evidence. Escalation and containment actions below are proposed.
 
 | Field | Entry |
 |---|---|
-| Case ID | LAB-SIEM-003-TICKET |
-| Source | Authorized TryHackMe Splunk training datasets |
+| Case | LAB-SIEM-003-TICKET |
 | Analyst | Xavier Tables |
-| Detection / reason for review | Rare Windows account-management activity; unusual per-user VPN country labels |
-| Entities | Lab accounts `James`, `Alberto`, `jsmith`, `kbrown` |
-| Windows source | `index=windowslogs` — 12,256 events in supplied dataset |
-| VPN source | `index=vpnlogs` — 2,000 events in supplied dataset |
-| Alert timestamp | Not recorded as an actual production alert |
-| Exact event time zone | Not established in published screenshots |
-| Severity | **Not assigned** — no organizational classification policy or impact context available |
-| Case status | **Pending further validation** (hypothetical production equivalent) |
-| Final lab disposition | Suspicious activity; compromise unconfirmed |
+| Reason for review | Rare Windows account activity and unusual per-user VPN country labels |
+| Windows entities | James, Alberto, Logon ID 0x551686 |
+| VPN entities | jsmith, kbrown |
+| Dataset scope | 12,256 Windows events; 2,000 VPN events |
+| Alert time | No alert timestamp recorded; investigation began with dataset review |
+| Event-time caveat | Historical timestamps; display time zone and complete dataset bounds not established |
+| Severity | Unassigned: the lab supplied no organizational severity/impact criteria |
+| Lab outcome | Further investigation warranted; compromise unconfirmed |
 
-## Investigation chronology (supported by documented work)
-1. Surveyed Windows dataset and profiled Event ID frequency, isolating rare account-management events.
-2. Examined network authentication and account activity associated with Logon ID `0x551686`, with Security/Sysmon correlations requiring additional host/time scoping.
-3. Reviewed Sysmon process ancestry, including `WmiPrvSE.exe`, `net.exe`, `conhost.exe` and `net1.exe`.
-4. Baselined VPN events by account/country: one rare-country event for `jsmith`, one for `kbrown`.
-5. Used `streamstats` to identify four quick country-label changes around the two outlier events (15–57 minutes).
-6. Documented limits and validation needs rather than treating alerts as confirmed compromise.
+## Findings for handoff
 
-## Observed facts vs. unresolved questions
-**Supported:** Documented searches, matching activity clusters in screenshots, per-user country baselines, process GUID ancestry and transition time gaps.
+**Windows:** The Security search returned authentication, account/group changes, and process-creation records matching a Logon ID. Sysmon showed process ancestry for the same account and displayed second. The event computer and common-session connection still need validation, along with administrative approval and group permissions.
 
-**Not established:** Same-computer/same-session linkage across all Windows/Sysmon records, administrative change approval, affected security-group privilege, authenticated devices, MFA results, actual user geography, compromise or business impact.
+**VPN:** One rare-country event for each of two accounts produced four rapid transitions (15-57 minutes). The available data did not establish device identity, MFA outcomes, physical location, or source-IP ownership.
 
-## Proposed Tier-1 next actions (not carried out)
-- **Windows:** Verify host/session/time correlation, check change ticket or administrator approval, identify group permissions, review available endpoint and identity logs.
-- **VPN:** Validate user/device, MFA, routing/proxy ownership, IP geolocation and adjacent post-login activity.
-- **Escalation trigger:** Failed authorization validation, confirmed unauthorized account modification, or corroborating malicious identity/endpoint events.
-- **Handoff:** Include original queries, nine screenshots, event-time and timezone caveats, alternative explanations and unanswered questions.
+## Proposed next owner/actions
+
+- Have the appropriate identity/endpoint owner validate the Windows computer/session and administrative authorization.
+- Have the identity/VPN owner review device, MFA, routing, and account-owner context.
+- Escalate under the team's process if changes are unapproved, corroborating malicious evidence appears, or privileged activity remains unresolved.
+
+The two datasets represent separate leads. The handoff should include the query trail, screenshots, observed timestamps, and outstanding checks.
 
 ## Evidence
-- [Full Splunk investigation](../projects/splunk-siem-investigation/README.md)
-- [Executed SPL query log](../projects/splunk-siem-investigation/queries/investigation-queries.md)
-- [Concise case brief](splunk-incident-brief.md)
-- [Proposed revalidation plan — unexecuted](splunk-correlation-validation-plan.md)
 
-This ticket format is a documentation exercise based on the completed lab. It doesn't represent experience working a live alert queue or meeting production SLAs.
+[Report](../projects/splunk-siem-investigation/README.md) · [Queries](../projects/splunk-siem-investigation/queries/investigation-queries.md) · [Brief](splunk-incident-brief.md) · [Pending checks](splunk-correlation-validation-plan.md)

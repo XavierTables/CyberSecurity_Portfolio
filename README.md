@@ -1,41 +1,41 @@
-# Xavier Tables | Security Operations Portfolio
+# Xavier Tables | Cybersecurity Portfolio
 
-**CompTIA Security+ | Tri-C SecurePath graduate | Cleveland, Ohio**
+**Security+ certified | Seeking SOC Analyst I or IT Support | Cleveland, Ohio**
 
-I'm working toward my first SOC Analyst I or IT support role. This repository contains three completed security labs. Each report links to the searches or screenshots I used, what I found, and what I couldn't confirm.
+These three training projects document the searches I ran, the evidence I reviewed, and my conclusions. They cover Splunk investigations, Windows Security logs, and a guided Nessus scan.
 
 [LinkedIn](https://www.linkedin.com/in/xaviertables/) · [GitHub profile](https://github.com/XavierTables)
 
-## Featured investigation: Splunk SIEM
+## Featured project: Splunk investigation
 
-**[Full investigation](projects/splunk-siem-investigation/README.md)** · **[SPL query log](projects/splunk-siem-investigation/queries/investigation-queries.md)** · **[Short case brief](docs/splunk-incident-brief.md)**
+**[Case brief](docs/splunk-incident-brief.md)** · **[Full report](projects/splunk-siem-investigation/README.md)** · **[11 executed SPL queries](projects/splunk-siem-investigation/queries/investigation-queries.md)**
 
-I used Splunk to work through two sets of training logs: **12,256 Windows events** and **2,000 VPN events**.
+I worked with supplied TryHackMe datasets containing **12,256 Windows events** and **2,000 VPN events**.
 
-- **Windows:** Followed a network logon into account-management activity and compared Security events with Sysmon process relationships. The searches were not consistently scoped to one host and time window, so the cross-source session link needs further validation.
-- **VPN:** Found two accounts with one unusual country-labelled event each. An SPL search showed four rapid country changes around those two events, with gaps of 15–57 minutes. I documented other possible explanations, including routing and IP geolocation.
-- **Result:** Both patterns deserved follow-up. The available evidence did **not** confirm compromise.
+- **Windows:** Examined a network logon, account-management events, and Sysmon process relationships. The searches produced investigative leads; the host/session connection still needs validation.
+- **VPN:** Found two rare-country logins and four rapid country changes around them. Routing and IP geolocation remained possible explanations.
+- **Conclusion:** Follow-up was warranted. The available logs did not establish account compromise.
 
-The full report includes **11 SPL searches**, nine screenshots, and the reasoning behind the findings.
+## Completed lab projects
 
-## Completed projects
-
-| Project | What I did |
+| Project | Work completed |
 |---|---|
-| **[Splunk SIEM investigation](projects/splunk-siem-investigation/README.md)** | Investigated Windows authentication and VPN activity using SPL, Windows Security logs, and Sysmon. |
-| **[Windows Security log triage](projects/windows-security-log-triage/README.md)** | Reviewed an Administrator password reset and separate SYSTEM service activity using Events 4724, 4738, 4624, and 4672. The reset's authorization was not available in the lab. |
-| **[Nessus vulnerability assessment](projects/nessus-vulnerability-assessment/README.md)** | Ran a guided, credentialed baseline scan of one lab host and reviewed the reported severity counts. Individual findings and remediation weren't verified. |
+| [Splunk investigation](projects/splunk-siem-investigation/README.md) | Windows account-activity review and VPN baselining using SPL, with queries and screenshots. |
+| [Windows Security log triage](projects/windows-security-log-triage/README.md) | Reviewed four events involving an Administrator password reset and separate SYSTEM service activity. |
+| [Nessus vulnerability assessment](projects/nessus-vulnerability-assessment/README.md) | Ran a guided scan of one assigned host and interpreted the severity summary and grouped results. |
 
-## Technical background
+## Tools and training
 
-**Used in the published labs:** Splunk, SPL, Windows Event Viewer and Security logs, Sysmon, Nessus, account/session investigation, process analysis, and VPN baselining.
+**Used in these projects:** Splunk, SPL, Event Viewer, Windows Security logs, Sysmon, and Nessus.
 
-**Additional coursework and training:** Active Directory fundamentals, networking (TCP/IP, DNS, DHCP), Wireshark, Nmap, Windows, and Linux.
+**Additional training:** Active Directory fundamentals, TCP/IP, DNS, DHCP, Wireshark, Nmap, Windows, and Linux.
 
-**Education and certification:** CompTIA Security+ (2026); Tri-C SecurePath cybersecurity boot camp (14 weeks, completed June 2026); Associate of Arts, Cuyahoga Community College (2022). Additional CySA+ coursework.
+**Education:** CompTIA Security+ (2026); Tri-C SecurePath cybersecurity training (14 weeks, completed June 2026); Associate of Arts, Cuyahoga Community College (2022). I also completed CySA+ coursework.
 
-## About the lab work
+## Practice plans
 
-These projects used authorized TryHackMe and uCertify environments. The reports distinguish what I actually observed from follow-up steps that would need other data, tools, or approvals. They're training investigations, not production incidents.
+The [Windows/Active Directory support exercise](practice-labs/helpdesk-ad/README.md) and [Sentinel/KQL exercise](practice-labs/sentinel-kql/README.md) are **plans awaiting execution**. The Splunk [host/session validation checklist](docs/splunk-correlation-validation-plan.md) is also pending.
 
-For the Splunk case, I also wrote a [retrospective example triage ticket](docs/splunk-retrospective-triage-ticket.md) and a [host/session revalidation plan](docs/splunk-correlation-validation-plan.md). The ticket wasn't handled in a live SOC, and the proposed revalidation tests haven't been run.
+The [sample triage ticket](docs/splunk-retrospective-triage-ticket.md) uses my completed Splunk investigation to practice a handoff. It was written after the lab.
+
+All completed projects used authorized TryHackMe or uCertify training environments. Each report states the scope of the work and the checks that remain open.

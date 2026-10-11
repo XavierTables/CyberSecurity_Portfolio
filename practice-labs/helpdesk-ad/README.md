@@ -1,40 +1,37 @@
-# Active Directory Help Desk — Practice Plan
+# Windows and Active Directory Support: Practice Plan
 
-> **Planned exercise — not completed.** This is a file-share troubleshooting scenario and ticket template. I haven't run this specific support case yet.
+**Status: Planned; not executed.** The intended output is a completed support ticket with troubleshooting evidence and a verified result.
 
-## Goal
-Practice handling one help desk ticket from intake to troubleshooting, an approved fix or escalation, and final verification in a safe Windows lab.
+## Lab and scenario
 
-## Lab environment
-Use a Windows Server evaluation VM with Active Directory Domain Services, a Windows client joined to your lab domain, and test-only users and groups. Ensure sufficient VM resources, use a host-only/private lab network, and snapshot before changes. **Do not operate on someone else's production domain.**
+Use a private Windows Server/AD lab, a domain-joined Windows client, and test users/groups. Take a snapshot before changes.
 
-## Ticket scenario — user cannot access a departmental file share
-1. **Intake:** Record user's exact error, time, affected app/share, device, network connection, whether others are affected, urgency and callback method. Avoid collecting passwords.
-2. **Reproduce:** Sign in with a test account and record the expected vs. observed access result.
-3. **Connectivity:** Check `ipconfig /all`, `nslookup <lab-domain>`, `ping <lab-server>` (when permitted), and `Test-NetConnection <lab-server> -Port 445`. A blocked ping does not alone prove SMB is down.
-4. **Identity and entitlement:** Inspect test-user group memberships in Active Directory Users and Computers and compare share vs. NTFS permissions. Do not add privileged access without an approved reason.
-5. **Change control:** If a missing authorized group membership is the cause, document approval, make the *lab-only* change and record the original state. Otherwise document the reason for escalation.
-6. **Verify and close:** Retest with the test user, record the successful/unsuccessful outcome and communicate clearly. Note that changes may require token refresh/new logon.
+**Ticket:** A test user cannot access a departmental file share.
 
-## Optional second case
-Create a test-only account unlock/password-reset scenario. Record identity verification as a **simulated step** (not actual organizational policy), handle access securely, and verify the user can log in without publishing secrets.
+## Workflow
 
-## Publishable evidence checklist
-- Lab diagram or short environment inventory (no real credentials).
-- Before/after screenshots of relevant AD settings and test outcomes.
-- Sanitized command output from at least two appropriate troubleshooting checks.
-- **One completed ticket** with root cause, approval, changes and verification.
-- What you would escalate and why, and any unresolved limits.
+1. Record the exact error, affected user/device/share, timing, urgency, network connection, and whether others are affected.
+2. Reproduce the problem with the test account.
+3. Inspect `ipconfig /all`, DNS lookup results, and `Test-NetConnection <lab-server> -Port 445`. Ping can provide context when permitted; a blocked ping alone does not establish that SMB is down.
+4. Compare AD group membership with share and NTFS permissions.
+5. If a missing authorized membership explains the failure, record the simulated approval and original state, then make the lab change. Otherwise document the evidence and escalation reason.
+6. Refresh the test user's logon/token when needed and retest access. Record the result and a short customer-facing explanation.
 
-## Blank Tier-1 ticket (copy and complete only after doing the lab)
-**Ticket:** LAB-HD-___ | **Date/time/time zone:** ___  
-**Reported issue:** ___ | **User impact:** ___ | **Affected asset:** ___  
-**Troubleshooting performed and results:** ___  
-**Root-cause hypothesis / supporting facts:** ___  
-**Authorization/approval:** ___  
-**Change implemented or escalation reason:** ___  
-**Validation result:** ___ | **Customer-facing resolution:** ___  
-**Status:** Open / Escalated / Closed | **Evidence:** ___
+## Evidence to publish after execution
 
-## When this becomes a completed project
-After I run the case, I'll add the actual ticket, screenshots, commands, and verification results. For now, it's a practice outline, not completed project evidence.
+- Lab inventory and test-account context.
+- Relevant command results and before/after permission/access captures.
+- A completed ticket recording the cause, simulated approval, change or escalation, and final verification.
+- Any remaining uncertainty.
+
+## Ticket template
+
+**Case / date / time zone:** ___  
+**Issue and user impact:** ___  
+**Checks and observed results:** ___  
+**Cause or working hypothesis:** ___  
+**Simulated approval and change / escalation:** ___  
+**Verification and customer update:** ___  
+**Status and evidence links:** ___
+
+An optional second case can cover a test-account unlock/password reset, with simulated identity verification and login verification. Completed evidence will be added only after the exercise is run.

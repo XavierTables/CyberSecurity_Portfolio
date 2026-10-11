@@ -1,27 +1,35 @@
-# SOC Analyst I — Technical Interview Drill
+# Portfolio Interview Practice
 
-**Use with the [completed Splunk case](../projects/splunk-siem-investigation/README.md).** Do not memorize a polished script that exceeds what your evidence proves. Practice answering each item aloud in 60–120 seconds.
+Use the [Splunk report](../projects/splunk-siem-investigation/README.md), query log, and screenshots to answer these aloud. Explain the reasoning in your own words, then check it against the evidence.
 
-| Hiring-manager question | Minimum credible answer |
+| Question | Evidence to explain |
 |---|---|
-| What triggered your Splunk investigation? | Account-management events were rare; VPN accounts had unusual country baselines. Explain the searches that found them. |
-| Did you confirm account compromise? | No. Show which facts are observable and which authorization/identity details are missing. |
-| Are the four VPN transitions four compromises? | No. Four sequential country-label changes surrounded **two** rare-country events, and geolocation is not verified physical location. |
-| What is the biggest flaw in your Windows correlation? | Recorded session searches were not consistently host/time scoped; same logon ID alone cannot establish one host/session. |
-| Why does the ProcessGuid matter? | It supports identifying Sysmon process instances and parent-child lineage, but is not proof of the Windows logon session without additional correlation. |
-| What would cause you to escalate? | Unapproved account changes, convincing corroborating endpoint/identity evidence, or unresolved privileged activity after documented checks. |
-| What does Nessus Auth: Pass tell you? | Authentication succeeded as reported, not that every credentialed check had complete coverage. |
-| Would you close the VPN finding? | Not solely on the country label; validate device, MFA, routing/proxy, IP ownership and baseline first. |
-| What makes a usable SOC ticket? | Alert context, affected entities, timestamps/time zone, query, evidence, severity rationale, disposition and next owner. |
-| What would you do on a real shift that you have not done in labs? | Follow a queue and SLAs, document and escalate according to playbooks, coordinate handoffs, handle approved containment steps. Admit you have not worked a production SOC. |
+| What started the investigation? | Rare account-management Event IDs and unusual per-user VPN country counts. |
+| What did the VPN search find? | Two rare-country events with four surrounding transitions, at 15-57 minute gaps. |
+| How did the transition query work? | Sort by user/time; use streamstats current=f to keep prior values; compare countries and calculate the time gap. |
+| Did the data establish compromise? | No. Explain the missing authorization, identity, device, and routing checks. |
+| What limits the Windows correlation? | The recorded searches did not consistently constrain/show the computer or time window. A shared Logon ID alone is insufficient. |
+| What did the process GUIDs support? | Parent-child relationships in Sysmon; the common Security/Sysmon session still needs validation. |
+| What would you check next? | The pending host/session checklist, administrative approval, group permissions, and VPN identity/device context. |
+| What would prompt escalation? | Unapproved changes, corroborating malicious evidence, or unresolved privileged activity under the team's process. |
+| What does Nessus Auth: Pass establish? | Scanner-reported authentication success. Explain why complete check coverage and finding applicability require more evidence. |
+| What belongs in a handoff? | Trigger, affected entities, time window, queries, evidence, conclusion, open questions, and next owner. |
 
-## Score yourself
-For each answer: **0** = can't answer; **1** = jargon only; **2** = clear but no evidence; **3** = cites the actual query or event and names the limitation. Target **25+/30** before an interview. These are practice criteria, not a hiring predictor.
+## Practice method
 
-## STAR story framework
-**Situation:** Authorized SIEM exercise and two anomalous patterns.  
-**Task:** Determine what the telemetry actually supported.  
-**Action:** Profile Event IDs, pivot using a logon identifier, examine Sysmon process relationships, and baseline VPN users.  
-**Result:** Documented suspicious findings **without falsely claiming compromise**; identified host/session and identity validation required before a production disposition.
+1. Pick one query and explain its input, each command, the returned result, and the next question.
+2. Open the supporting screenshot and point to the fields behind your explanation.
+3. Separate completed actions from proposed follow-up.
+4. If you cannot explain a line or claim, review the documentation or rerun the relevant exercise before using it in an interview.
 
-If asked to reproduce the correlations, explain the host/time scoping gap first and point to the [proposed revalidation plan](splunk-correlation-validation-plan.md).
+## Project story
+
+**Situation:** Two unusual patterns in authorized training logs.
+
+**Task:** Determine what the available evidence supported.
+
+**Actions:** Profiled Event IDs, examined a Logon ID and process relationships, and built VPN baselines and a transition query.
+
+**Result:** Documented follow-up leads and identified the host/session and identity checks still needed.
+
+For questions about shift experience, describe your training accurately. Queue handling, organizational SLAs, live escalation, and approved containment are responsibilities you would need to learn on the job.

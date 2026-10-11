@@ -1,21 +1,23 @@
-# Splunk Host/Session Correlation — Revalidation Plan
+# Windows Host/Session Validation Plan
 
-> **Not yet run.** This is the checklist I would use if I can access the training dataset again. The existing screenshots don't verify that every Security and Sysmon event came from the same host and session.
+**Status: Not executed.** This checklist would extend the original Splunk case if the training dataset becomes available again.
 
-## Why this matters
-The recorded search `"0x551686" Channel=Security` operates over historical data without a host or time filter; the Sysmon query also lacks a matching computer constraint. Windows logon IDs can be reused across hosts and after restarts. A shared account and timestamp is suggestive, not definitive cross-source identity.
+The recorded Security and Sysmon searches did not consistently show or constrain the event computer. A matching account, second, or Logon ID provides a lead; it does not establish a common session across sources.
 
-## Step 1 — Establish field names and event computers
-Run in the same authorized Splunk dataset, then inspect returned **field values** rather than assuming the field schema:
+## 1. Identify the event-computer fields
+
+Proposed search:
 
 ```spl
 index=windowslogs EventID=4624 "0x551686"
 | table _time EventID Hostname host Computer ComputerName TargetUserName TargetLogonId SubjectLogonId LogonType IpAddress
 ```
 
-Expected anchor from published capture: Windows Event 4624; James; target Logon ID `0x551686`; displayed `Hostname=Micheal.Beaven`. **The event computer for other records remains to be established.** Confirm which field actually represents the event computer before proceeding.
+The original anchor displays James, Event 4624, TargetLogonId `0x551686`, and `Hostname=Micheal.Beaven`. Inspect actual field values to establish which field represents the event computer. Check that independently for Security and Sysmon.
 
-## Step 2 — Scope Windows Security records to the verified computer AND bounded time
+## 2. Bound the Security search
+
+Replace the placeholders with measured values and adapt `Hostname` to the verified event-computer field:
 
 ```spl
 index=windowslogs Channel=Security EventID IN (4624,4672,4627,4688,4728,4720,4724,4729,4726,4634)
@@ -25,29 +27,32 @@ index=windowslogs Channel=Security EventID IN (4624,4672,4627,4688,4728,4720,472
 | table _time Hostname RecordNumber EventID SubjectUserName TargetUserName SubjectLogonId TargetLogonId LogonType Message
 ```
 
-Replace `<...>` placeholders with **measured** values. In Splunk time modifiers, `earliest` and `latest` should be placed in the base search as shown, and the exact field name may differ by sourcetype. Confirm event-specific subject vs. target Logon ID; do not assume a free-text match means the same field in every event.
+Record the time zone/window and audit outcome where available. Inspect the event-specific subject and target Logon ID roles; the free-text match alone does not establish which field matched. Check logon/logoff and reboot context before treating rows as one session.
 
-## Step 3 — Independently verify Sysmon computer and process ancestry
+## 3. Check Sysmon ancestry and session context
+
+Proposed search:
 
 ```spl
 index=windowslogs EventID=1 User="Cybertees\\James" earliest="<START_EPOCH>" latest="<END_EPOCH>"
 | table _time Hostname host Computer User Image ParentImage ProcessGuid ParentProcessGuid ProcessId ParentProcessId CommandLine
 ```
 
-Then filter the **actual Sysmon event-computer field** to the validated host (do not blindly reuse a field that is missing in Sysmon). Compare `ProcessGuid` / `ParentProcessGuid` for the parent-child chain. Process GUID ancestry identifies related processes, but does **not** by itself prove those processes belong to James's Windows Security logon session. Correlate session evidence independently.
+Constrain the actual Sysmon event-computer field to the verified computer. Compare ProcessGuid/ParentProcessGuid values for ancestry. Establish the Security-to-Sysmon session connection separately using available session/process fields and event context.
 
-## Step 4 — Record evidence and publish only if supported
-Capture: the original 4624 anchor with host and timestamp; host-filtered Security timeline; matching-host Sysmon events; explicit time zone/window; subject/target Logon ID handling; process GUID relationships; contradictions or missing values.
+## Results to record
 
-| Test | Result | Evidence path |
-|---|---|---|
-| Same event computer in all relevant Security rows | **Not tested** | — |
-| Same computer in Security and Sysmon evidence | **Not tested** | — |
-| Compatible bounded timestamps and logon lifecycle | **Not tested** | — |
-| Event-specific Logon IDs and subject/target roles checked | **Not tested** | — |
-| Sysmon ProcessGuid parent-child relationships reproduced | **Not retested** | Historical screenshots in full report |
-| Administrative approval or denial obtained | **Unavailable** | — |
+| Check | Current status |
+|---|---|
+| Relevant Security rows share a verified event computer | Not tested |
+| Security and Sysmon records share the verified computer | Not tested |
+| Time window and logon/reboot context are compatible | Not tested |
+| Subject/target Logon ID roles are checked per event | Not tested |
+| Sysmon GUID relationships are reproduced | Pending; original screenshot retained |
+| Administrative authorization is established | Approval data unavailable in the supplied case |
 
-**Decision rule:** If all technical correlation checks pass, update the report with the executed query, screenshots, date, and exactly what improved. If they fail or cannot be executed, keep the existing caveat. Do not rewrite the original 11-query execution trail.
+Add actual results, executed queries, date/time zone, and sanitized screenshots only after running the checks. Retain the original query trail and document any contradictions or remaining gaps.
 
-[Original investigation](../projects/splunk-siem-investigation/README.md) · [Original query log](../projects/splunk-siem-investigation/queries/investigation-queries.md)
+[Original report](../projects/splunk-siem-investigation/README.md) · [Original queries](../projects/splunk-siem-investigation/queries/investigation-queries.md)
+
+[Microsoft: Logon ID scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634)
