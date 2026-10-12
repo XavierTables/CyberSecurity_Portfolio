@@ -17,7 +17,7 @@ I wrote this sample handoff using the evidence from my TryHackMe investigation. 
 
 ## Findings for handoff
 
-**Windows:** The Security search returned authentication, account/group changes, and process-creation records matching a Logon ID. Sysmon showed process ancestry for the same account and displayed second. The event computer and common-session connection still need validation, along with administrative approval and group permissions.
+**Windows:** The Security search returned authentication, account/group changes, and process-creation records matching a Logon ID. I also found Sysmon parent-child process relationships for the same account at the same displayed timestamp. The event computer and common-session connection still need validation, along with administrative approval and group permissions.
 
 **VPN:** One rare-country event for each of two accounts produced four rapid transitions (15-57 minutes). The available data did not establish device identity, MFA outcomes, physical location, or source-IP ownership.
 
@@ -27,7 +27,7 @@ I wrote this sample handoff using the evidence from my TryHackMe investigation. 
 - Have the identity/VPN owner review device, MFA, routing, and account-owner context.
 - Escalate under the team's process if changes are unapproved, corroborating malicious evidence appears, or privileged activity remains unresolved.
 
-The two datasets represent separate leads. The handoff should include the query trail, screenshots, observed timestamps, and outstanding checks.
+The two datasets represent separate leads. I linked my queries, screenshots, and remaining checks below.
 
 ## Evidence
 
