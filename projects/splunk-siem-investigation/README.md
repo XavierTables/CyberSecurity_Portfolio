@@ -34,9 +34,9 @@ Rare events led me to activity involving subject account `James`, target account
 
 [Authentication record](evidence/03-james-network-logon.png) · [Security timeline](evidence/04-security-session-timeline.png) · [Sysmon results](evidence/05-sysmon-process-correlation.png)
 
-The process relationships were visible within the Sysmon results. The Security-to-Sysmon session connection remains unresolved: the recorded searches did not consistently constrain or display the event computer and time window. A shared Logon ID alone cannot establish a session across computers or reboots. [Microsoft explains the Logon ID scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
+I could follow the parent-child relationships in Sysmon, but I still need to confirm whether those processes belong to the Security logon session. My original searches did not consistently filter or show the computer and time window. A shared Logon ID alone cannot establish a session across computers or reboots. [Microsoft explains the Logon ID scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
 
-**Assessment:** Administrative activity requiring authorization and correlation checks. WMI-associated ancestry alone does not establish malicious execution. I still need to verify the password-reset outcome and the affected group's permissions.
+**Assessment:** I need to confirm that the account changes were approved and that the events belong together. Seeing WmiPrvSE.exe as a parent process does not, by itself, show malicious activity. I still need to verify the password-reset outcome and the affected group's permissions.
 
 ## VPN country changes
 
@@ -51,7 +51,7 @@ For `jsmith`, the 199 US events used `72.14.201.12`; the single Japan-labelled e
 
 The rare-country query calculated each country's share of a user's events. The rapid-switch query sorted events by user and time, then used `streamstats current=f` to compare each event with the previous one. The four result rows represent transitions around two outliers, rather than four separate rare-country logins.
 
-The **5% country-share** and **120-minute transition** thresholds were choices for this training dataset. Their suitability for other data was not tested.
+I chose **5% country share** and **120 minutes between country changes** as starting thresholds for this dataset. I have not tested them on other data.
 
 **Assessment:** The changes warranted identity and device checks. IP geolocation, VPN/proxy routing, or shared infrastructure could explain the labels; physical travel and credential theft were not established.
 
@@ -62,7 +62,7 @@ The **5% country-share** and **120-minute transition** thresholds were choices f
 | Windows | Verify the event computer, bounded time window, and event-specific subject/target Logon IDs; reproduce the Sysmon ancestry; check administrative approval and group permissions. |
 | VPN | Review account-owner confirmation, device identity, MFA outcomes, source-IP ownership, and routing/geolocation context. |
 
-I recorded my next Windows checks in the [validation checklist](../../docs/splunk-correlation-validation-plan.md). Escalation would depend on failed authorization checks, corroborating malicious activity, or unresolved privileged activity under the team's procedures.
+I recorded my next Windows checks in the [validation checklist](../../docs/splunk-correlation-validation-plan.md). I would escalate if the changes were unapproved, other evidence suggested malicious activity, or privileged activity remained unexplained.
 
 ## What I learned
 
