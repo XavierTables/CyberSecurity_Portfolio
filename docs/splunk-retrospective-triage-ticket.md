@@ -1,6 +1,6 @@
 # Sample SOC Triage Ticket
 
-**Training handoff exercise:** Written after the completed TryHackMe investigation, using its existing evidence. Escalation and containment actions below are proposed.
+I wrote this sample handoff using the evidence from my TryHackMe investigation. The next actions are recommendations.
 
 | Field | Entry |
 |---|---|
