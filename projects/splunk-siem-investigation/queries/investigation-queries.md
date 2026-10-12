@@ -1,12 +1,12 @@
 # SPL Query Log
 
-These are the **11 searches executed** during the [Splunk investigation](../README.md), in their original order. The SPL blocks preserve the original commands.
+These are the **11 searches I ran** during my [Splunk investigation](../README.md), in their original order.
 
 ## Search scope
 
 The screenshots used **All time**. The complete dataset bounds and display time zone were not recorded. The Windows session/Sysmon searches did not consistently constrain or display the event computer.
 
-Nine screenshots accompany the report. They document selected results, while this log also preserves searches without a dedicated capture. The [validation plan](../../../docs/splunk-correlation-validation-plan.md) describes the host, time, and event-specific Logon ID checks still needed.
+I saved nine screenshots of selected results. My next Windows correlation checks are in the [validation plan](../../../docs/splunk-correlation-validation-plan.md).
 
 ## 01: Windows dataset overview
 
@@ -62,7 +62,7 @@ EventID IN (4624,4672,4627,4688,4728,4720,4724,4729,4726,4634)
 | table RecordNumber EventTime EventID Category SubjectUserName TargetUserName SubjectLogonId TargetLogonId LogonType IpAddress Message
 ```
 
-The published result contained 12 rows, including authentication, process creation, account/group changes, a password-reset attempt, and logoff. RecordNumber helped order records within the Security log, subject to confirming the event computer/log instance. The table omitted the password-reset audit outcome.
+The search returned 12 rows, including authentication, process creation, account/group changes, a password-reset attempt, and logoff. RecordNumber helped order records within the Security log, subject to confirming the event computer/log instance. The table omitted the password-reset audit outcome.
 
 ## 06: Sysmon process relationships
 
