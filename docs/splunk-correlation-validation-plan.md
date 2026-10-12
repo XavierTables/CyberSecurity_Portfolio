@@ -1,8 +1,8 @@
 # Windows Host/Session Validation Plan
 
-**Status: Not executed.** This checklist would extend the original Splunk case if the training dataset becomes available again.
+**Status: Not executed.** I plan to run these checks when I can access the training dataset again.
 
-The recorded Security and Sysmon searches did not consistently show or constrain the event computer. A matching account, second, or Logon ID provides a lead; it does not establish a common session across sources.
+The recorded Security and Sysmon searches did not consistently show or constrain the event computer. Matching accounts, timestamps, or Logon IDs gave me leads, but I still need to confirm the computer and session.
 
 ## 1. Identify the event-computer fields
 
@@ -13,11 +13,11 @@ index=windowslogs EventID=4624 "0x551686"
 | table _time EventID Hostname host Computer ComputerName TargetUserName TargetLogonId SubjectLogonId LogonType IpAddress
 ```
 
-The original anchor displays James, Event 4624, TargetLogonId `0x551686`, and `Hostname=Micheal.Beaven`. Inspect actual field values to establish which field represents the event computer. Check that independently for Security and Sysmon.
+My starting logon event shows James, Event 4624, TargetLogonId `0x551686`, and `Hostname=Micheal.Beaven`. I will check which field identifies the computer in each source.
 
 ## 2. Bound the Security search
 
-Replace the placeholders with measured values and adapt `Hostname` to the verified event-computer field:
+I will replace the placeholders with the values from the data and use the verified computer field:
 
 ```spl
 index=windowslogs Channel=Security EventID IN (4624,4672,4627,4688,4728,4720,4724,4729,4726,4634)
@@ -27,7 +27,7 @@ index=windowslogs Channel=Security EventID IN (4624,4672,4627,4688,4728,4720,472
 | table _time Hostname RecordNumber EventID SubjectUserName TargetUserName SubjectLogonId TargetLogonId LogonType Message
 ```
 
-Record the time zone/window and audit outcome where available. Inspect the event-specific subject and target Logon ID roles; the free-text match alone does not establish which field matched. Check logon/logoff and reboot context before treating rows as one session.
+I will record the time window, time zone, and audit outcome. I will check which subject or target Logon ID matched in each event, then review logon, logoff, and reboot context.
 
 ## 3. Check Sysmon ancestry and session context
 
@@ -38,7 +38,7 @@ index=windowslogs EventID=1 User="Cybertees\\James" earliest="<START_EPOCH>" lat
 | table _time Hostname host Computer User Image ParentImage ProcessGuid ParentProcessGuid ProcessId ParentProcessId CommandLine
 ```
 
-Constrain the actual Sysmon event-computer field to the verified computer. Compare ProcessGuid/ParentProcessGuid values for ancestry. Establish the Security-to-Sysmon session connection separately using available session/process fields and event context.
+I will filter Sysmon to the verified computer and compare ProcessGuid and ParentProcessGuid values. I will then check whether the process records connect to the Security logon session.
 
 ## Results to record
 
@@ -51,7 +51,7 @@ Constrain the actual Sysmon event-computer field to the verified computer. Compa
 | Sysmon GUID relationships are reproduced | Pending; original screenshot retained |
 | Administrative authorization is established | Approval data unavailable in the supplied case |
 
-Add actual results, executed queries, date/time zone, and sanitized screenshots only after running the checks. Retain the original query trail and document any contradictions or remaining gaps.
+After running the checks, I will add the results, queries, timestamps, and screenshots. I will keep my original searches and explain any conflicting results or unanswered questions.
 
 [Original report](../projects/splunk-siem-investigation/README.md) · [Original queries](../projects/splunk-siem-investigation/queries/investigation-queries.md)
 
