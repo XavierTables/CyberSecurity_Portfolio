@@ -4,23 +4,23 @@ These are the **11 searches I ran** during my [Splunk investigation](../README.m
 
 ## Search scope
 
-The screenshots used **All time**. The complete dataset bounds and display time zone were not recorded. The Windows session/Sysmon searches did not consistently constrain or display the event computer.
+I searched **All time** in the supplied training datasets. I did not record their full date ranges or Splunk's display time zone. My Windows searches also need tighter computer and time filters, which I covered in the validation plan.
 
 I saved nine screenshots of selected results. My next Windows correlation checks are in the [validation plan](../../../docs/splunk-correlation-validation-plan.md).
 
 ## 01: Windows dataset overview
 
-Inspect the available Windows data before narrowing the search.
+I started by checking the available Windows data.
 
 ```spl
 index=windowslogs
 ```
 
-Recorded result: 12,256 events, with authentication, account, host, process, and network fields available.
+Result: 12,256 events, with authentication, account, host, process, and network fields available.
 
 ## 02: Event ID distribution
 
-Count records by Event ID to find less common activity.
+I counted records by Event ID to find less common activity.
 
 ```spl
 index=windowslogs
@@ -32,7 +32,7 @@ Recorded result: 55 distinct Event IDs. Events 4720, 4724, 4726, 4728, 4729, and
 
 ## 03: Account-management activity
 
-Review the rare account-management events together.
+I reviewed the rare account-management events together.
 
 ```spl
 index=windowslogs EventID IN (4720,4724,4726,4728,4729,4739)
@@ -43,7 +43,7 @@ The recorded findings involved subject account James, target account Alberto, an
 
 ## 04: James network logon
 
-Look for an authentication record matching the observed Logon ID.
+I searched for a logon event matching the Logon ID.
 
 ```spl
 index=windowslogs EventID=4624 "0x551686"
@@ -53,7 +53,7 @@ Recorded result: one 4624 event for James, with TargetLogonId 0x551686, Type 3, 
 
 ## 05: Security timeline
 
-Collect Security records matching the Logon ID and inspect their order.
+I collected Security events matching the Logon ID and ordered them by record number.
 
 ```spl
 index=windowslogs "0x551686" Channel=Security
@@ -66,7 +66,7 @@ The search returned 12 rows, including authentication, process creation, account
 
 ## 06: Sysmon process relationships
 
-Inspect process fields for James and compare them with the Security findings.
+I examined process records for James and compared them with the Security events.
 
 ```spl
 index=windowslogs EventID=1 User="Cybertees\\James"
@@ -79,7 +79,7 @@ The rows showed net.exe with parent image WmiPrvSE.exe, plus conhost.exe and net
 
 ## 07: VPN dataset overview
 
-Inspect the available VPN data.
+I checked the available VPN data.
 
 ```spl
 index=vpnlogs
@@ -89,7 +89,7 @@ Recorded result: 2,000 events, 10 users, 12 source IPs, and 6 countries. The inv
 
 ## 08: Per-user country baseline
 
-Count each user's events by country.
+I counted each user's VPN events by country.
 
 ```spl
 index=vpnlogs
@@ -101,7 +101,7 @@ Recorded result: jsmith had 199 US-labelled events and one Japan-labelled event;
 
 ## 09: Rare-country search
 
-Calculate each country's share of a user's recorded events.
+I calculated each country's share of a user's VPN events.
 
 ```spl
 index=vpnlogs
@@ -117,7 +117,7 @@ The search returned the two outliers at 0.50% each (1 of 200 events). The 5% cut
 
 ## 10: jsmith source-IP baseline
 
-Compare IP/country counts and the first/last observed times for jsmith.
+I compared jsmith's source IPs, countries, and first and last observed times.
 
 ```spl
 index=vpnlogs user=jsmith
@@ -126,11 +126,11 @@ index=vpnlogs user=jsmith
 | sort - count
 ```
 
-Recorded result: 72.14.201.12 / US had 199 events; 103.5.140.67 / Japan had one. The unusual source was assessed within the supplied dataset's scope.
+Recorded result: 72.14.201.12 / US had 199 events; 103.5.140.67 / Japan had one. I compared the unusual source with jsmith's other logins in this dataset.
 
 ## 11: Rapid country changes
 
-Compare each event with the previous event for that user.
+I compared each login with the previous login for the same user.
 
 ```spl
 index=vpnlogs
@@ -145,4 +145,4 @@ Recorded result: jsmith US to Japan in 25 minutes and Japan to US in 15; kbrown 
 
 ## Reproduction notes
 
-Before reusing these searches, inspect the field schema, bound the time window, check missing values and timestamp ties, and tune thresholds against sufficient user history. In Windows events, verify the computer and the meaning of subject versus target Logon IDs.
+When I reuse these searches, I will check the fields, set a time window, and review missing values or events with identical timestamps. I will also tune the VPN thresholds against the available user history and verify the computer and subject/target Logon IDs in the Windows events.
