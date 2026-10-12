@@ -8,7 +8,7 @@
 
 I investigated two separate patterns: rare Windows account-management activity and VPN logins outside each user's usual country pattern.
 
-The Windows searches returned authentication, account changes, and related-looking process activity. The VPN searches found **two rare-country events** and **four rapid country changes** around them. I documented both as leads for further investigation. The evidence did not establish account compromise.
+The Windows searches returned authentication, account-management events, and Sysmon process activity. The VPN searches found **two rare-country events** and **four rapid country changes** around them. I documented both as leads for further investigation. The evidence did not establish account compromise.
 
 ![VPN query showing four country changes around two rare-country events](evidence/09-vpn-rapid-country-switch-detection.png)
 
@@ -21,7 +21,7 @@ The Windows searches returned authentication, account changes, and related-looki
 
 I explored the supplied historical data using **All time**, profiled Event ID frequencies, followed a Logon ID, examined Sysmon process ancestry, and built per-user VPN baselines. The [query log](queries/investigation-queries.md) preserves all 11 searches in their original order.
 
-The Windows authentication capture displays April 15, 2022. The VPN transition capture displays February 26 and March 13, 2026. The captures do not establish the complete dataset bounds or the Splunk display time zone.
+The Windows logon screenshot shows April 15, 2022; the VPN transition screenshot shows February 26 and March 13, 2026. I used historical training data.
 
 ## Windows account activity
 
@@ -36,7 +36,7 @@ Rare events led me to activity involving subject account `James`, target account
 
 The process relationships were visible within the Sysmon results. The Security-to-Sysmon session connection remains unresolved: the recorded searches did not consistently constrain or display the event computer and time window. A shared Logon ID alone cannot establish a session across computers or reboots. [Microsoft explains the Logon ID scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
 
-**Assessment:** Administrative activity requiring authorization and correlation checks. WMI-associated ancestry alone does not establish malicious execution. The published timeline also omits the password-reset audit outcome and the affected group's privileges.
+**Assessment:** Administrative activity requiring authorization and correlation checks. WMI-associated ancestry alone does not establish malicious execution. I still need to verify the password-reset outcome and the affected group's permissions.
 
 ## VPN country changes
 
@@ -62,7 +62,7 @@ The **5% country-share** and **120-minute transition** thresholds were choices f
 | Windows | Verify the event computer, bounded time window, and event-specific subject/target Logon IDs; reproduce the Sysmon ancestry; check administrative approval and group permissions. |
 | VPN | Review account-owner confirmation, device identity, MFA outcomes, source-IP ownership, and routing/geolocation context. |
 
-These checks are proposed follow-up. The [validation checklist](../../docs/splunk-correlation-validation-plan.md) records which Windows tests remain pending. Escalation would depend on failed authorization checks, corroborating malicious activity, or unresolved privileged activity under the team's procedures.
+I recorded my next Windows checks in the [validation checklist](../../docs/splunk-correlation-validation-plan.md). Escalation would depend on failed authorization checks, corroborating malicious activity, or unresolved privileged activity under the team's procedures.
 
 ## What I learned
 
@@ -82,7 +82,7 @@ My first Windows searches were too broad to verify one host/session connection. 
 | [08: jsmith baseline](evidence/08-jsmith-ip-baseline.png) | Source-IP and country counts |
 | [09: Country transitions](evidence/09-vpn-rapid-country-switch-detection.png) | Four transition rows and time gaps |
 
-TryHackMe supplied the environment and datasets. The public evidence excludes a working screenshot that displayed a lab password. The published work documents investigation and proposed follow-up; containment and remediation were not performed.
+I used the environment and datasets supplied by TryHackMe. My work covered investigation and follow-up recommendations.
 
 ## References
 
