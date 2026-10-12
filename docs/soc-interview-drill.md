@@ -6,9 +6,9 @@ These are the questions I use to practice explaining my [Splunk investigation](.
 |---|---|
 | What started the investigation? | Rare account-management Event IDs and unusual per-user VPN country counts. |
 | What did the VPN search find? | Two rare-country events with four surrounding transitions, at 15-57 minute gaps. |
-| How did the transition query work? | Sort by user/time; use streamstats current=f to keep prior values; compare countries and calculate the time gap. |
+| How did the transition query work? | I sorted by user and time, used streamstats current=f to keep the previous login's values, then compared countries and calculated the time gap. |
 | Did the data establish compromise? | No. I still need authorization, identity, device, and routing checks. |
-| What limits the Windows correlation? | The recorded searches did not consistently constrain/show the computer or time window. A shared Logon ID alone is insufficient. |
+| What limits the Windows correlation? | My searches did not consistently filter or show the computer and time window. Matching Logon IDs alone cannot confirm the session. |
 | What did the process GUIDs support? | Parent-child relationships in Sysmon; the common Security/Sysmon session still needs validation. |
 | What would you check next? | The pending host/session checklist, administrative approval, group permissions, and VPN identity/device context. |
 | What would prompt escalation? | Unapproved changes, corroborating malicious evidence, or unresolved privileged activity under the team's process. |
