@@ -28,7 +28,7 @@ I worked with supplied TryHackMe datasets containing **12,256 Windows events** a
 
 I'm also pursuing Tier 1 Help Desk, Service Desk, and PC Deployment opportunities. My Tri-C SecurePath training included Windows and Active Directory lab work (users, groups, permissions, and password resets) plus TCP/IP, DNS, DHCP, and connectivity fundamentals. I bring customer communication and time-sensitive issue resolution experience from Foot Locker and DoorDash.
 
-**Support-relevant evidence:** In my [Windows Security log triage](projects/windows-security-log-triage/README.md), I distinguished routine SYSTEM service activity from a separate Administrator account change and documented the need to verify authorization. My [Active Directory file-share support exercise](practice-labs/helpdesk-ad/README.md) is a **planned exercise, not a completed project**.
+**Windows troubleshooting:** In my [Windows Security log triage](projects/windows-security-log-triage/README.md), I distinguished routine SYSTEM service activity from a separate Administrator account change and documented the need to verify authorization. My next planned exercise is [troubleshooting Active Directory file-share access](practice-labs/helpdesk-ad/README.md).
 
 ## Tools and training
 
@@ -42,6 +42,6 @@ I'm also pursuing Tier 1 Help Desk, Service Desk, and PC Deployment opportunitie
 
 The [Windows/Active Directory support exercise](practice-labs/helpdesk-ad/README.md) and [Sentinel/KQL exercise](practice-labs/sentinel-kql/README.md) are **plans awaiting execution**. The Splunk [host/session validation checklist](docs/splunk-correlation-validation-plan.md) is also pending.
 
-The [sample triage ticket](docs/splunk-retrospective-triage-ticket.md) uses my completed Splunk investigation to practice a handoff. It was written after the lab.
+I wrote a [sample handoff ticket](docs/splunk-retrospective-triage-ticket.md) based on my Splunk investigation.
 
 All completed projects used authorized TryHackMe or uCertify training environments. Each report states the scope of the work and the checks that remain open.
