@@ -146,5 +146,3 @@ Recorded result: jsmith US to Japan in 25 minutes and Japan to US in 15; kbrown 
 ## Reproduction notes
 
 Before reusing these searches, inspect the field schema, bound the time window, check missing values and timestamp ties, and tune thresholds against sufficient user history. In Windows events, verify the computer and the meaning of subject versus target Logon IDs.
-
-A working screenshot that displayed a training password was excluded from the public evidence.
