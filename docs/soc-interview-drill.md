@@ -1,6 +1,6 @@
 # Portfolio Interview Practice
 
-Use the [Splunk report](../projects/splunk-siem-investigation/README.md), query log, and screenshots to answer these aloud. Explain the reasoning in your own words, then check it against the evidence.
+These are the questions I use to practice explaining my [Splunk investigation](../projects/splunk-siem-investigation/README.md). I check my answers against the query log and screenshots.
 
 | Question | Evidence to explain |
 |---|---|
@@ -31,5 +31,3 @@ Use the [Splunk report](../projects/splunk-siem-investigation/README.md), query 
 **Actions:** Profiled Event IDs, examined a Logon ID and process relationships, and built VPN baselines and a transition query.
 
 **Result:** Documented follow-up leads and identified the host/session and identity checks still needed.
-
-For questions about shift experience, describe your training accurately. Queue handling, organizational SLAs, live escalation, and approved containment are responsibilities you would need to learn on the job.
