@@ -21,7 +21,7 @@ The Windows searches returned authentication, account-management events, and Sys
 
 I explored the supplied historical data using **All time**, profiled Event ID frequencies, followed a Logon ID, examined Sysmon process ancestry, and built per-user VPN baselines. The [query log](queries/investigation-queries.md) preserves all 11 searches in their original order.
 
-The Windows logon screenshot shows April 15, 2022; the VPN transition screenshot shows February 26 and March 13, 2026. I used historical training data.
+The Windows logon screenshot shows April 15, 2022; the VPN transition screenshot shows February 26 and March 13, 2026. I used historical training data. In the Windows overview, one record's displayed Time is July 14, 2022 while its EventTime is April 15, 2022. I need to check timestamp parsing before using those fields interchangeably.
 
 ## Windows account activity
 
@@ -29,7 +29,7 @@ Rare events led me to activity involving subject account `James`, target account
 
 - Event 4624 showed a successful James network logon: Type 3, source IP `172.90.12.11`, Kerberos, and an elevated token.
 - The Security search matching the Logon ID returned account creation, group-membership changes, a password-reset attempt, account deletion, process creation, and logoff records.
-- A nearby Event 4739 had different host/session context and was excluded from that account-management cluster.
+- My notes from the broader account-management search excluded Event 4739 because its host/session context differed.
 - Sysmon rows for `Cybertees\James` showed `net.exe` with parent image `WmiPrvSE.exe`. The displayed GUID relationships connected `net1.exe` and `conhost.exe` to that `net.exe` process.
 
 [Authentication record](evidence/03-james-network-logon.png) · [Security timeline](evidence/04-security-session-timeline.png) · [Sysmon results](evidence/05-sysmon-process-correlation.png)
@@ -72,15 +72,15 @@ My first Windows searches were too broad to verify one host/session connection. 
 
 | Screenshot | What it records |
 |---|---|
-| [01: Windows overview](evidence/01-windows-data-overview.png) | Dataset and available fields |
-| [02: Event ID distribution](evidence/02-windows-eventid-distribution.png) | Event-frequency results |
-| [03: James logon](evidence/03-james-network-logon.png) | Authentication fields |
-| [04: Security timeline](evidence/04-security-session-timeline.png) | Matching Logon ID search ordered by RecordNumber |
-| [05: Sysmon](evidence/05-sysmon-process-correlation.png) | Process fields and GUID relationships |
-| [06: VPN overview](evidence/06-vpn-data-overview.png) | VPN dataset scope |
-| [07: Country baseline](evidence/07-vpn-country-baseline.png) | Per-user country counts |
-| [08: jsmith baseline](evidence/08-jsmith-ip-baseline.png) | Source-IP and country counts |
-| [09: Country transitions](evidence/09-vpn-rapid-country-switch-detection.png) | Four transition rows and time gaps |
+| [01: Windows overview](evidence/01-windows-data-overview.png) | 12,256 events, available fields, and an expanded Sysmon Event 10 record |
+| [02: Event ID distribution](evidence/02-windows-eventid-distribution.png) | 55 Event IDs, including six selected Event IDs with one occurrence each |
+| [03: James logon](evidence/03-james-network-logon.png) | Event 4624 for James: Type 3, Kerberos, source IP 172.90.12.11, and Logon ID 0x551686 |
+| [04: Security timeline](evidence/04-security-session-timeline.png) | 12 Security rows matching 0x551686, ordered by RecordNumber; EventTime is the same across the rows |
+| [05: Sysmon](evidence/05-sysmon-process-correlation.png) | Three process rows: net.exe with parent WmiPrvSE.exe, and net1.exe/conhost.exe with parent GUIDs matching net.exe |
+| [06: VPN overview](evidence/06-vpn-data-overview.png) | 2,000 events; field counts show 10 users, 12 source IPs, and six country values |
+| [07: Country baseline](evidence/07-vpn-country-baseline.png) | jsmith: 199 US and one JP event; kbrown: 199 DE and one AU event |
+| [08: jsmith baseline](evidence/08-jsmith-ip-baseline.png) | Two source-IP/country rows for jsmith, their counts, and first/last observed times |
+| [09: Country transitions](evidence/09-vpn-rapid-country-switch-detection.png) | Four transitions: jsmith at 25 and 15 minutes; kbrown at 17 and 57 minutes |
 
 I used the environment and datasets supplied by TryHackMe. My work covered investigation and follow-up recommendations.
 
