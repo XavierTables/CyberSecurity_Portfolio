@@ -1,10 +1,10 @@
 # Windows and Active Directory Support: Practice Plan
 
-**Status: Planned; not executed.** The intended output is a completed support ticket with troubleshooting evidence and a verified result.
+**Status: Planned.** I will document a support ticket with troubleshooting evidence and a verified result.
 
 ## Lab and scenario
 
-Use a private Windows Server/AD lab, a domain-joined Windows client, and test users/groups. Take a snapshot before changes.
+I plan to use a private Windows Server/AD lab, a domain-joined Windows client, and test users/groups. I will take a snapshot before making changes.
 
 **Ticket:** A test user cannot access a departmental file share.
 
