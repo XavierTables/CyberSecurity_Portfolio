@@ -4,13 +4,13 @@
 
 ## Question
 
-What follow-up did rare Windows account activity and unusual VPN country changes warrant?
+What did the unusual Windows account activity and VPN logins tell me, and what should I check next?
 
 ## Evidence and assessment
 
 | Lead | Recorded evidence | Assessment |
 |---|---|---|
-| Windows | A James network logon matching Logon ID 0x551686; account/group changes involving Alberto; Sysmon process ancestry including WmiPrvSE.exe, net.exe, conhost.exe, and net1.exe | Administrative activity requiring authorization checks. Cross-source host/session linkage remains unverified. |
+| Windows | A James network logon matching Logon ID 0x551686; account/group changes involving Alberto; Sysmon process ancestry including WmiPrvSE.exe, net.exe, conhost.exe, and net1.exe | Administrative activity requiring authorization checks. I still need to confirm whether the Security and Sysmon events came from the same computer and session. |
 | VPN | jsmith and kbrown each had one rare-country event; the transition query returned four country changes with gaps of 15-57 minutes | Unusual login patterns requiring device, MFA, routing, and geolocation checks. |
 
 The supplied datasets contained 12,256 Windows events and 2,000 VPN events. These were separate investigative leads; the analysis did not establish a connection between them.
