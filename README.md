@@ -12,7 +12,7 @@ These three training projects document the searches I ran, the evidence I review
 
 I worked with supplied TryHackMe datasets containing **12,256 Windows events** and **2,000 VPN events**.
 
-- **Windows:** Examined a network logon, account-management events, and Sysmon process relationships. The searches produced investigative leads; the host/session connection still needs validation.
+- **Windows:** Examined a network logon, account-management events, and Sysmon process relationships. I still need to confirm whether the Security and Sysmon events came from the same computer and session.
 - **VPN:** Found two rare-country logins and four rapid country changes around them. Routing and IP geolocation remained possible explanations.
 - **Conclusion:** Follow-up was warranted. The available logs did not establish account compromise.
 
@@ -40,8 +40,8 @@ I'm also pursuing Tier 1 Help Desk, Service Desk, and PC Deployment opportunitie
 
 ## Practice plans
 
-The [Windows/Active Directory support exercise](practice-labs/helpdesk-ad/README.md) and [Sentinel/KQL exercise](practice-labs/sentinel-kql/README.md) are **plans awaiting execution**. The Splunk [host/session validation checklist](docs/splunk-correlation-validation-plan.md) is also pending.
+The [Windows/Active Directory support exercise](practice-labs/helpdesk-ad/README.md) and [Sentinel/KQL exercise](practice-labs/sentinel-kql/README.md) are **planned exercises that I have not completed yet**. The Splunk [host/session validation checklist](docs/splunk-correlation-validation-plan.md) is also pending.
 
 I wrote a [sample handoff ticket](docs/splunk-retrospective-triage-ticket.md) based on my Splunk investigation.
 
-All completed projects used authorized TryHackMe or uCertify training environments. Each report states the scope of the work and the checks that remain open.
+I completed these projects in TryHackMe or uCertify training environments.
