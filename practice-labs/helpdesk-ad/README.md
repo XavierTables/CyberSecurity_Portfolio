@@ -10,14 +10,14 @@ I plan to use a private Windows Server/AD lab, a domain-joined Windows client, a
 
 ## Workflow
 
-1. Record the exact error, affected user/device/share, timing, urgency, network connection, and whether others are affected.
-2. Reproduce the problem with the test account.
-3. Inspect `ipconfig /all`, DNS lookup results, and `Test-NetConnection <lab-server> -Port 445`. Ping can provide context when permitted; a blocked ping alone does not establish that SMB is down.
-4. Compare AD group membership with share and NTFS permissions.
-5. If a missing authorized membership explains the failure, record the simulated approval and original state, then make the lab change. Otherwise document the evidence and escalation reason.
-6. Refresh the test user's logon/token when needed and retest access. Record the result and a short customer-facing explanation.
+1. I will record the exact error, affected user/device/share, timing, urgency, network connection, and whether others are affected.
+2. I will reproduce the problem with the test account.
+3. I will inspect `ipconfig /all`, DNS lookup results, and `Test-NetConnection <lab-server> -Port 445`. Ping can provide context when permitted; a blocked ping alone does not establish that SMB is down.
+4. I will compare AD group membership with share and NTFS permissions.
+5. If the user is missing an approved group membership, I will record the original state and simulated approval before making the lab change. If the cause is still unclear, I will document my checks and explain why I would escalate.
+6. I will refresh the test user's session if needed, retest access, and write a short update explaining the result.
 
-## Evidence to publish after execution
+## What I will document
 
 - Lab inventory and test-account context.
 - Relevant command results and before/after permission/access captures.
@@ -34,4 +34,4 @@ I plan to use a private Windows Server/AD lab, a domain-joined Windows client, a
 **Verification and customer update:** ___  
 **Status and evidence links:** ___
 
-An optional second case can cover a test-account unlock/password reset, with simulated identity verification and login verification. Completed evidence will be added only after the exercise is run.
+For a second case, I plan to unlock or reset a test account, simulate identity verification, and confirm that the user can sign in. I will add the results after completing the exercise.
