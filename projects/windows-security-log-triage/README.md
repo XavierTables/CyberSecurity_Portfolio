@@ -51,7 +51,7 @@ The reviewed events do not establish the host's overall security state. This exe
 
 ## Evidence handling
 
-I [exported the Security log](https://github.com/user-attachments/assets/59c01585-3317-480e-815b-5e3ab20b748e) as `security_logs.evtx`. The portfolio publishes the screenshots rather than the full dataset. The [source-log overview](https://github.com/user-attachments/assets/15148a3a-94cf-4fe9-ae0c-73f3a28623d8) records the log used.
+I [exported the Security log](https://github.com/user-attachments/assets/59c01585-3317-480e-815b-5e3ab20b748e) as `security_logs.evtx`. I included screenshots of the records I reviewed. The [source-log overview](https://github.com/user-attachments/assets/15148a3a-94cf-4fe9-ae0c-73f3a28623d8) records the log used.
 
 ## What I learned
 
