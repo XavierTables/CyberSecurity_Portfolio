@@ -6,7 +6,7 @@
 
 I plan to investigate a sign-in anomaly in a training workspace and write a short handoff.
 
-I will check the available tables and fields before running the queries. `SigninLogs` needs Entra sign-in data; `SecurityEvent` needs Windows Security data. Record the actual query window and time zone.
+I will check the available tables and fields before running the queries. `SigninLogs` needs Entra sign-in data; `SecurityEvent` needs Windows Security data. I will record the search window and time zone.
 
 ## Proposed queries
 
@@ -21,7 +21,7 @@ SigninLogs
 | order by failures desc
 ```
 
-Five events is a practice threshold to evaluate against the data. Inspect result codes and surrounding sign-ins before treating a count as an alert; MFA and conditional-access outcomes need additional context.
+I chose five failures as a starting threshold. I will check the result codes, nearby sign-ins, MFA results, and conditional-access results before interpreting a match.
 
 ### 2. Inspect Windows authentication/account events
 
@@ -53,16 +53,16 @@ SigninLogs
 | order by distinctIPs desc
 ```
 
-An unusual IP count is a lead for context checks, rather than a compromise verdict.
+If a user has an unusual number of source IPs, I will review the surrounding sign-ins before deciding what it means.
 
-## Evidence to publish after execution
+## What I will document
 
 - Workspace/data-source description and verified table schema.
 - Executed queries with sanitized screenshots or result exports.
 - One candidate finding, a timestamped timeline, and alternative explanations.
 - A sample ticket covering affected entities, evidence, severity rationale, conclusion, open questions, and recommended next owner.
 
-Record actual findings and limitations after running the exercise.
+I will add my findings and any unanswered questions after running the exercise.
 
 ## Official references
 
