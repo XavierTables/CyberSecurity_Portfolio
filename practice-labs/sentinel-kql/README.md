@@ -1,12 +1,12 @@
 # Sentinel and KQL: Practice Plan
 
-**Status: Planned; not executed.** The queries below are starting points awaiting schema checks and actual results.
+**Status: Planned.** I have not run these queries yet.
 
 ## Goal and setup
 
-Investigate a sign-in anomaly and write a short handoff using an authorized training workspace. Use an existing practice environment where possible; confirm billing conditions before creating Azure resources.
+I plan to investigate a sign-in anomaly in a training workspace and write a short handoff.
 
-Inspect available tables and fields first. `SigninLogs` needs Entra sign-in data; `SecurityEvent` needs Windows Security data. Record the actual query window and time zone.
+I will check the available tables and fields before running the queries. `SigninLogs` needs Entra sign-in data; `SecurityEvent` needs Windows Security data. Record the actual query window and time zone.
 
 ## Proposed queries
 
