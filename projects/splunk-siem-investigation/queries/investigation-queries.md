@@ -16,7 +16,7 @@ I started by checking the available Windows data.
 index=windowslogs
 ```
 
-Result: 12,256 events, with authentication, account, host, process, and network fields available.
+Result: 12,256 events, with authentication, account, host, process, and network fields available. In the expanded record, Splunk's displayed Time is July 14, 2022 while EventTime is April 15, 2022; I need to check how the timestamp was parsed.
 
 ## 02: Event ID distribution
 
@@ -39,7 +39,7 @@ index=windowslogs EventID IN (4720,4724,4726,4728,4729,4739)
 | sort _time
 ```
 
-The recorded findings involved subject account James, target account Alberto, and Logon ID 0x551686. A nearby 4739 event had different host/session context and was excluded from that cluster.
+My notes from this search identified subject account James, target account Alberto, and Logon ID 0x551686. I excluded a nearby 4739 event because its host/session context differed.
 
 ## 04: James network logon
 
@@ -62,7 +62,7 @@ EventID IN (4624,4672,4627,4688,4728,4720,4724,4729,4726,4634)
 | table RecordNumber EventTime EventID Category SubjectUserName TargetUserName SubjectLogonId TargetLogonId LogonType IpAddress Message
 ```
 
-The search returned 12 rows, including authentication, process creation, account/group changes, a password-reset attempt, and logoff. RecordNumber helped order records within the Security log, subject to confirming the event computer/log instance. The table omitted the password-reset audit outcome.
+The search returned 12 rows, including authentication, process creation, account/group changes, a password-reset attempt, and logoff. RecordNumber helped order records within the Security log, subject to confirming the event computer/log instance. The screenshot shows the password-reset Event ID, but not its audit outcome or target account.
 
 ## 06: Sysmon process relationships
 
@@ -126,7 +126,7 @@ index=vpnlogs user=jsmith
 | sort - count
 ```
 
-Recorded result: 72.14.201.12 / US had 199 events; 103.5.140.67 / Japan had one. I compared the unusual source with jsmith's other logins in this dataset.
+Recorded result: 72.14.201.12 / US had 199 events, from February 22 to March 23, 2026 in the displayed results. The single 103.5.140.67 / Japan event was February 26 at 14:15. I compared the unusual source with jsmith's other logins in this dataset.
 
 ## 11: Rapid country changes
 
