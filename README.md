@@ -24,6 +24,12 @@ I worked with supplied TryHackMe datasets containing **12,256 Windows events** a
 | [Windows Security log triage](projects/windows-security-log-triage/README.md) | Reviewed four events involving an Administrator password reset and separate SYSTEM service activity. |
 | [Nessus vulnerability assessment](projects/nessus-vulnerability-assessment/README.md) | Ran a guided scan of one assigned host and interpreted the severity summary and grouped results. |
 
+## IT support and troubleshooting
+
+I'm also pursuing Tier 1 Help Desk, Service Desk, and PC Deployment opportunities. My Tri-C SecurePath training included Windows and Active Directory lab work (users, groups, permissions, and password resets) plus TCP/IP, DNS, DHCP, and connectivity fundamentals. I bring customer communication and time-sensitive issue resolution experience from Foot Locker and DoorDash.
+
+**Support-relevant evidence:** In my [Windows Security log triage](projects/windows-security-log-triage/README.md), I distinguished routine SYSTEM service activity from a separate Administrator account change and documented the need to verify authorization. My [Active Directory file-share support exercise](practice-labs/helpdesk-ad/README.md) is a **planned exercise, not a completed project**.
+
 ## Tools and training
 
 **Used in these projects:** Splunk, SPL, Event Viewer, Windows Security logs, Sysmon, and Nessus.
