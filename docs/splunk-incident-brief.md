@@ -26,4 +26,4 @@ The supplied datasets contained 12,256 Windows events and 2,000 VPN events. Thes
 
 [Full report](../projects/splunk-siem-investigation/README.md) · [11 executed searches](../projects/splunk-siem-investigation/queries/investigation-queries.md) · [Sample handoff ticket](splunk-retrospective-triage-ticket.md) · [Pending validation checklist](splunk-correlation-validation-plan.md)
 
-The report includes nine screenshots. The complete dataset bounds and display time zone were not recorded; the captured Windows searches lacked consistent host/time scoping. No containment or remediation was performed.
+I saved nine screenshots with the report. My next step is to validate the Windows host/session connection.
