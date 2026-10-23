@@ -21,9 +21,3 @@ The follow-up is to confirm reset authorization with the responsible administrat
 | PC and home support | Built PCs and helped family with hardware, software, and home-network issues |
 | Windows and Active Directory | Training in users, groups, password resets, and permission concepts |
 | Networking | Training with Wireshark, Nmap, command-line tools, TCP/IP, DNS, and DHCP |
-
-## Planned support case
-
-The [AD file-share practice plan](../practice-labs/helpdesk-ad/README.md) covers reproducing an access error, checking connectivity/DNS, comparing group membership with share/NTFS permissions, and verifying access after an approved lab change. Execution and resolution are still pending.
-
-[Support ticket template](support-ticket-template.md) · [Project roadmap](../docs/project-roadmap.md)

@@ -18,7 +18,7 @@ This is a retrospective lab handoff based on my recorded searches. The prioritie
 | Next decision | Escalate if the activity is unapproved, malicious evidence corroborates it, or privileged actions remain unexplained |
 | Evidence links | [Logon](../projects/splunk-siem-investigation/evidence/03-james-network-logon.png), [Security rows](../projects/splunk-siem-investigation/evidence/04-security-session-timeline.png), [Sysmon](../projects/splunk-siem-investigation/evidence/05-sysmon-process-correlation.png) |
 
-The parent-child Sysmon relationships do not yet establish a common session with the Security records. My [validation checklist](splunk-correlation-validation-plan.md) records the searches still to run.
+The parent-child Sysmon relationships do not yet establish a common session with the Security records. The [investigation report](../projects/splunk-siem-investigation/README.md#windows-account-activity) records the remaining computer, time-window, and session checks.
 
 ## VPN country changes
 

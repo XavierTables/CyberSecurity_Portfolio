@@ -6,7 +6,7 @@ These are the **11 searches I ran** during my [Splunk investigation](../README.m
 
 I searched **All time** in the supplied training datasets. I did not record their full date ranges or Splunk's display time zone. My Windows searches also need tighter computer and time filters, which I covered in the validation plan.
 
-I saved nine screenshots of selected results. My next Windows correlation checks are in the [validation plan](../../../docs/splunk-correlation-validation-plan.md).
+I saved nine screenshots of selected results. The [Windows investigation](../README.md#windows-account-activity) records the computer, time-window, and session checks still needed.
 
 ## 01: Windows dataset overview
 

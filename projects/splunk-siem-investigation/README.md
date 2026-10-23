@@ -14,7 +14,7 @@
 
 **Status:** Further investigation recommended; account compromise is unconfirmed. Windows computer/session correlation and timestamp interpretation need validation. VPN device, MFA, source-IP, and account-owner context remain unresolved.
 
-**Evidence:** [Executed queries](queries/investigation-queries.md) · [Screenshots](#evidence) · [Case brief](../../docs/splunk-incident-brief.md) · [Proposed validation](../../docs/splunk-correlation-validation-plan.md)
+**Evidence:** [Executed queries](queries/investigation-queries.md) · [Screenshots](#evidence) · [Case brief](../../docs/splunk-incident-brief.md)
 
 ## Data and method
 
@@ -45,7 +45,7 @@ I excluded a nearby Event 4739 from the broader account-management search becaus
 
 **Where my interpretation changed:** The matching account and Logon ID gave me a lead, but my searches did not consistently show or constrain the computer and time window. I could explain the Sysmon ancestry without proving that those processes belonged to the Security logon session. A Logon ID must be interpreted in the correct computer/logon context; [Microsoft documents its scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
 
-My next steps are to verify the event computer and event-specific subject/target IDs, reproduce the process relationships, and check the password-reset outcome, group permissions, and administrative approval. The [validation checklist](../../docs/splunk-correlation-validation-plan.md) contains the proposed searches.
+My next steps are to verify the event computer and event-specific subject/target IDs, reproduce the process relationships, and check the password-reset outcome, group permissions, and administrative approval.
 
 ## VPN country changes
 

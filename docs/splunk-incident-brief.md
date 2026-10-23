@@ -25,4 +25,4 @@ For VPN, I would ask the identity/VPN owner to review device and MFA records and
 
 ## Supporting material
 
-[Sample handoff and priority rationale](splunk-retrospective-triage-ticket.md) · [Windows validation checklist](splunk-correlation-validation-plan.md) · [Nine screenshots](../projects/splunk-siem-investigation/README.md#evidence)
+[Sample handoff and priority rationale](splunk-retrospective-triage-ticket.md) · [Windows findings and open checks](../projects/splunk-siem-investigation/README.md#windows-account-activity) · [Nine screenshots](../projects/splunk-siem-investigation/README.md#evidence)

@@ -42,6 +42,4 @@ Each report opens with the question, work performed, finding, status, and eviden
 
 ## More work
 
-[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md) · [Project roadmap](docs/project-roadmap.md)
-
-The roadmap distinguishes pending validation from planned AD and Sentinel exercises.
+[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md)
