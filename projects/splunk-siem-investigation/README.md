@@ -6,9 +6,15 @@
 
 ## Summary
 
-I followed two independent leads: rare Windows account-management activity and VPN logins outside each user's usual country pattern. The Windows work identified account events and Sysmon process relationships. The VPN searches found **two rare-country events** and **four rapid transitions** around them.
+**Question:** What could rare Windows account changes and unusual VPN country patterns tell me about activity worth investigating?
 
-**Disposition:** Further investigation recommended. Windows host/session validation and identity context remain open.
+**Work performed:** I ran 11 SPL searches across supplied Windows and VPN datasets. I reviewed account/logon events, compared Sysmon process GUIDs, and calculated per-user country baselines and login intervals.
+
+**Finding:** The VPN searches found two rare-country events and four surrounding transitions, 15–57 minutes apart. Windows searches identified account activity and separate Sysmon parent-child relationships.
+
+**Status:** Further investigation recommended; account compromise is unconfirmed. Windows computer/session correlation and timestamp interpretation need validation. VPN device, MFA, source-IP, and account-owner context remain unresolved.
+
+**Evidence:** [Executed queries](queries/investigation-queries.md) · [Screenshots](#evidence) · [Case brief](../../docs/splunk-incident-brief.md) · [Proposed validation](../../docs/splunk-correlation-validation-plan.md)
 
 ## Data and method
 

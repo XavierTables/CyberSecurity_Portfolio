@@ -6,9 +6,15 @@
 
 ## Summary
 
-I compared an Administrator password reset with SYSTEM activity a few minutes later. Events 4724 and 4738 supported a password change. The later 4624/4672 records belonged to SYSTEM service activity, so I kept the two event groups separate.
+**Question:** Did an Administrator password reset and later privileged SYSTEM activity belong to the same suspicious sequence?
 
-**Assessment:** Later activity consistent with expected SYSTEM service behavior; password-reset authorization remains unverified. Confidence is moderate within the four-record scope.
+**Work performed:** I manually compared four Event Viewer records, checking timestamps, accounts, Logon IDs, processes, and account-change fields.
+
+**Finding:** Events 4724 and 4738 supported an Administrator password change. The later 4624/4672 records were consistent with SYSTEM service activity, so I kept the two groups separate.
+
+**Status:** Moderate confidence within the four-record scope. Password-reset authorization remains unverified, and these records do not establish a broader host-security conclusion.
+
+**Evidence:** [Screenshots](#evidence) · [Event timeline](#scope-and-timeline). The raw EVTX is unavailable; the repository retains the export screenshot.
 
 ## Scope and timeline
 
