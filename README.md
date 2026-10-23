@@ -1,49 +1,42 @@
-# Xavier Tables | Cybersecurity & IT Support Portfolio
+# Xavier Tables | SOC Analyst Portfolio
 
-**CompTIA Security+ (2026) · Tri-C SecurePath · Cleveland, Ohio**  
-**Target roles:** SOC Analyst I and entry-level IT Support
+**CompTIA Security+ (2026) · Tri-C SecurePath · Cleveland, Ohio**
 
-I use training labs to practice investigating security events, checking alternative explanations, and documenting what I can actually verify. My strongest work is a Splunk investigation using Windows and VPN logs. I also bring hands-on PC building and informal troubleshooting experience.
+I'm pursuing a SOC Analyst I role. These labs show how I investigate Windows and VPN activity, check alternative explanations, and document the evidence behind my conclusions.
 
-[LinkedIn](https://www.linkedin.com/in/xaviertables/) · [GitHub profile](https://github.com/XavierTables)
+**[Start with the case brief](docs/splunk-incident-brief.md)** · [SOC résumé](resume/Xavier_Tables_SOC_Resume.pdf) · [LinkedIn](https://www.linkedin.com/in/xaviertables/) · [IT Support](it-support/README.md)
 
-## Featured investigation — Splunk
+## Featured case: Windows and VPN activity in Splunk
 
-![Splunk result showing rapid VPN country transitions](projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png)
+I ran **11 SPL searches** across **12,256 Windows events** and **2,000 VPN events** in supplied TryHackMe datasets. I followed account changes and process relationships in Windows, then compared VPN country changes with each user's baseline.
 
-**[Read the investigation](projects/splunk-siem-investigation/README.md)** · [11 executed SPL queries](projects/splunk-siem-investigation/queries/investigation-queries.md) · [SOC case brief](docs/splunk-incident-brief.md)
+The VPN searches found **two rare-country events and four rapid transitions**. The Windows results gave me a process-ancestry lead, with host/session validation still open. My [case brief](docs/splunk-incident-brief.md) explains the findings and recommended follow-up.
 
-I searched two TryHackMe training datasets containing **12,256 Windows events** and **2,000 VPN events**. Two decisions shaped the results:
+**[Full investigation](projects/splunk-siem-investigation/README.md)** · [Executed SPL queries](projects/splunk-siem-investigation/queries/investigation-queries.md) · [Sample handoff](docs/splunk-retrospective-triage-ticket.md) · [Evidence index](projects/splunk-siem-investigation/README.md#evidence)
 
-- **Windows account activity:** I followed uncommon account-management events to a network logon and Sysmon process relationships. I could explain the process ancestry, but couldn't yet prove the Security and Sysmon records shared the same host and logon session. [The verification steps remain pending](docs/splunk-correlation-validation-plan.md).
-- **VPN activity:** I compared each user's normal country pattern with individual outliers. Two rare-country logins produced four rapid country transitions. The pattern deserved follow-up, but IP geolocation and VPN routing offered other possible explanations.
+<a href="projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png"><img src="projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png" width="640" alt="Splunk query results: four country transitions around two rare-country VPN events"></a>
 
-**My conclusion:** The logs showed questions worth investigating, not confirmed compromise. The missing host, authorization, device, and MFA context mattered as much as the suspicious-looking events.
+*VPN result preview. Open the image for the original screenshot.*
 
-## Completed hands-on investigations
+## Lab projects
 
-| Project | What I did | What the evidence supports |
+| Project | Work demonstrated | Recorded outcome |
 | --- | --- | --- |
-| **[Splunk: Windows and VPN investigation](projects/splunk-siem-investigation/README.md)** | Ran 11 SPL searches and recorded screenshots and queries | Investigative leads, process relationships, VPN baselines, and unresolved checks |
-| **[Windows Security Log Triage](projects/windows-security-log-triage/README.md)** | Reviewed four Event Viewer records and exported a Security log | Administrator password-change evidence distinct from later SYSTEM service activity |
-| **[Nessus Baseline Scan](projects/nessus-vulnerability-assessment/README.md)** | Configured and completed a guided authenticated scan of one lab host | Scanner-reported findings requiring plugin-level validation before selecting fixes |
+| **[Splunk investigation](projects/splunk-siem-investigation/README.md)** | SPL searches, account-event review, Sysmon ancestry, VPN baselining | Two separate leads documented for follow-up |
+| **[Windows Security Log Triage](projects/windows-security-log-triage/README.md)** | Compared four Event Viewer records and their account/process context | Distinguished an Administrator password change from later SYSTEM service activity |
+| **[Nessus Baseline Scan](projects/nessus-vulnerability-assessment/README.md)** | Configured and completed a guided authenticated scan of one lab host | Recorded scanner severity totals; individual finding validation is the next step |
 
-These are exercises in **TryHackMe or uCertify training environments**, not investigations of production systems.
+Each report links to its screenshots and explains the scope of the training exercise.
 
-## IT Support & troubleshooting
+## Tools and background
 
-My [IT Support overview](it-support/README.md) connects Windows account-event analysis with the PC building, device support, and networking practice I've done outside these three projects. I'm developing an [Active Directory file-share access ticket](practice-labs/helpdesk-ad/README.md); it remains a **practice plan**, not a resolved ticket.
+**Documented in these projects:** Splunk/SPL, Windows Event Viewer, Security logs, Sysmon, and Nessus.
+**Additional training:** Windows/Linux, Active Directory fundamentals, Wireshark, Nmap, TCP/IP, DNS, and DHCP.
 
-## Security research
+**Education:** CompTIA Security+ (2026); Tri-C SecurePath cybersecurity training, completed June 2026; Associate of Arts, Cuyahoga Community College (2022).
 
-I also write short, source-backed notes to understand current threats and practice communicating their operational impact. These are **research briefs, not hands-on incidents**.
+## More work
 
-[PHP2Shell threat research](docs/php2shell-threat-analysis.md) · [Research index](research/README.md)
+[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md) · [Project roadmap](docs/project-roadmap.md)
 
-## Tools & background
-
-**Documented project tools:** Splunk/SPL, Windows Event Viewer and Security logs, Sysmon, Nessus (guided).  
-**Additional training:** Active Directory fundamentals, Windows/Linux, Wireshark, Nmap, TCP/IP, DNS, and DHCP.  
-**Education:** CompTIA Security+ (2026); Tri-C SecurePath cybersecurity training (completed June 2026); Associate of Arts, Cuyahoga Community College (2022). I studied CySA+ material but do not hold the certification.
-
-**In progress:** [AD support ticket](practice-labs/helpdesk-ad/README.md), [Sentinel/KQL lab](practice-labs/sentinel-kql/README.md), and [Windows host/session correlation checks](docs/splunk-correlation-validation-plan.md). I will add findings only after running those exercises.
+The roadmap tracks pending Splunk validation and planned AD/Sentinel exercises.

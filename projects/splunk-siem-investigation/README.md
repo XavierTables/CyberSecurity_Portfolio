@@ -2,91 +2,92 @@
 
 **Case:** LAB-SIEM-003 · **Environment:** TryHackMe training datasets · **Tool:** Splunk/SPL
 
-[Case brief](../../docs/splunk-incident-brief.md) · [Executed query log](queries/investigation-queries.md) · [Sample triage ticket](../../docs/splunk-retrospective-triage-ticket.md) · [Pending validation checklist](../../docs/splunk-correlation-validation-plan.md)
+[Portfolio](../../README.md) · [Case brief](../../docs/splunk-incident-brief.md) · [Executed queries](queries/investigation-queries.md) · [Sample handoff](../../docs/splunk-retrospective-triage-ticket.md)
 
 ## Summary
 
-I investigated two separate patterns: rare Windows account-management activity and VPN logins outside each user's usual country pattern.
+I followed two independent leads: rare Windows account-management activity and VPN logins outside each user's usual country pattern. The Windows work identified account events and Sysmon process relationships. The VPN searches found **two rare-country events** and **four rapid transitions** around them.
 
-The Windows searches returned authentication, account-management events, and Sysmon process activity. The VPN searches found **two rare-country events** and **four rapid country changes** around them. I documented both as leads for further investigation. The evidence did not establish account compromise.
-
-![VPN query showing four country changes around two rare-country events](evidence/09-vpn-rapid-country-switch-detection.png)
+**Disposition:** Further investigation recommended. Windows host/session validation and identity context remain open.
 
 ## Data and method
 
-| Dataset | Recorded scope | Main fields used |
-|---|---|---|
-| `index=windowslogs` | 12,256 events; 55 distinct Event IDs | EventID, accounts, Logon IDs, record numbers, process fields |
-| `index=vpnlogs` | 2,000 events; 10 users; 12 source IPs; 6 countries | user, src_ip, src_country, _time |
+| Dataset | Recorded scope | Fields used |
+| --- | --- | --- |
+| `windowslogs` | 12,256 events; 55 Event IDs | Accounts, Logon IDs, record numbers, process fields |
+| `vpnlogs` | 2,000 events; 10 users; 12 source IPs; 6 countries | user, src_ip, src_country, _time |
 
-I explored the supplied historical data using **All time**. I started with event frequencies to find account-management activity worth inspecting, followed a Logon ID, checked Sysmon process ancestry, and built VPN baselines before comparing country transitions. The [query log](queries/investigation-queries.md) preserves all 11 searches in the order I ran them.
+I used All time on the supplied historical datasets. My [query log](queries/investigation-queries.md) preserves the **11 searches** in their original order.
 
-**Where my reasoning changed:** Matching account names and a Logon ID gave me a lead, but I realized I had not shown that Security and Sysmon events shared the same computer and session. That is why I stopped short of attributing the process activity to the network logon. I recorded the missing validation instead of treating a plausible story as a proven one.
-
-The Windows logon screenshot shows April 15, 2022; the VPN transition screenshot shows February 26 and March 13, 2026. I used historical training data. In the Windows overview, one record's displayed Time is July 14, 2022 while its EventTime is April 15, 2022. I need to check timestamp parsing before using those fields interchangeably.
+**Time handling:** Complete dataset bounds and Splunk's display time zone were not recorded. The Windows logon screenshot shows April 15, 2022; the VPN transitions show February 26 and March 13, 2026. One Windows overview record displays July 14, 2022 in Time and April 15, 2022 in EventTime. Timestamp parsing needs validation before those fields can be used interchangeably.
 
 ## Windows account activity
 
-Rare events led me to activity involving subject account `James`, target account `Alberto`, and Logon ID `0x551686`.
+I started with Event ID counts. Account-management events 4720, 4724, 4726, 4728, 4729, and 4739 each appeared once, which gave me a smaller set to inspect.
 
-- Event 4624 showed a successful James network logon: Type 3, source IP `172.90.12.11`, Kerberos, and an elevated token.
-- The Security search matching the Logon ID returned account creation, group-membership changes, a password-reset attempt, account deletion, process creation, and logoff records.
-- My notes from the broader account-management search excluded Event 4739 because its host/session context differed.
-- Sysmon rows for `Cybertees\James` showed `net.exe` with parent image `WmiPrvSE.exe`. The displayed GUID relationships connected `net1.exe` and `conhost.exe` to that `net.exe` process.
+My notes identified subject account **James**, target account **Alberto**, and Logon ID **`0x551686`**. I then searched for the matching network logon and examined process records:
+
+| Check | Recorded result |
+| --- | --- |
+| Event 4624 matching the Logon ID | James; Type 3; Kerberos; source IP `172.90.12.11`; elevated token |
+| Security events matching the Logon ID | 12 rows covering authentication, process creation, account/group changes, a password-reset attempt, and logoff |
+| Sysmon process relationships | `net.exe` with parent `WmiPrvSE.exe`; `net1.exe` and `conhost.exe` with parent GUIDs matching `net.exe` |
 
 [Authentication record](evidence/03-james-network-logon.png) · [Security timeline](evidence/04-security-session-timeline.png) · [Sysmon results](evidence/05-sysmon-process-correlation.png)
 
-I could follow the parent-child relationships in Sysmon, but I still need to confirm whether those processes belong to the Security logon session. My original searches did not consistently filter or show the computer and time window. A shared Logon ID alone cannot establish a session across computers or reboots. [Microsoft explains the Logon ID scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
+I excluded a nearby Event 4739 from the broader account-management search because its host/session context differed.
 
-**Assessment:** I need to confirm that the account changes were approved and that the events belong together. Seeing WmiPrvSE.exe as a parent process does not, by itself, show malicious activity. I still need to verify the password-reset outcome and the affected group's permissions.
+**Where my interpretation changed:** The matching account and Logon ID gave me a lead, but my searches did not consistently show or constrain the computer and time window. I could explain the Sysmon ancestry without proving that those processes belonged to the Security logon session. A Logon ID must be interpreted in the correct computer/logon context; [Microsoft documents its scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
+
+My next steps are to verify the event computer and event-specific subject/target IDs, reproduce the process relationships, and check the password-reset outcome, group permissions, and administrative approval. The [validation checklist](../../docs/splunk-correlation-validation-plan.md) contains the proposed searches.
 
 ## VPN country changes
 
-I counted events by user and country, then inspected each outlier's surrounding logins.
+I counted events by user and country, then inspected the outliers and their surrounding logins.
 
-| Account | Observed country baseline | Rapid changes |
-|---|---|---|
-| `jsmith` | 199 US events; 1 Japan event | US to Japan: 25 minutes; Japan to US: 15 minutes |
-| `kbrown` | 199 Germany events; 1 Australia event | Germany to Australia: 17 minutes; Australia to Germany: 57 minutes |
+| Account | Baseline | Transitions around the outlier |
+| --- | --- | --- |
+| jsmith | 199 US events; 1 Japan event | US to Japan: 25 minutes; Japan to US: 15 minutes |
+| kbrown | 199 Germany events; 1 Australia event | Germany to Australia: 17 minutes; Australia to Germany: 57 minutes |
 
-For `jsmith`, the 199 US events used `72.14.201.12`; the single Japan-labelled event used `103.5.140.67`.
+For jsmith, 199 US events used **`72.14.201.12`**; the Japan-labelled event used **`103.5.140.67`**.
 
-The rare-country query calculated each country's share of a user's events. The rapid-switch query sorted events by user and time, then used `streamstats current=f` to compare each event with the previous one. The four result rows represent transitions around two outliers, rather than four separate rare-country logins.
+The rarity query calculated each country's share of a user's events. I used a **5%** exploratory cutoff; both outliers were **0.5%** (1 of 200). The transition query sorted events by user and time and compared each event with the preceding login, using **120 minutes** as the inspection window.
 
-I used **5% country share** as an exploratory rarity filter and **120 minutes** to inspect nearby country switches. The rarity filter surfaced the one-in-200 events (**0.5%**) and the time filter surfaced four transitions around just two outliers. I would not call those thresholds production-ready: they were not tested against normal travel, VPN behavior, or other datasets.
+<a href="evidence/09-vpn-rapid-country-switch-detection.png"><img src="evidence/09-vpn-rapid-country-switch-detection.png" width="640" alt="Four VPN country transitions around two rare-country login events"></a>
 
-**Assessment:** The changes warranted identity and device checks. IP geolocation, VPN/proxy routing, or shared infrastructure could explain the labels; physical travel and credential theft were not established.
+*Open the image for the original query and results.*
 
-## Follow-up
+The four rows represent transitions into and out of two outlier events. My thresholds were lab choices and were not tested against other datasets or normal travel/VPN behavior.
 
-| Lead | Checks needed before deciding the outcome |
-|---|---|
-| Windows | Verify the event computer, bounded time window, and event-specific subject/target Logon IDs; reproduce the Sysmon ancestry; check administrative approval and group permissions. |
-| VPN | Review account-owner confirmation, device identity, MFA outcomes, source-IP ownership, and routing/geolocation context. |
+**Assessment:** The pattern warrants device, MFA, source-IP, and account-owner checks. VPN/proxy routing and geolocation errors are possible explanations; physical travel or credential theft cannot be established from these fields alone.
 
-I recorded my next Windows checks in the [validation checklist](../../docs/splunk-correlation-validation-plan.md). I would escalate if the changes were unapproved, other evidence suggested malicious activity, or privileged activity remained unexplained.
+## Recommended handoff
 
-## What I learned
+I would continue both leads separately:
 
-My first Windows searches were broad enough to find unusual activity but too broad to prove a host/session connection. Next time, I would verify the event computer, time window, and the role of each subject/target Logon ID before linking process and account events.
+- **Windows:** Validate the host/session connection first, then obtain change approval and group-permission context.
+- **VPN:** Have the identity/VPN owner review devices, MFA, source IPs, and routing.
 
-The VPN exercise taught me to separate an **unusual pattern** from an **unauthorized login**. I could measure how rare and close together the country labels were; I could not verify the account owner's location, device, or VPN routing from this dataset.
+My [sample handoff](../../docs/splunk-retrospective-triage-ticket.md) states proposed owners, priority criteria, and escalation conditions.
 
 ## Evidence
 
 | Screenshot | What it records |
-|---|---|
+| --- | --- |
 | [01: Windows overview](evidence/01-windows-data-overview.png) | 12,256 events, available fields, and an expanded Sysmon Event 10 record |
-| [02: Event ID distribution](evidence/02-windows-eventid-distribution.png) | 55 Event IDs, including six selected Event IDs with one occurrence each |
-| [03: James logon](evidence/03-james-network-logon.png) | Event 4624 for James: Type 3, Kerberos, source IP 172.90.12.11, and Logon ID 0x551686 |
-| [04: Security timeline](evidence/04-security-session-timeline.png) | 12 Security rows matching 0x551686, ordered by RecordNumber; EventTime is the same across the rows |
-| [05: Sysmon](evidence/05-sysmon-process-correlation.png) | Three process rows: net.exe with parent WmiPrvSE.exe, and net1.exe/conhost.exe with parent GUIDs matching net.exe |
-| [06: VPN overview](evidence/06-vpn-data-overview.png) | 2,000 events; field counts show 10 users, 12 source IPs, and six country values |
-| [07: Country baseline](evidence/07-vpn-country-baseline.png) | jsmith: 199 US and one JP event; kbrown: 199 DE and one AU event |
-| [08: jsmith baseline](evidence/08-jsmith-ip-baseline.png) | Two source-IP/country rows for jsmith, their counts, and first/last observed times |
-| [09: Country transitions](evidence/09-vpn-rapid-country-switch-detection.png) | Four transitions: jsmith at 25 and 15 minutes; kbrown at 17 and 57 minutes |
+| [02: Event ID distribution](evidence/02-windows-eventid-distribution.png) | 55 Event IDs, including six selected IDs with one occurrence each |
+| [03: James logon](evidence/03-james-network-logon.png) | Event 4624: Type 3, Kerberos, source IP `172.90.12.11`, Logon ID `0x551686` |
+| [04: Security timeline](evidence/04-security-session-timeline.png) | 12 matching Security rows ordered by RecordNumber; EventTime is identical across the displayed rows |
+| [05: Sysmon](evidence/05-sysmon-process-correlation.png) | Three process rows and their parent/child `ProcessGuid` relationships |
+| [06: VPN overview](evidence/06-vpn-data-overview.png) | 2,000 events, 10 users, 12 source IPs, and six country values |
+| [07: Country baseline](evidence/07-vpn-country-baseline.png) | jsmith: 199 US/one JP event; kbrown: 199 DE/one AU event |
+| [08: jsmith IP baseline](evidence/08-jsmith-ip-baseline.png) | Two source-IP/country rows, counts, and first/last observed times |
+| [09: Country transitions](evidence/09-vpn-rapid-country-switch-detection.png) | Four transitions with 25-, 15-, 17-, and 57-minute gaps |
 
-I used the environment and datasets supplied by TryHackMe. My work covered investigation and follow-up recommendations.
+## What I learned
+
+Broad searches helped me find leads. Establishing a Windows session requires tighter computer, time, and subject/target ID checks. The VPN results also taught me to distinguish a rare pattern from an unauthorized login.
 
 ## References
 

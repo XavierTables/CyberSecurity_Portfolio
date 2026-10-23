@@ -5,6 +5,8 @@
 
 *This is a public-source research brief, not a PHP2Shell lab or an incident I investigated.*
 
+[Portfolio](../README.md) · [Research index](../research/README.md)
+
 ## What happened
 
 PHP released fixes on **October 21, 2026** for two flaws in its web-request processing. Researchers showed that attackers could use them for **unauthenticated remote code execution (RCE)** on vulnerable PHP servers. Amazon Threat Intelligence also reported an **exploitation attempt on October 17** in its MadPot honeypot data—four days before public disclosure. Additional attempts followed. [1][2]
