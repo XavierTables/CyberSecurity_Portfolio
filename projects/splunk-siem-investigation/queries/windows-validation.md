@@ -2,6 +2,8 @@
 
 **Prepared:** October 26, 2026 · **Execution status:** Not run against the original Splunk dataset.
 
+**Optional future work:** Only screenshots are currently available. The [retrospective evidence review](../evidence-review.md) is complete with bounded findings. This runbook is retained for use only if original data is recovered; it is not a claim that those checks were completed or a prerequisite for reading the final screenshot-based assessment.
+
 This is a follow-up runbook for the [investigation](../README.md), separate from the [11 recorded searches](investigation-queries.md). It does not document completed validation, confirmed compromise, or incident closure.
 
 ## Start here
@@ -17,10 +19,10 @@ Run this first. Export every result as CSV or JSON, including `_raw`; preserve t
 ```spl
 index=windowslogs ("0x551686" OR EventID=4739)
 | eval splunk_epoch=_time, display_time_with_offset=strftime(_time,"%Y-%m-%dT%H:%M:%S%z")
-| table splunk_epoch display_time_with_offset host Computer ComputerName source sourcetype Channel EventID RecordNumber EventRecordID EventTime UtcTime SubjectUserName SubjectLogonId TargetUserName TargetLogonId _raw
+| table splunk_epoch display_time_with_offset host Hostname Computer ComputerName source sourcetype Channel EventID RecordNumber EventRecordID EventTime UtcTime SubjectUserName SubjectLogonId TargetUserName TargetLogonId _raw
 ```
 
-Missing columns are a finding to investigate. Inspect `_raw` for the event computer, provider, channel, original timestamp, zone and event-specific fields. Splunk `host` can describe collection metadata; do not silently treat it as the event computer.
+Missing columns are a finding to investigate. Inspect `_raw` for the event computer, provider, channel, original timestamp, zone and event-specific fields. The retained JSON-like record uses `Hostname`; preserve that field as well as any Computer/ComputerName fields found in recovered data. Splunk `host` can describe collection metadata; do not silently treat it as the event computer.
 
 The April-to-July date mismatch cannot be explained by a normal time-zone display offset alone. Determine whether `_time` was parsed from the wrong field, whether EventTime is constant or malformed, or whether the dataset was transformed. Those are hypotheses until the raw records and source documentation support one.
 
@@ -33,7 +35,7 @@ Run this after the first search. It preserves other process activity for James r
 ```spl
 index=windowslogs EventID=1 User="Cybertees\\James"
 | eval splunk_epoch=_time
-| table splunk_epoch host Computer ComputerName source sourcetype Channel EventID EventTime UtcTime User LogonId LogonGuid ProcessGuid ParentProcessGuid ProcessId ParentProcessId Image ParentImage CommandLine ParentCommandLine _raw
+| table splunk_epoch host Hostname Computer ComputerName source sourcetype Channel EventID EventTime UtcTime User LogonId LogonGuid ProcessGuid ParentProcessGuid ProcessId ParentProcessId Image ParentImage CommandLine ParentCommandLine _raw
 ```
 
 Match the account spelling and source field names to the actual records; document any changes. A missing `LogonId`/`LogonGuid` column does not mean the raw event lacks it. Check `_raw` before deciding the field is unavailable.
@@ -45,7 +47,7 @@ Verify the event computer first. Compare the parent GUID on net1.exe/conhost.exe
 ```spl
 index=windowslogs EventID IN (4720,4724,4726,4728,4729,4739)
 | eval splunk_epoch=_time
-| table splunk_epoch host Computer ComputerName source sourcetype Channel EventID RecordNumber EventRecordID EventTime SubjectUserName SubjectDomainName SubjectLogonId SubjectUserSid TargetUserName TargetDomainName TargetSid MemberName MemberSid Keywords Message _raw
+| table splunk_epoch host Hostname Computer ComputerName source sourcetype Channel EventID RecordNumber EventRecordID EventTime SubjectUserName SubjectDomainName SubjectLogonId SubjectUserSid TargetUserName TargetDomainName TargetSid MemberName MemberSid Keywords Message _raw
 ```
 
 Inspect all returned records, including Event 4739 even if it belongs to a different computer or session. Preserve the comparison that supports either keeping it with the lead or treating it separately.
@@ -56,13 +58,13 @@ For 4720/4726, record the actual target account/SID. For 4728/4729, distinguish 
 
 | Check | Evidence needed | Current status |
 | --- | --- | --- |
-| Event-computer scope | Original Computer value, provider/channel and source/log provenance on both sources | Pending |
-| Timestamp interpretation | Raw source timestamps, documented zone, parser result/parse failures and comparison with numeric `_time` | Pending |
-| Security session | Event-specific subject/target IDs, account/SID, computer, source-time window, and reboot/log boundary evidence or explicit boundary limitation | Pending |
-| Sysmon connection | Same event computer and compatible source time plus matching session/GUID context where present; GUID ancestry checked separately | Pending |
-| Alberto/group relationship | Expanded 4728/4729 member and group fields, compared with the account SID | Pending |
-| Password reset | Expanded 4724 target and audit outcome | Pending |
-| Event 4739 relevance | Original record and saved computer/session/time comparison | Pending |
+| Event-computer scope | Original Computer value, provider/channel and source/log provenance on both sources | Not established from retained screenshots |
+| Timestamp interpretation | Raw source timestamps, documented zone, parser result/parse failures and comparison with numeric `_time` | Not established from retained screenshots |
+| Security session | Event-specific subject/target IDs, account/SID, computer, source-time window, and reboot/log boundary evidence or explicit boundary limitation | Not established from retained screenshots |
+| Sysmon connection | Same event computer and compatible source time plus matching session/GUID context where present; GUID ancestry checked separately | Not established from retained screenshots |
+| Alberto/group relationship | Expanded 4728/4729 member and group fields, compared with the account SID | Not established from retained screenshots |
+| Password reset | Expanded 4724 target and audit outcome | Not established from retained screenshots |
+| Event 4739 relevance | Original record and saved computer/session/time comparison | Not established from retained screenshots |
 | Administrative approval | Supplied change record, owner confirmation, or explicit statement that it is unavailable | Unavailable in retained evidence |
 
 Use each event's schema: for the 4624 session being investigated, start with TargetLogonId; administrative action records usually identify the actor in SubjectLogonId. Do not combine those into one unlabeled ID. A Logon ID is scoped to a computer between reboots. A repeated ID, matching username, nearby `_time`, or matching PID by itself is insufficient.
