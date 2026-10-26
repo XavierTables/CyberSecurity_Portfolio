@@ -12,7 +12,7 @@ I investigated rare Windows account changes and unusual VPN country transitions 
 
 | Lead | What I established | What remains open |
 | --- | --- | --- |
-| Windows | A James network logon matched Logon ID 0x551686; Security records showed account/group activity involving Alberto. Separate Sysmon results showed parent-child process relationships. | Whether the Security and Sysmon records share a verified computer/session; approval for the account changes |
+| Windows | A James network logon displayed Logon ID 0x551686. Security rows showed James creating and deleting Alberto, plus group-add/remove events whose member and group details still need validation. Separate Sysmon results showed parent-child process relationships. | Whether the Security and Sysmon records share a verified computer/session; approval for the account changes |
 | VPN | jsmith and kbrown each had one rare-country event. Four transitions surrounded those events, with gaps of 15–57 minutes. | Device identity, MFA outcomes, source-IP ownership, and routing/geolocation context |
 
 ## Recommended disposition
