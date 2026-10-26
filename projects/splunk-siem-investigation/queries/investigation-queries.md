@@ -2,6 +2,8 @@
 
 These are the **11 searches I ran** during my [Splunk investigation](../README.md), in their original order.
 
+**October 26, 2026 review:** This is the historical execution record. The current review used nine retained screenshots; it did not rerun these searches. The [screenshot review](../evidence-review.md) distinguishes visible execution evidence from written notes and arithmetic.
+
 ## Search scope
 
 I searched **All time** in the supplied training datasets. I did not record their full date ranges or Splunk's display time zone. My Windows searches also need tighter computer and time filters; the investigation report lists those remaining checks.
@@ -145,8 +147,8 @@ Recorded result: jsmith US to Japan in 25 minutes and Japan to US in 15; kbrown 
 
 ## Reproduction notes
 
-When I reuse these searches, I will check the fields, set a time window, and review missing values or events with identical timestamps. I will also tune the VPN thresholds against the available user history and verify the computer and subject/target Logon IDs in the Windows events.
+Only screenshots are currently available. The retained evidence cannot resolve the Windows computer/session/time checks or reproduce every search. If original data is recovered, check the field schema, establish source-time and event-computer scope, review missing values and tied timestamps, and evaluate the exploratory VPN thresholds against suitable history.
 
 ## Proposed follow-up searches
 
-The [Windows validation runbook](windows-validation.md) contains proposed checks. Those searches are unexecuted and are not part of the 11-search execution record above.
+The [optional Windows validation runbook](windows-validation.md) contains proposed checks for recovered source data. Those three searches are unexecuted and are not part of the 11-search execution record above.
