@@ -4,7 +4,7 @@ These are the **11 searches I ran** during my [Splunk investigation](../README.m
 
 ## Search scope
 
-I searched **All time** in the supplied training datasets. I did not record their full date ranges or Splunk's display time zone. My Windows searches also need tighter computer and time filters, which I covered in the validation plan.
+I searched **All time** in the supplied training datasets. I did not record their full date ranges or Splunk's display time zone. My Windows searches also need tighter computer and time filters; the investigation report lists those remaining checks.
 
 I saved nine screenshots of selected results. The [Windows investigation](../README.md#windows-account-activity) records the computer, time-window, and session checks still needed.
 
@@ -32,14 +32,14 @@ Recorded result: 55 distinct Event IDs. Events 4720, 4724, 4726, 4728, 4729, and
 
 ## 03: Account-management activity
 
-I reviewed the rare account-management events together.
+I reviewed the rare account, group, and domain-policy events together. Event 4739 is a domain-policy change.
 
 ```spl
 index=windowslogs EventID IN (4720,4724,4726,4728,4729,4739)
 | sort _time
 ```
 
-My notes from this search identified subject account James, target account Alberto, and Logon ID 0x551686. I excluded a nearby 4739 event because its host/session context differed.
+My notes from this search identified subject account James, target account Alberto, and Logon ID 0x551686. The retained evidence does not show the Event 4739 detail needed to verify its relationship to this lead; the earlier host/session exclusion is not substantiated.
 
 ## 04: James network logon
 
@@ -146,3 +146,7 @@ Recorded result: jsmith US to Japan in 25 minutes and Japan to US in 15; kbrown 
 ## Reproduction notes
 
 When I reuse these searches, I will check the fields, set a time window, and review missing values or events with identical timestamps. I will also tune the VPN thresholds against the available user history and verify the computer and subject/target Logon IDs in the Windows events.
+
+## Proposed follow-up searches
+
+The [Windows validation runbook](windows-validation.md) contains proposed checks. Those searches are unexecuted and are not part of the 11-search execution record above.
