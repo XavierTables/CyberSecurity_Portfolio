@@ -12,9 +12,9 @@
 
 **Finding:** The VPN searches found two rare-country events and four surrounding transitions, 15–57 minutes apart. Windows searches identified account activity and separate Sysmon parent-child relationships.
 
-**Status:** Further investigation recommended; account compromise is unconfirmed. Windows computer/session correlation and timestamp interpretation need validation. VPN device, MFA, source-IP, and account-owner context remain unresolved.
+**Status:** Retrospective evidence review complete, October 26, 2026. The conclusions are limited to nine retained screenshots and the historical query log; only screenshots are now available for validation. Account compromise is unconfirmed. A common Windows computer/session and reliable cross-source timing cannot be established from the retained views. VPN device, MFA, source-IP, and account-owner context are unavailable.
 
-**Evidence:** [Executed queries](queries/investigation-queries.md) · [Screenshots](#evidence) · [Case brief](../../docs/splunk-incident-brief.md)
+**Evidence:** [Historical queries](queries/investigation-queries.md) · [Screenshots](#evidence) · [Screenshot review and final decisions](evidence-review.md) · [Case brief](../../docs/splunk-incident-brief.md)
 
 ## Data and method
 
@@ -45,7 +45,9 @@ One Event 4739 appeared in the count. I did not retain the event detail needed t
 
 **Where my interpretation changed:** The matching account and Logon ID gave me a lead, but my searches did not consistently show or constrain the computer and time window. I could explain the Sysmon ancestry without proving that those processes belonged to the Security logon session. A Logon ID must be interpreted in the correct computer/logon context; [Microsoft documents its scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
 
-My next steps are to verify the event computer and event-specific subject/target IDs, reproduce the process relationships, and check the password-reset outcome, group permissions, and administrative approval. The [validation runbook](queries/windows-validation.md) separates those proposed checks from the searches already performed. Its queries have not yet been run against the original dataset.
+The screenshot review recovered some context: the expanded 4624 names `Hostname=Micheal.Beaven`, while the overview shows one Splunk `host` value and three `Hostname` values. The Sysmon result table does not show its event hostname or Logon ID/GUID, so that computer name cannot be assigned to the three process rows. The Security table also contains a 4688 whose subject Logon ID is `0x3e4` and target Logon ID is `0x551686`; matching the target does not make James the subject actor of every row.
+
+**Final Windows assessment:** The retained views support a James network logon, account-event observations, and separate process ancestry. They do not establish one verified Security/Sysmon session, a successful password reset, the affected group/member, administrative approval, or compromise. Those conclusions remain unavailable with the current evidence. The [optional validation runbook](queries/windows-validation.md) applies only if original data is recovered; its three searches are unexecuted.
 
 ## VPN country changes
 
@@ -68,14 +70,13 @@ The four rows represent transitions into and out of two outlier events. My thres
 
 **Assessment:** The pattern warrants device, MFA, source-IP, and account-owner checks. VPN/proxy routing and geolocation errors are possible explanations; physical travel or credential theft cannot be established from these fields alone.
 
-## Recommended handoff
+## Final disposition and handoff
 
-I would continue both leads separately:
+**Retrospective lab review complete; unauthorized activity undetermined.** The Windows lead is inconclusive beyond the specific observations above. The VPN lead demonstrates unusual country-labelled activity within the supplied dataset, with no retained identity evidence to distinguish misuse from a benign explanation. The two leads are independent.
 
-- **Windows:** Validate the host/session connection first, then obtain change approval and group-permission context.
-- **VPN:** Have the identity/VPN owner review devices, MFA, source IPs, and routing.
+No new Splunk searches, account-owner checks, containment, remediation, or production incident closure were performed during this review. The absence of further evidence does not establish that the activity was benign.
 
-My [sample handoff](../../docs/splunk-retrospective-triage-ticket.md) states proposed owners, priority criteria, and escalation conditions.
+If the original data becomes available, the [sample handoff](../../docs/splunk-retrospective-triage-ticket.md) states proposed owners, priority criteria, and escalation conditions. The [evidence review](evidence-review.md) records the current findings and the limits that prevent stronger conclusions.
 
 ## Evidence
 
