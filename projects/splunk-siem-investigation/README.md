@@ -29,7 +29,7 @@ I used All time on the supplied historical datasets. My [query log](queries/inve
 
 ## Windows account activity
 
-I started with Event ID counts. Account-management events 4720, 4724, 4726, 4728, 4729, and 4739 each appeared once, which gave me a smaller set to inspect.
+I started with Event ID counts. Events 4720, 4724, 4726, 4728, 4729, and 4739 each appeared once, which gave me a smaller set of account, group, and policy changes to inspect. Event 4739 records a domain-policy change rather than a user-account change.
 
 My notes identified subject account **James**, target account **Alberto**, and Logon ID **`0x551686`**. I then searched for the matching network logon and examined process records:
 
@@ -41,11 +41,11 @@ My notes identified subject account **James**, target account **Alberto**, and L
 
 [Authentication record](evidence/03-james-network-logon.png) · [Security timeline](evidence/04-security-session-timeline.png) · [Sysmon results](evidence/05-sysmon-process-correlation.png)
 
-I excluded a nearby Event 4739 from the broader account-management search because its host/session context differed.
+One Event 4739 appeared in the count. I did not retain the event detail needed to verify its relationship to this lead. I therefore cannot substantiate the earlier exclusion by computer or session.
 
 **Where my interpretation changed:** The matching account and Logon ID gave me a lead, but my searches did not consistently show or constrain the computer and time window. I could explain the Sysmon ancestry without proving that those processes belonged to the Security logon session. A Logon ID must be interpreted in the correct computer/logon context; [Microsoft documents its scope](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634).
 
-My next steps are to verify the event computer and event-specific subject/target IDs, reproduce the process relationships, and check the password-reset outcome, group permissions, and administrative approval.
+My next steps are to verify the event computer and event-specific subject/target IDs, reproduce the process relationships, and check the password-reset outcome, group permissions, and administrative approval. The [validation runbook](queries/windows-validation.md) separates those proposed checks from the searches already performed. Its queries have not yet been run against the original dataset.
 
 ## VPN country changes
 
