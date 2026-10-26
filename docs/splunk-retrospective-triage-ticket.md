@@ -10,7 +10,7 @@ This is a retrospective lab handoff based on my recorded searches. The prioritie
 
 | Field | Handoff |
 | --- | --- |
-| Entities | James; Alberto; Logon ID `0x551686` |
+| Entities | James; Alberto in the account-creation/deletion rows; Logon ID `0x551686`; group member/group identity still unverified |
 | Evidence | Security authentication/account/group records; a separate Sysmon process tree involving `WmiPrvSE.exe`, `net.exe`, `net1.exe`, and `conhost.exe` |
 | Provisional priority | **Medium:** account/privilege activity warrants review; authorization and impact are unresolved |
 | First action | Verify the event computer, time window, and subject/target Logon ID for each Security record; check timestamp parsing before comparing sources |
@@ -18,7 +18,7 @@ This is a retrospective lab handoff based on my recorded searches. The prioritie
 | Next decision | Escalate if the activity is unapproved, malicious evidence corroborates it, or privileged actions remain unexplained |
 | Evidence links | [Logon](../projects/splunk-siem-investigation/evidence/03-james-network-logon.png), [Security rows](../projects/splunk-siem-investigation/evidence/04-security-session-timeline.png), [Sysmon](../projects/splunk-siem-investigation/evidence/05-sysmon-process-correlation.png) |
 
-The parent-child Sysmon relationships do not yet establish a common session with the Security records. The [investigation report](../projects/splunk-siem-investigation/README.md#windows-account-activity) records the remaining computer, time-window, and session checks.
+The parent-child Sysmon relationships do not yet establish a common session with the Security records. The separate group-change rows do not establish Alberto as the group member. Event 4739 also requires an expanded record before its relationship to this lead can be decided. The [investigation report](../projects/splunk-siem-investigation/README.md#windows-account-activity) records the remaining computer, time-window, and session checks.
 
 ## VPN country changes
 
