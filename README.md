@@ -12,7 +12,7 @@ I found **two rare-country VPN events** involving users whose other recorded log
 
 I compared each user's country and source-IP history, then used SPL to calculate the gaps between logins. The supplied TryHackMe datasets contained 2,000 VPN events and 12,256 Windows events; my query log records 11 executed searches across both.
 
-**Status:** Further investigation recommended. Device, MFA, and routing context remain unresolved. The separate Windows lead identified account activity and Sysmon ancestry; host/session validation remains open.
+**Status:** Retrospective screenshot review complete. The VPN anomalies are supported; device, MFA, and routing context remain unavailable. The separate Windows lead shows account activity and Sysmon ancestry, but a common computer/session cannot be established from the retained views. Account compromise is unconfirmed.
 
 **[Read the case brief](docs/splunk-incident-brief.md)** · [Full investigation](projects/splunk-siem-investigation/README.md) · [Executed SPL](projects/splunk-siem-investigation/queries/investigation-queries.md) · [Sample handoff](docs/splunk-retrospective-triage-ticket.md)
 
@@ -20,7 +20,7 @@ I compared each user's country and source-IP history, then used SPL to calculate
 
 | Project | Work demonstrated | Recorded outcome |
 | --- | --- | --- |
-| **[Splunk investigation](projects/splunk-siem-investigation/README.md)** | SPL searches, Windows account-event review, Sysmon ancestry, VPN baselining | Two independent leads documented for follow-up |
+| **[Splunk investigation](projects/splunk-siem-investigation/README.md)** | SPL searches, Windows account-event review, Sysmon ancestry, VPN baselining | Two leads assessed with explicit evidence limits; compromise unconfirmed |
 | **[Windows Security Log Triage](projects/windows-security-log-triage/README.md)** | Compared four Event Viewer records and their account/process context | Distinguished an Administrator password change from later SYSTEM service activity |
 | **[Nessus Baseline Scan](projects/nessus-vulnerability-assessment/README.md)** | Configured and completed a guided authenticated scan of one lab host | Recorded severity totals; individual finding validation remains open |
 
