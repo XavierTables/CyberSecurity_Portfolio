@@ -1,26 +1,22 @@
-# SSH Authentication: Verifying What a Successful Login Means
+# SSH Authentication: Checking What Access Was Established
 
-[Back to remote-access assessment](README.md) · [Screenshot sources](evidence/README.md)
+[Remote-access report](README.md) · [VNC comparison](vnc-analysis.md) · [Evidence index](evidence/README.md)
 
-## Objective
+## What I examined
 
-Use a controlled SSH login test to see whether weak credentials work against the Metasploitable service, then check what kind of access follows.
+The SSH exercise used Kali Linux and the Metasploit module `auxiliary/scanner/ssh/ssh_login` against TCP 22 on Metasploitable 2.
 
-## Approach
+The module options establish the target and credential-testing method. `RHOSTS` specifies the host, `USER_FILE` and `PASS_FILE` supply possible credentials, and `STOP_ON_SUCCESS` controls when testing stops.
 
-In the SecurePath exercise, Kali runs Metasploit's `auxiliary/scanner/ssh/ssh_login` against SSH on TCP 22. The module is configured with a small training list of possible usernames and passwords.
+![SSH module options](evidence/ssh-module-options.webp)
 
-![SSH module settings](evidence/ssh-module-options.webp)
+## Results
 
-The useful options here are `RHOSTS`, `USER_FILE`, `PASS_FILE`, and `STOP_ON_SUCCESS`. They're important because they tell me **which host was tested**, **where the credential guesses came from**, and **when the scanner would stop**.
+The login scanner reported `msfadmin:msfadmin` as successful and opened an SSH shell session.
 
-## Result
+![SSH login result](evidence/ssh-login-reported.webp)
 
-The example reports a credential match for `msfadmin:msfadmin` and opens an SSH session.
-
-![SSH authentication result](evidence/ssh-login-reported.webp)
-
-The next step matters more than the tool's summary. The session is selected and the account is checked:
+A follow-up session check produced:
 
 ```text
 sessions -i 1
@@ -28,20 +24,18 @@ whoami
 msfadmin
 ```
 
-![SSH session and whoami](evidence/ssh-session-whoami.webp)
+![SSH session identity check](evidence/ssh-session-whoami.webp)
 
-## My interpretation
+## My conclusion
 
-I can support a conclusion of **interactive SSH access as `msfadmin`**. I cannot support a claim of root access or a vulnerability in the SSH software. The weakness demonstrated is the predictable credential for this deliberately vulnerable account.
+The login wasn't just a positive password guess. The shell session and `whoami` result support **interactive access as the msfadmin user**.
 
-If I were handling this as a SOC alert, I'd separate a login attempt from a confirmed successful session. I'd correlate the source IP, authentication logs, username, timing, and any shell or process activity after login.
+I would not describe that as root access, privilege escalation, or an exploit of the SSH protocol. The weakness shown is the predictable credential on a deliberately vulnerable training system.
 
-## Remediation and validation
+## What I'd investigate on a company server
 
-For an organizational host, I would replace default/shared credentials, remove unused accounts, restrict SSH to the approved administration network, and review key-based authentication and MFA where suitable. I'd verify the fix by confirming the previous credentials fail and legitimate administrators can still connect.
+I'd check whether the account was approved, when and where the connection came from, failed attempts preceding the successful login, and commands executed afterward. I'd recommend removing default credentials, restricting SSH to approved management paths, and using stronger authentication where supported.
 
-**Bottom line:** A scanner success result gets my attention. A subsequent session and `whoami` result make my assessment more specific.
+**Verification after remediation:** Confirm the weak credentials no longer authenticate while approved administrative access continues to work.
 
-[Recreate this test in an authorized VM](../reproduce-and-capture.md)
-
-*The screenshot excerpts are from the SecurePath Exercise 2 materials; see the [evidence index](evidence/README.md) for source pages.*
+[Practice the commands and capture your own output](../reproduce-and-capture.md) · [Screenshot source pages](evidence/README.md)

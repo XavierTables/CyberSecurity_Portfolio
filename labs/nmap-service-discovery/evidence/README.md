@@ -1,17 +1,13 @@
-# Nmap Lab Evidence Index
+# Nmap — Screenshot Index
 
-[Lab report](../README.md)
+[Nmap analysis](../README.md)
 
-**Source:** "Lab Exercise 5 — Nmap Security Scanner" — provided SecurePath instructional PDF.
+**Image source:** Cropped terminal excerpts from the Tri-C SecurePath CySA+ instructor deck **Lab Exercise 5 — Nmap Security Scanner**. These images illustrate the lesson's results; original Nmap scan files are not included.
 
-The three images are crops of the terminal output printed in **instructor slides**. They were not taken from an original Nmap log or a fresh scan. Every crop includes a label documenting its slide source.
-
-| Image | Source page | Visible command and evidence |
+| Screenshot | Source | What it shows |
 | --- | --- | --- |
-| [Default TCP scan](nmap-default-ports.webp) | 22 | `nmap 10.0.2.4`; 23 displayed open TCP ports |
-| [OS fingerprint](nmap-os-fingerprint.webp) | 24 | `nmap -O 10.0.2.4`; Linux 2.6.x estimate |
-| [Full range](nmap-full-port-range.webp) | 25 | `nmap -O 10.0.2.4 -p 1-65535`; 30 displayed open TCP ports and estimated OS |
+| [Default scan](nmap-default-ports.webp) | Exercise 5, p. 22 | 23 open TCP ports in the default scan |
+| [OS fingerprint](nmap-os-fingerprint.webp) | Exercise 5, p. 24 | Linux 2.6.x OS estimate |
+| [Full TCP range](nmap-full-port-range.webp) | Exercise 5, p. 25 | 30 open TCP ports after scanning 1–65535 |
 
-**Evidence limitations:** The screenshots show a July 15, 2025 example, whereas the trainee's CySA+ coursework took place later. The screenshots alone do not establish exact service versions, vulnerability validation, public exposure, or independent execution by the trainee.
-
-For defensible conclusions, the report uses only commands and outputs visible in these instructional excerpts, and distinguishes interpretations from observed details.
+The example console timestamps read July 15, 2025. Findings and follow-up recommendations are discussed in the [main analysis](../README.md).

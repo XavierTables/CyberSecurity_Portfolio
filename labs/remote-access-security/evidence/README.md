@@ -1,17 +1,15 @@
-# Remote-Access Lab Evidence Index
+# SSH and VNC — Screenshot Index
 
-[Combined report](../README.md) · [SSH analysis](../ssh-analysis.md) · [VNC analysis](../vnc-analysis.md)
+[Remote-access report](../README.md) · [SSH analysis](../ssh-analysis.md) · [VNC analysis](../vnc-analysis.md)
 
-**Provenance:** Crops of terminal images embedded in the instructor-provided PDF exercises. Every file contains an added source label below the original screenshot region. The terminal pixels and instructional highlights were not redrawn or recreated. These files are **not** independent captures of my own console session.
+**Image source:** Cropped terminal excerpts from the Tri-C SecurePath CySA+ instructor slide decks, **Lab Exercise 2** (SSH) and **Lab Exercise 3** (VNC). These images illustrate the lab results; original terminal session logs are not included.
 
-| File | Lesson / slide | What is visible |
+| Screenshot | Source | What it shows |
 | --- | --- | --- |
-| [SSH module options](ssh-module-options.webp) | Lab Exercise 2, p.11 | `ssh_login` configuration including target and wordlist settings |
-| [SSH login report](ssh-login-reported.webp) | Lab Exercise 2, p.13 | `msfadmin:msfadmin` success and new SSH session |
-| [SSH session check](ssh-session-whoami.webp) | Lab Exercise 2, p.14 | Shell session 1 selected; `whoami` output `msfadmin` |
-| [Nmap VNC service](vnc-nmap-port5900.webp) | Lab Exercise 3, p.9 | `5900/tcp open vnc`, protocol 3.3 shown |
-| [VNC password acceptance](vnc-password-reported.webp) | Lab Exercise 3, p.15 | `vnc_login` reports `Login Successful: :password` |
+| [SSH module options](ssh-module-options.webp) | Exercise 2, p. 11 | `ssh_login` configuration |
+| [SSH login result](ssh-login-reported.webp) | Exercise 2, p. 13 | `msfadmin:msfadmin` login success |
+| [SSH session check](ssh-session-whoami.webp) | Exercise 2, p. 14 | Shell session and `whoami` response |
+| [VNC port discovery](vnc-nmap-port5900.webp) | Exercise 3, p. 9 | VNC on TCP 5900 |
+| [VNC password check](vnc-password-reported.webp) | Exercise 3, p. 15 | Password accepted by `vnc_login` |
 
-The source exercises were shared for analysis by the trainee. The entire instructor decks have **not** been uploaded. If a source owner's reuse restrictions apply, these excerpts can be removed without changing the report's text analysis.
-
-The SSH example's recorded timestamp predates the training period. No claim is made that the example output was collected on the lab date.
+The figures preserve the original historical console timestamps. Interpretations and remediation recommendations are in the linked reports.

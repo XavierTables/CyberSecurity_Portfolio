@@ -1,49 +1,39 @@
-# VNC Authentication: Investigating Port 5900
+# VNC Authentication: Weak Password on Port 5900
 
-[Back to remote-access assessment](README.md) · [Screenshot sources](evidence/README.md)
+[Remote-access report](README.md) · [SSH comparison](ssh-analysis.md) · [Evidence index](evidence/README.md)
 
-## Objective
+## What I examined
 
-Find a remote-desktop service, check whether a weak password is accepted, and determine how much access the result actually proves.
-
-## Approach
-
-The lab uses Nmap to identify the VNC service on TCP 5900:
+This exercise starts by identifying VNC on the lab target using service detection:
 
 ```bash
 nmap -sV -p 5900 192.168.1.106
 ```
 
-![VNC service identified](evidence/vnc-nmap-port5900.webp)
+![Nmap identifying VNC on TCP 5900](evidence/vnc-nmap-port5900.webp)
 
-The scan reports `5900/tcp open vnc` with VNC protocol version 3.3. That shows a listener responded on the lab network; it doesn't show the server was exposed to the public internet.
+Nmap reported `5900/tcp open vnc` with VNC protocol 3.3. This establishes reachability from the lab scanner, not public internet exposure.
 
-Next, the Metasploit `auxiliary/scanner/vnc/vnc_login` module checks passwords against that service.
+## Password check
 
-## Result
-
-![VNC authentication result](evidence/vnc-password-reported.webp)
-
-The relevant line is:
+The Metasploit `auxiliary/scanner/vnc/vnc_login` module then checked authentication. The key output was:
 
 ```text
 Login Successful: :password
 ```
 
-## My interpretation
+![VNC scanner reporting accepted password](evidence/vnc-password-reported.webp)
 
-The VNC service in the example accepted a simple, predictable password. That is an authentication concern because remote-desktop services can give a connected user control over a GUI session.
+## My conclusion
 
-But I would **not** write "desktop compromised" based on this screenshot. The image shows a successful password check, not a VNC viewer connected to the desktop. The next test would be an authorized graphical login and a check of the permissions granted.
+The lab's VNC service accepted a weak password. That's worth investigating because remote-desktop services can provide control of another system.
 
-I also corrected a terminology issue in the training title: **VNC isn't VPN**. VNC is a remote-display protocol; a VPN connects networks or clients through a secure tunnel.
+What I can confirm from this output is **successful authentication**. A viewer actually connecting and controlling the desktop would require its own session evidence. This is also **VNC**, not VPN; port 5900 is associated with the remote-display service tested here.
 
-## What I would do next
+## What I'd investigate at work
 
-I would check service ownership, allowed source networks, authentication configuration, encryption, and whether any unexpected connections were logged. Then I'd restrict management access, replace weak passwords, and validate the result with a permitted retest.
+I'd verify which systems could reach the VNC listener, identify its owner and product, review authentication and encryption settings, and look for unexpected connections. I'd recommend strong unique credentials, approved access restrictions, and a follow-up test showing weak passwords are rejected.
 
-**Bottom line:** I have evidence of an accepted weak password; I would seek session-level verification before escalating the claim to confirmed remote-desktop access.
+**My takeaway:** Don't confuse an accepted password with a demonstrated remote desktop session.
 
-[Practice on an isolated lab VM](../reproduce-and-capture.md)
-
-*The screenshot excerpts are from SecurePath Exercise 3; source pages are listed in the [evidence index](evidence/README.md).*
+[Practice the commands and capture your own output](../reproduce-and-capture.md) · [Screenshot source pages](evidence/README.md)

@@ -1,15 +1,15 @@
-# Cybersecurity Labs — Network and Authentication Analysis
+# Network and Authentication Labs
 
 [Back to my portfolio](../README.md)
 
-These exercises are from my CySA+ coursework at Tri-C SecurePath. I use them to work through how tools report results, what those results actually establish, and what I'd investigate or recommend next. I kept the reports focused on the technical questions rather than reproducing step-by-step classroom slides.
+These are technical write-ups from topics I studied in Tri-C SecurePath's CySA+ training. I focused on interpreting results, explaining the risk, and deciding what an analyst should verify next.
 
-| Lab | What I investigated | Main takeaway |
+| Analysis | Key result | What it demonstrates |
 | --- | --- | --- |
-| **[SSH and VNC authentication](remote-access-security/README.md)** | Weak credentials, SSH shell verification, and VNC login testing | An accepted credential and a confirmed remote session aren't interchangeable |
-| **[Nmap network reconnaissance](nmap-service-discovery/README.md)** | Default vs full-range port discovery and OS fingerprinting | Seven more listeners appeared in the full-range scan; each needs validation |
-| **[SMTP user enumeration](smtp-enumeration/README.md)** | `VRFY` responses and account-enumeration risk | SMTP reply codes need careful interpretation before claiming account validity |
+| **[SSH and VNC authentication](remote-access-security/README.md)** | SSH session as `msfadmin`; weak VNC password accepted | Authentication testing, access verification, and careful conclusions |
+| **[Nmap network reconnaissance](nmap-service-discovery/README.md)** | 23 open ports in a default scan, 30 in a full-range scan | Port discovery, service analysis, and investigation priorities |
+| **[SMTP user enumeration](smtp-enumeration/README.md)** | Different SMTP `VRFY` responses | Protocol analysis and enumeration risk |
 
-**Evidence:** I retained screenshots from the course materials for reference; individual [SSH/VNC](remote-access-security/evidence/README.md) and [Nmap](nmap-service-discovery/evidence/README.md) evidence indexes identify their sources. My written analysis is separate from those instructional images.
+The terminal figures and their original source pages are linked in each report's evidence index: [SSH/VNC](remote-access-security/evidence/README.md) · [Nmap](nmap-service-discovery/evidence/README.md).
 
-[Run your own lab scans and capture real evidence](tools/capture-nmap.sh) · [Fill out independent evidence record](independent-evidence-record.md) · [Practice commands](reproduce-and-capture.md) · [Featured SOC investigations](../README.md#lab-projects)
+[Hands-on reproduction guide](reproduce-and-capture.md) · [Evidence capture script](tools/capture-nmap.sh) · [Featured SOC work](../README.md#lab-projects)
