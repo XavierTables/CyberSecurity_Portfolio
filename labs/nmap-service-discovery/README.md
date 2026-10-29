@@ -87,7 +87,9 @@ That connects to my [Nessus vulnerability assessment](../../projects/nessus-vuln
 ### Evidence and practice
 
 - [Cropped scan screenshots and source information](evidence/README.md)
-- [Commands for recreating and recording these scans](../reproduce-and-capture.md)
+- [Run Nmap and save original scan output](../tools/capture-nmap.sh)
+- [Use the independent results worksheet](../independent-evidence-record.md)
+- [Manual command walkthrough](../reproduce-and-capture.md)
 
 *Evidence context: The scan figures are excerpts from my SecurePath course materials. The comparisons, conclusions, and proposed follow-up are my analysis; raw independent Nmap output wasn't retained.*
 

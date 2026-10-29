@@ -12,4 +12,4 @@ These exercises are from my CySA+ coursework at Tri-C SecurePath. I use them to 
 
 **Evidence:** I retained screenshots from the course materials for reference; individual [SSH/VNC](remote-access-security/evidence/README.md) and [Nmap](nmap-service-discovery/evidence/README.md) evidence indexes identify their sources. My written analysis is separate from those instructional images.
 
-[Practice commands and evidence-capture checklist](reproduce-and-capture.md) · [Featured SOC investigations](../README.md#lab-projects)
+[Run your own lab scans and capture real evidence](tools/capture-nmap.sh) · [Fill out independent evidence record](independent-evidence-record.md) · [Practice commands](reproduce-and-capture.md) · [Featured SOC investigations](../README.md#lab-projects)

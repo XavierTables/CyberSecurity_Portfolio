@@ -4,6 +4,8 @@
 
 This is the **practical upgrade path** for the guided-lab reports. The currently published screenshots are instructor-slide examples. When I repeat the steps and save original output, I can replace them with screenshots I genuinely captured and update the report's observed results.
 
+> **Fastest way to generate real, personally captured evidence:** On your own isolated Kali/Metasploitable setup, use [the Nmap capture script](tools/capture-nmap.sh) to save timestamped normal/XML/grepable scans. Then use the two generated Metasploit resource files for controlled SSH and VNC checks. Fill out [your evidence record](independent-evidence-record.md). Until you run these tests, the published slide screenshots are training references, not independent execution proof.
+
 **Only perform these steps on Kali and Metasploitable VMs you own or are explicitly authorized to test.** Metasploitable 2 is deliberately vulnerable. Keep it disconnected from production networks and do not use bridged networking.
 
 ## A. Get the lab ready

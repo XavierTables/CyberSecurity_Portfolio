@@ -72,6 +72,8 @@ My recommended fixes would be to remove default credentials, use strong unique a
 - [VNC evidence analysis](vnc-analysis.md)
 - [Evidence index and slide sources](evidence/README.md)
 - [Practice and independent evidence-capture commands](../reproduce-and-capture.md)
+- [Capture your own SSH/VNC results with a known-target lab setup](../tools/capture-nmap.sh)
+- [Record your actual results and limitations](../independent-evidence-record.md)
 
 *Evidence context: The figures are cropped terminal excerpts from the SecurePath lab materials I studied. I wrote this technical interpretation and the follow-up recommendations; the original terminal recordings weren't retained.*
 
