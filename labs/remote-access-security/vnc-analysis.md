@@ -1,53 +1,46 @@
-# VNC: Port 5900 Discovery and Weak Password Check
+# VNC Authentication | Port 5900 and a Weak Password
 
-[Combined report](README.md) · [SSH comparison](ssh-analysis.md) · [Evidence index](evidence/README.md)
+[Combined assessment](README.md) · [Evidence](evidence/README.md) · [Recreate this lab](../reproduce-and-capture.md)
 
-## Question
+## Service discovery
 
-Could the demonstrated VNC service be discovered and authenticate with a weak password? Does the evidence show full remote desktop access?
-
-## Discovery shown in the lesson
-
-The guided material uses Nmap against the deliberately vulnerable Metasploitable VM:
+The lab example runs Nmap against Metasploitable:
 
 ```text
 nmap 192.168.1.106 -sV -p 5900
 5900/tcp open vnc VNC (protocol 3.3)
 ```
 
-![Cropped Nmap terminal excerpt showing VNC on port 5900.](evidence/vnc-nmap-port5900.webp)
+![Nmap detects VNC in the training example](evidence/vnc-nmap-port5900.webp)
 
-*Source: SecurePath Lab Exercise 3, page 9; instructor-slide screenshot.*
+*Exercise 3, p.9 — VNC service identified on TCP 5900.*
 
-An open port indicates a reachable service responding to Nmap. It is **not** proof the host was available from the internet.
+The first answer is simply that a VNC service is reachable **from the scanning VM**. Nmap does not establish that the service is reachable from the internet.
 
-## Authentication result shown
+## Credential test
 
-The exercise uses Metasploit's `auxiliary/scanner/vnc/vnc_login` against the lab IP. The instruction slide describes trying the module's password list. The terminal excerpt reports:
+The Metasploit module `auxiliary/scanner/vnc/vnc_login` tries the lab's password candidates. The slide shows:
 
 ```text
-192.168.1.106:5900 - Starting VNC login sweep
-192.168.1.106:5900 - Login Successful: :password
+Starting VNC login sweep
+Login Successful: :password
 Scanned 1 of 1 hosts (100% complete)
-Auxiliary module execution completed
 ```
 
-![Cropped Metasploit terminal excerpt indicating accepted password for VNC service.](evidence/vnc-password-reported.webp)
+![Metasploit VNC weak password success from the guided slide](evidence/vnc-password-reported.webp)
 
-*Source: Lab Exercise 3, page 15; instructor-slide screenshot.*
+*Exercise 3, p.15 — `password` accepted.*
 
-## What I conclude
+## My conclusion
 
-The example demonstrates a **weak VNC password accepted by an authentication scanner** in the lab. It does not include a screen capture of an active VNC viewer controlling the desktop, so I would not claim confirmed graphical access.
+The demonstrated configuration accepts a weak VNC password, which could permit inappropriate remote desktop access **if** the service is accessible to an unauthorized actor. But the slide stops at authentication; it does not show a VNC viewer attached to a desktop. My finding is **successful password authentication**, not verified desktop takeover.
 
-The original lesson title says "VPN Port 5900." That is a terminology mistake: TCP 5900 in this exercise is **VNC**, a remote graphical-desktop protocol, not a VPN.
+Despite its PDF title, this is a **VNC**, not **VPN**, activity.
 
-## Defensive significance and next checks
+## Defensive response
 
-If a production VNC endpoint accepts a predictable password, an unauthorized party who can reach the service may be able to access a graphical session. The actual impact depends on the application's security, network reachability and session rights.
+I would check network reachability, remote-access ownership, authentication settings, encryption, successful-login records, and intended user permissions. The fix would center on strong nonshared credentials, restricting reachable management interfaces, and any stronger authentication supported by the selected VNC product.
 
-I would review the network rules, product/version, server-side authentication configuration, VNC session restrictions and logs. I would require a unique strong password or approved identity integration, limit management access, verify encryption/secure transport, and test that weak credentials are rejected. Server-side records and a permitted test session would be needed to confirm the full access path.
+A useful follow-up would be an authorized viewer-session test and a post-remediation negative test. Neither is shown in these materials.
 
-## Evidence limitation
-
-The slide contains an example of a successful password check, not an independently captured user test result, production exposure proof, or verified desktop session.
+**Source:** Crops from *Lab Exercise 3 — How to Hack VPN Port 5900*, pp.9 and 15; source notes appear in the [evidence index](evidence/README.md).

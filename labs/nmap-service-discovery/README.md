@@ -1,99 +1,89 @@
-# Nmap Service Discovery and OS Fingerprinting
+# Nmap Service Discovery | Default Scan vs. All Ports
 
-**Type:** Supplemental guided-lab analysis · **Training:** Tri-C SecurePath / CySA+ preparation  
-**Environment shown:** Kali Linux scanning a deliberately vulnerable Metasploitable VM  
-**Source:** Supplied "Lab Exercise 5 — Nmap Security Scanner" instructional PDF
+**Completed CySA+ guided-lab review** · Tri-C SecurePath · Kali Linux / Metasploitable 2  
+[Portfolio](../../README.md) · [Lab collection](../README.md) · [Reproduce and capture your own results](../reproduce-and-capture.md)
 
-[Portfolio](../../README.md) · [All supplemental labs](../README.md) · [Evidence index](evidence/README.md)
+## The question
 
-## Summary
+What could I miss if I only scan Nmap's default TCP port set?
 
-**Question:** How much changes when I scan a target's default TCP port set versus its full TCP port range?
+The answer in this guided exercise was **seven open TCP ports**. The provided default scan reported **23**, while the all-port scan reported **30**.
 
-**Work reviewed:** I compared the Nmap screenshots from a guided classroom lesson: a basic scan, an OS-detection scan, and an all-port scan. I concentrated on what the terminal output supports rather than labeling open ports as confirmed vulnerabilities.
+| Scan | Example command | Open TCP ports shown |
+| --- | --- | ---: |
+| Default TCP scan | `nmap 10.0.2.4` | 23 |
+| OS-detection scan | `nmap -O 10.0.2.4` | OS fingerprint information |
+| All TCP ports + OS detection | `nmap -O -p 1-65535 10.0.2.4` | 30 |
 
-**Result:** The example's default scan reported **23 open TCP ports**, while the full-range scan listed **30 open TCP ports**. Seven ports appear only in the longer scan's displayed list.
+The images below are **course reference screenshots**, not independently saved scan output. Their Nmap timestamps are from July 15, 2025; this report is my analysis of those recorded examples. [Image sources and slide numbers](evidence/README.md).
 
-**Assessment:** The target has a broad exposed service surface within its lab network. Additional testing would be required to identify actual software, validate vulnerabilities, and determine business risk.
+## 1. The first scan: where I'd begin
 
-**Evidence provenance:** The images below are cropped from supplied instructor slides, **not** independently captured console output. The terminal images display July 15, 2025 timestamps; they are historical examples and are not presented as scans I executed in 2026.
+![Default Nmap scan output from the guided lab](evidence/nmap-default-ports.webp)
 
-## 1. Basic Nmap scan
+*Exercise 5, p.22 — default scan: 23 open TCP ports.*
 
-The first example uses:
+The results show services associated with SSH (22), Telnet (23), SMTP (25), HTTP (80), SMB (139/445), MySQL (3306), PostgreSQL (5432), and VNC (5900), among others.
 
-```bash
-nmap 10.0.2.4
-```
+My first thought wouldn't be "23 vulnerabilities." I'd ask why this VM has so many listeners, whether they are expected, and which should be reachable from the scanning segment.
 
-![Cropped instructor Nmap terminal showing 23 open TCP ports during a basic scan.](evidence/nmap-default-ports.webp)
+## 2. OS fingerprint: a useful estimate
 
-*Source: Lab Exercise 5, page 22.*
+![Nmap OS detection output from the guided lab](evidence/nmap-os-fingerprint.webp)
 
-The output lists common services such as FTP (21), SSH (22), Telnet (23), SMTP (25), HTTP (80), SMB-related ports (139/445), MySQL (3306), PostgreSQL (5432), and VNC (5900).
+*Exercise 5, p.24 — Nmap reports a Linux 2.6.x fingerprint.*
 
-**My interpretation:** Those service names are a useful initial map, not proof of software versions, exploitable vulnerabilities, or whether every service should be reachable. For prioritization, I would ask which services are required and who is authorized to access them.
+The example suggests a Linux 2.6.x kernel family and a VirtualBox-related network interface. The kernel range is an **estimate based on network responses**; host inventory or direct system access would be needed to validate the exact platform.
 
-## 2. OS fingerprinting
+## 3. The full-range scan: what changed
 
-The example then uses:
+![Nmap all-port scan showing 30 open ports in the exercise](evidence/nmap-full-port-range.webp)
 
-```bash
-nmap -O 10.0.2.4
-```
+*Exercise 5, p.25 — full TCP scan reports 30 open ports.*
 
-![Cropped instructor Nmap output showing Linux 2.6.x OS fingerprint and related detection results.](evidence/nmap-os-fingerprint.webp)
+Seven ports were visible in the full-range screenshot that didn't appear in the default result:
 
-*Source: Lab Exercise 5, page 24.*
+| Additional port | Label in the displayed output | My next check |
+| --- | --- | --- |
+| 3632/tcp | `distccd` | Confirm the actual service/version and whether it should be exposed |
+| 6697/tcp | `ircs-u` | Verify the service, ownership, and network access need |
+| 8787/tcp | `msgsrvr` | Validate the listener instead of assuming a product from the port label |
+| 34748/tcp | `unknown` | Inspect the responding application and host process |
+| 56105/tcp | `unknown` | Inspect the responding application and host process |
+| 58029/tcp | `unknown` | Inspect the responding application and host process |
+| 60438/tcp | `unknown` | Inspect the responding application and host process |
 
-Nmap reports a **Linux 2.6.x** fingerprint with an OS-details range rather than a precise verified kernel version. It also identifies a VirtualBox-like network adapter. I would treat an OS fingerprint as an estimate until checked against host inventory or system-level evidence.
+**Why that matters:** Nmap's initial service label can come from a port-number association. I wouldn't call any of these a confirmed vulnerable application until I checked with service-version detection, inventory, or host process data.
 
-## 3. Full TCP-port-range scan
+## My analyst assessment
 
-The next example scans the full 1–65535 TCP range while requesting OS detection:
+**Observation:** The all-port scan reveals a wider attack surface than the default scan.
 
-```bash
-nmap -O 10.0.2.4 -p 1-65535
-```
+**Risk to investigate:** Unneeded remote-access, file-sharing, legacy, and database services can expose additional authentication interfaces or software requiring patch and configuration review.
 
-![Cropped instructor terminal output showing 30 open ports and Linux fingerprint in a full-range scan.](evidence/nmap-full-port-range.webp)
+**Decision:** Prioritize unexpected listeners and verify each relevant service. Open ports are **leads**, not vulnerability confirmations, so I would not assign a CVSS score here.
 
-*Source: Lab Exercise 5, page 25.*
+**How I'd hand this off:** "One authorized lab host presented 30 open TCP ports in the full scan versus 23 in the default scan. Validate ownership and reachability of the seven additional listeners; follow up with version detection and configuration checks before assigning risk."
 
-### What changed?
+## Practical next steps
 
-| Observation | Default scan | Full-range scan |
-| --- | ---: | ---: |
-| Reported open TCP ports | 23 | 30 |
-| Reported closed TCP ports | 977 within the default port set | 65,505 in the full range |
-| Higher-numbered ports uncovered beyond the initial list | Not in the screenshot | 3632, 6697, 8787, 34748, 56105, 58029, 60438 |
+- Confirm the asset, authorized scan scope, and expected service inventory.
+- Perform targeted `-sV` verification on ports worth investigating.
+- Compare the observed surface with the Nessus results and platform configuration.
+- Restrict or disable unnecessary services, then re-scan after approved changes.
+- Preserve original Nmap normal/XML output when performing the lab yourself.
 
-The full scan shows **seven additional ports** not listed in the initial screenshot. Nmap displays service labels for some of them, including `distccd` on 3632, but a port-based service label is **not a validated service identity**. I would use targeted version detection and service-owner confirmation before describing a specific running daemon or vulnerability.
+This connects directly to my [Nessus assessment](../../projects/nessus-vulnerability-assessment/README.md): first establish **what is listening**, then validate **what is vulnerable**.
 
-This is the part of the lab I find most useful: a quick default scan can miss services on unusual ports. That affects both asset visibility and vulnerability-scanning scope.
+## Evidence and recreation
 
-## 4. What I would do with these results in a SOC or vulnerability-management role
+- [Three cropped course screenshots with source pages](evidence/README.md)
+- [Independent Nmap scan and screenshot instructions](../reproduce-and-capture.md)
 
-1. **Confirm scope and asset ownership.** Match the IP and host details to the approved inventory, then determine why each exposed service is running.
-2. **Validate services.** Use authorized targeted version-detection methods such as `-sV`, system inventory, or configuration review rather than assuming a port number proves a product.
-3. **Prioritize exposure.** Remote management, legacy protocols, database ports and unexpected listeners deserve context-dependent review. An open port alone is not a finding with proven exploitability.
-4. **Correlate with security monitoring.** Repeated scans or connections against unusual services may be useful SOC leads when reviewed with source IPs, change windows and expected administrative activity.
-5. **Support remediation.** Close unnecessary listeners, restrict required ones, confirm patching and secure configuration, then re-scan after approved changes.
-
-## Limitations and next validation
-
-The retained artifacts are **instructional PDF screenshots**, not original Nmap XML/normal output files collected from a system I controlled. I cannot verify the scan options beyond what is visible in the terminal, reproduce historical results, or attribute those terminal sessions to me.
-
-The slide's Linux fingerprint does not identify an exact operating-system patch level. The port table does not verify authentication weaknesses, vulnerabilities, internet reachability, or successful exploitation. I have not assigned a CVSS score.
-
-If recreating the exercise in an authorized lab, I would capture my own timestamped Nmap output, record the VM network configuration, compare `-sV` results, and connect the confirmed service inventory to one validated Nessus finding.
-
-## Why this complements my other work
-
-My [Nessus baseline scan](../../projects/nessus-vulnerability-assessment/README.md) is about scanner-reported vulnerability results. This guided Nmap review illustrates an earlier step: **finding which services exist before deciding what requires deeper assessment**.
+**Status:** Guided-training analysis complete. An independently captured re-run would be stronger evidence, but is not presented here as already performed.
 
 ## References
 
-- [Official Nmap Reference Guide](https://nmap.org/book/man.html)
-- [Nmap Port Scanning Techniques](https://nmap.org/book/man-port-scanning-techniques.html)
-- [Nmap Version Detection](https://nmap.org/book/man-version-detection.html)
+- [Nmap Reference Guide](https://nmap.org/book/man.html)
+- [Service and Version Detection](https://nmap.org/book/man-version-detection.html)
+- [Port Scanning Techniques](https://nmap.org/book/man-port-scanning-techniques.html)

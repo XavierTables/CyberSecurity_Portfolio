@@ -44,7 +44,7 @@ Each report opens with the question, work performed, finding, status, and eviden
 
 [SSH and VNC authentication](labs/remote-access-security/README.md) · [Nmap service discovery](labs/nmap-service-discovery/README.md) · [SMTP enumeration](labs/smtp-enumeration/README.md)
 
-These are guided-training analyses; instructor-slide excerpts are labeled separately from original work.
+These completed guided-lab analyses show how I interpret service discovery and authentication results. Figures from the course are credited in their evidence indexes. [See the step-by-step lab reproduction guide](labs/reproduce-and-capture.md) for creating original verification evidence.
 
 ## More work
 

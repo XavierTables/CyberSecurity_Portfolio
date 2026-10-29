@@ -1,13 +1,19 @@
-# Supplemental Hands-On Labs
+# Supplemental Cybersecurity Labs
 
-[Portfolio home](../README.md)
+[Back to portfolio](../README.md)
 
-These are smaller guided exercises from my cybersecurity training. I use them to explain a protocol, review what a tool reported, and separate observations from confirmed security findings. They are **not** represented as full independent investigations.
+I completed these guided exercises during Tri-C SecurePath and wrote up what the results mean for real security work. The analyses are finished; the cropped terminal figures are **reference images from the coursework**, with page-by-page attribution in each evidence index. Original console logs from those examples were not preserved.
 
-| Lab | Focus | Evidence status |
+| Lab | My focus | Key result |
 | --- | --- | --- |
-| [Remote Access Security — SSH and VNC Authentication](remote-access-security/README.md) | Weak SSH credentials, shell verification, VNC port discovery and password acceptance; defensive recommendations | Cropped, source-labeled bootcamp instructional terminal screenshots; not independently captured logs |
-| [Nmap Service Discovery and OS Fingerprinting](nmap-service-discovery/README.md) | Comparing 23 ports in a default scan with 30 in a full-range scan; cautious OS interpretation | Cropped, source-labeled training-slide screenshots; no original Nmap export |
-| [SMTP User Enumeration — Kali Linux & Metasploitable 2](smtp-enumeration/README.md) · May 27, 2026 | SMTP reply codes, Metasploit enumeration, basic network assessment and defensive recommendations | Analysis based on saved bootcamp lesson screenshots; original console logs not retained |
+| **[SSH + VNC remote-access security](remote-access-security/README.md)** | Weak credentials, login checks, access verification, hardening | SSH shell verified in the example; VNC password accepted without demonstrated desktop access |
+| **[Nmap service discovery](nmap-service-discovery/README.md)** | Default vs full-range port scanning, OS fingerprint confidence, triage | Example found 23 vs 30 open TCP ports, seven additional listeners |
+| **[SMTP user enumeration](smtp-enumeration/README.md)** | SMTP `VRFY`, enumeration, response-code interpretation | `252` is not proof of a valid user; `550 5.1.1` rejects an unknown local recipient |
 
-For my more complete investigations and their original evidence, see the [featured project list](../README.md#lab-projects).
+## Reproduce the work
+
+[**Hands-on walkthrough: Build your own evidence in Kali + Metasploitable**](reproduce-and-capture.md)
+
+This guide provides the commands, screenshot checklist, expected types of results, and analyst questions for replacing the course reference figures with independently captured evidence.
+
+For full investigations based on retained project evidence, see the [featured portfolio projects](../README.md#lab-projects).
