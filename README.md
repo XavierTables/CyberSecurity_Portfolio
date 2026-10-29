@@ -42,4 +42,4 @@ Each report opens with the question, work performed, finding, status, and eviden
 
 ## More work
 
-[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md)
+[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md) · [Supplemental hands-on labs](labs/README.md)
