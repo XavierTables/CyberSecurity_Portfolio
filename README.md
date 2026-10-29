@@ -40,6 +40,12 @@ Each report opens with the question, work performed, finding, status, and eviden
 
 **Education:** Tri-C SecurePath cybersecurity training, completed June 2026; Associate of Arts, Cuyahoga Community College (2022).
 
+## Supplemental hands-on labs
+
+[SSH and VNC authentication](labs/remote-access-security/README.md) · [Nmap service discovery](labs/nmap-service-discovery/README.md) · [SMTP enumeration](labs/smtp-enumeration/README.md)
+
+These are guided-training analyses; instructor-slide excerpts are labeled separately from original work.
+
 ## More work
 
-[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md) · [Supplemental hands-on labs](labs/README.md)
+[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md) · [All supplemental labs](labs/README.md)
