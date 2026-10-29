@@ -1,76 +1,82 @@
-# Remote Access Security | SSH and VNC Authentication
+# Remote Access Security Assessment: SSH and VNC
 
-**Completed CySA+ guided-lab review** · Tri-C SecurePath · Kali Linux / Metasploitable 2  
-[Portfolio](../../README.md) · [Lab collection](../README.md) · [Reproduce and capture your own results](../reproduce-and-capture.md)
+**Focus:** Weak credentials, remote authentication, and access verification  
+**Environment:** Kali Linux / Metasploitable 2 · **Training:** Tri-C SecurePath (CySA+)
 
-## The question
+[Portfolio](../../README.md) · [SSH investigation](ssh-analysis.md) · [VNC investigation](vnc-analysis.md) · [Evidence](evidence/README.md)
 
-What does a successful password check actually prove about access to a remote service?
+## Overview
 
-I worked through SSH and VNC exercises during cybersecurity training, then revisited the preserved results with a defender's perspective. I wanted to distinguish a successful **credential check** from a demonstrated **remote session**.
+I wanted to understand the difference between **finding a remote service**, **getting a valid login**, and **proving access**. SSH and VNC make a useful comparison because both can provide remote control, but the evidence of successful access looks different.
 
-## Outcome at a glance
+The two lab exercises demonstrate a successful SSH login with a known weak credential and an accepted VNC password. My focus here is what those results mean, what they *don't* prove, and what I would do if I found the same behavior on a company network.
 
-| Service | Result in the exercise | What I can conclude |
+| Service | Observed result | My assessment |
 | --- | --- | --- |
-| SSH, TCP 22 | `ssh_login` accepts `msfadmin:msfadmin`; a shell opens and `whoami` returns `msfadmin` | The example demonstrates authenticated command-line access as the named user |
-| VNC, TCP 5900 | Nmap sees VNC; `vnc_login` accepts `password` | The example demonstrates accepted weak-password authentication, **not** a confirmed graphical desktop session |
+| SSH / TCP 22 | Metasploit reported `msfadmin:msfadmin`, opened a shell, and `whoami` returned `msfadmin` | Authentication **and a command-line session** were demonstrated |
+| VNC / TCP 5900 | Nmap detected VNC and the login scanner accepted `password` | Weak authentication was demonstrated; a **graphical session wasn't shown** |
 
-**My finding:** In a reachable management service, a known or guessable credential can be the difference between an exposed login interface and unauthorized access. The observed access level matters: SSH has a shell confirmation; VNC has a scanner success message only.
+## 1. SSH: a login is only the first check
 
-**Evidence:** These are cropped screenshots from the course's guided-lab slide examples. The analysis is my own; original independent session logs were not retained. Exact pages and image sources are in the [evidence index](evidence/README.md).
+The exercise used Metasploit's `auxiliary/scanner/ssh/ssh_login` module against the intentionally vulnerable target. The result showed a successful credential match.
 
-## SSH | From credentials to a session
+![SSH login result](evidence/ssh-login-reported.webp)
 
-![Metasploit SSH module reporting a successful msfadmin login in the course exercise](evidence/ssh-login-reported.webp)
+The important part for me is the follow-up, not just the success message. The example goes into session 1 and runs `whoami`:
 
-*Exercise 2, p.13 — SSH login result.*
+![SSH session and account check](evidence/ssh-session-whoami.webp)
 
-The strongest step in the SSH sequence isn't the word **Success**. It's the next check: the example opens a session and `whoami` returns `msfadmin`.
+The response is `msfadmin`. That supports a specific conclusion: the credentials provided **remote shell access as that account**. It does **not** show root privileges, privilege escalation, or a vulnerability in the SSH protocol.
 
-![SSH session and whoami confirmation in the guided exercise](evidence/ssh-session-whoami.webp)
+[SSH investigation: commands, evidence, and next checks](ssh-analysis.md)
 
-*Exercise 2, p.14 — account context.*
+## 2. VNC: password accepted, access still needs confirmation
 
-I would describe this as **interactive SSH access with a known lab account**, not root compromise, an SSH software exploit, or privilege escalation.
+The second exercise identified VNC on TCP port 5900, then used `auxiliary/scanner/vnc/vnc_login` to check authentication.
 
-[Read the command-by-command SSH analysis](ssh-analysis.md)
+![VNC scanner result](evidence/vnc-password-reported.webp)
 
-## VNC | Password accepted, desktop not yet verified
+The module reported `Login Successful: :password`. That's a meaningful authentication finding because the password is easy to guess. But unlike the SSH example, the retained result doesn't include a connected VNC viewer. I wouldn't report confirmed desktop control without that extra check.
 
-![VNC login scanner returning an accepted password in the training example](evidence/vnc-password-reported.webp)
+[Read the VNC investigation](vnc-analysis.md)
 
-*Exercise 3, p.15 — VNC password result.*
+## What stands out to me
 
-Nmap showed TCP 5900 open, and the VNC auxiliary scanner reported `Login Successful: :password`. The slide doesn't include a VNC viewer session. I would verify that separately before claiming desktop control.
+**The same "success" label doesn't always mean the same thing.** With SSH, I can point to an authenticated shell and the user account it ran under. With VNC, I can point to a successful password test, but not to a verified desktop session.
 
-The course PDF calls this a "VPN" exercise, but the actual service on port 5900 is **VNC** (remote desktop). These are different technologies.
+I also wouldn't claim that either service was reachable from the internet. The evidence shows reachability **inside the lab network**. Exposure from an unauthorized network would require a separate test.
 
-[Read the VNC service and authentication analysis](vnc-analysis.md)
+## What I would recommend at work
 
-## Defensive interpretation
+If I found these results on an actual asset, I would start with three questions:
 
-**What I would investigate first:** Were these management services supposed to be reachable from this source network? Are the tested accounts legitimate and still needed? Does the server record repeated failures and successful sign-ins?
+1. **Is access expected?** Confirm the asset owner, intended administrators, and permitted source networks.
+2. **How was the login allowed?** Look for default/shared passwords, password-only SSH access, VNC authentication settings, and missing access restrictions.
+3. **Is there evidence of misuse?** Review SSH authentication logs, VNC or gateway logs, source addresses, failed attempts, successful sessions, and related changes.
 
-**What I would recommend:** Replace default or shared credentials, remove unused accounts, restrict management access, use stronger authentication where supported, and monitor login events. For VNC, confirm the product's transport security and session authorization. After a permitted change, repeat the targeted login test to validate the fix.
+My recommended fixes would be to remove default credentials, use strong unique authentication, limit SSH/VNC to approved management paths, and monitor access. I would then test—within authorized scope—that weak credentials no longer work.
 
-**What I would not claim:** That these lab machines were exposed to the public internet, that SSH itself was broken, or that VNC desktop control occurred. The screenshots don't establish those outcomes.
+## Final assessment
 
-## Why I included this exercise
+**Issue illustrated:** Remote-management access can be exposed by weak or default credentials.
 
-It connects service discovery to authentication risk and teaches a useful distinction: **a tool's positive result is not always the same thing as a verified impact**. I would use that same reasoning when triaging scanner findings in a SOC or vulnerability-management workflow.
+**SSH outcome:** Authenticated command-line session established in the example.
 
-## Evidence and next step
+**VNC outcome:** Authentication accepted; interactive graphical access unconfirmed.
 
-- [SSH analysis and full module-options screenshot](ssh-analysis.md)
-- [VNC analysis and Nmap service-discovery screenshot](vnc-analysis.md)
-- [Source-labeled evidence index](evidence/README.md)
-- [Step-by-step independent lab recreation and screenshot checklist](../reproduce-and-capture.md)
+**Security priority:** On a production asset, weak credentials on reachable management interfaces would warrant prompt investigation. I would determine severity from actual reachability, privileges, controls, and impact—not assume a rating from a classroom VM.
 
-**Status:** Guided-training analysis complete. Reproducing the exercise for original, independently captured evidence is an optional upgrade—not something this report claims is already done.
+### Supporting material
+
+- [SSH evidence analysis](ssh-analysis.md)
+- [VNC evidence analysis](vnc-analysis.md)
+- [Evidence index and slide sources](evidence/README.md)
+- [Practice and independent evidence-capture commands](../reproduce-and-capture.md)
+
+*Evidence context: The figures are cropped terminal excerpts from the SecurePath lab materials I studied. I wrote this technical interpretation and the follow-up recommendations; the original terminal recordings weren't retained.*
 
 ## References
 
-- [Rapid7: SSH login scanner module documentation](https://github.com/rapid7/metasploit-framework/blob/master/documentation/modules/auxiliary/scanner/ssh/ssh_login.md)
-- [Rapid7: VNC login scanner source](https://github.com/rapid7/metasploit-framework/blob/master/modules/auxiliary/scanner/vnc/vnc_login.rb)
+- [Metasploit documentation](https://docs.metasploit.com/)
+- [OpenSSH manuals](https://www.openssh.com/manual.html)
 - [Nmap reference guide](https://nmap.org/book/man.html)

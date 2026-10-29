@@ -1,40 +1,47 @@
-# SSH Authentication | What the Result Proves
+# SSH Authentication: Verifying What a Successful Login Means
 
-[Combined assessment](README.md) · [Evidence](evidence/README.md) · [Recreate this lab](../reproduce-and-capture.md)
+[Back to remote-access assessment](README.md) · [Screenshot sources](evidence/README.md)
 
-## Test shown
+## Objective
 
-The guided exercise targets Metasploitable 2's SSH service on TCP 22 with Metasploit's `auxiliary/scanner/ssh/ssh_login`. It supplies a small training wordlist as `USER_FILE` and `PASS_FILE`, then checks for accepted combinations.
+Use a controlled SSH login test to see whether weak credentials work against the Metasploitable service, then check what kind of access follows.
 
-![SSH module configuration from the instructor's lab example](evidence/ssh-module-options.webp)
+## Approach
 
-*Exercise 2, p.11 — training example's scanner configuration.*
+In the SecurePath exercise, Kali runs Metasploit's `auxiliary/scanner/ssh/ssh_login` against SSH on TCP 22. The module is configured with a small training list of possible usernames and passwords.
 
-## Evidence sequence
+![SSH module settings](evidence/ssh-module-options.webp)
 
-1. The scanner reports `Success: 'msfadmin:msfadmin'`.
-2. The console reports an SSH shell session.
-3. The session is selected and `whoami` returns `msfadmin`.
+The useful options here are `RHOSTS`, `USER_FILE`, `PASS_FILE`, and `STOP_ON_SUCCESS`. They're important because they tell me **which host was tested**, **where the credential guesses came from**, and **when the scanner would stop**.
 
-![SSH scanner success result from the training slide](evidence/ssh-login-reported.webp)
+## Result
 
-![Shell verification showing msfadmin in the example session](evidence/ssh-session-whoami.webp)
+The example reports a credential match for `msfadmin:msfadmin` and opens an SSH session.
 
-This sequence supports a narrower, defensible finding: **the example account authenticated and provided an interactive shell**. The logged-in user was `msfadmin`, not `root`. No privilege escalation or service implementation exploit is shown.
+![SSH authentication result](evidence/ssh-login-reported.webp)
 
-## What I would check as an analyst
+The next step matters more than the tool's summary. The session is selected and the account is checked:
 
-| Question | Verification |
-| --- | --- |
-| Was access expected? | Identify the host owner, approved admin accounts, and change window |
-| Was password guessing involved? | Compare source IPs, failure counts, successful login timestamps, and sshd logs |
-| What privileges did the login have? | Review `whoami`, `id`, account groups, and approved access policy |
-| How would I close it? | Change default credentials, remove unnecessary access, restrict SSH, then confirm the old password fails |
+```text
+sessions -i 1
+whoami
+msfadmin
+```
 
-A successful login against intentionally vulnerable Metasploitable is useful training evidence, **not** a production incident.
+![SSH session and whoami](evidence/ssh-session-whoami.webp)
 
-## What I learned
+## My interpretation
 
-I'd rather prove the access level than exaggerate the scanner output. Getting a shell as `msfadmin` is a real distinction from merely guessing a valid password, but it is not the same as obtaining administrative root privileges.
+I can support a conclusion of **interactive SSH access as `msfadmin`**. I cannot support a claim of root access or a vulnerability in the SSH software. The weakness demonstrated is the predictable credential for this deliberately vulnerable account.
 
-**Source:** Crops of instructor screenshots from *Lab Exercise 2 — Exploit SSH Server with Metasploit*, pp.11, 13–14. Full provenance is in the [evidence index](evidence/README.md).
+If I were handling this as a SOC alert, I'd separate a login attempt from a confirmed successful session. I'd correlate the source IP, authentication logs, username, timing, and any shell or process activity after login.
+
+## Remediation and validation
+
+For an organizational host, I would replace default/shared credentials, remove unused accounts, restrict SSH to the approved administration network, and review key-based authentication and MFA where suitable. I'd verify the fix by confirming the previous credentials fail and legitimate administrators can still connect.
+
+**Bottom line:** A scanner success result gets my attention. A subsequent session and `whoami` result make my assessment more specific.
+
+[Recreate this test in an authorized VM](../reproduce-and-capture.md)
+
+*The screenshot excerpts are from the SecurePath Exercise 2 materials; see the [evidence index](evidence/README.md) for source pages.*

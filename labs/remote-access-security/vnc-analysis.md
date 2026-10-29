@@ -1,46 +1,49 @@
-# VNC Authentication | Port 5900 and a Weak Password
+# VNC Authentication: Investigating Port 5900
 
-[Combined assessment](README.md) · [Evidence](evidence/README.md) · [Recreate this lab](../reproduce-and-capture.md)
+[Back to remote-access assessment](README.md) · [Screenshot sources](evidence/README.md)
 
-## Service discovery
+## Objective
 
-The lab example runs Nmap against Metasploitable:
+Find a remote-desktop service, check whether a weak password is accepted, and determine how much access the result actually proves.
 
-```text
-nmap 192.168.1.106 -sV -p 5900
-5900/tcp open vnc VNC (protocol 3.3)
+## Approach
+
+The lab uses Nmap to identify the VNC service on TCP 5900:
+
+```bash
+nmap -sV -p 5900 192.168.1.106
 ```
 
-![Nmap detects VNC in the training example](evidence/vnc-nmap-port5900.webp)
+![VNC service identified](evidence/vnc-nmap-port5900.webp)
 
-*Exercise 3, p.9 — VNC service identified on TCP 5900.*
+The scan reports `5900/tcp open vnc` with VNC protocol version 3.3. That shows a listener responded on the lab network; it doesn't show the server was exposed to the public internet.
 
-The first answer is simply that a VNC service is reachable **from the scanning VM**. Nmap does not establish that the service is reachable from the internet.
+Next, the Metasploit `auxiliary/scanner/vnc/vnc_login` module checks passwords against that service.
 
-## Credential test
+## Result
 
-The Metasploit module `auxiliary/scanner/vnc/vnc_login` tries the lab's password candidates. The slide shows:
+![VNC authentication result](evidence/vnc-password-reported.webp)
+
+The relevant line is:
 
 ```text
-Starting VNC login sweep
 Login Successful: :password
-Scanned 1 of 1 hosts (100% complete)
 ```
 
-![Metasploit VNC weak password success from the guided slide](evidence/vnc-password-reported.webp)
+## My interpretation
 
-*Exercise 3, p.15 — `password` accepted.*
+The VNC service in the example accepted a simple, predictable password. That is an authentication concern because remote-desktop services can give a connected user control over a GUI session.
 
-## My conclusion
+But I would **not** write "desktop compromised" based on this screenshot. The image shows a successful password check, not a VNC viewer connected to the desktop. The next test would be an authorized graphical login and a check of the permissions granted.
 
-The demonstrated configuration accepts a weak VNC password, which could permit inappropriate remote desktop access **if** the service is accessible to an unauthorized actor. But the slide stops at authentication; it does not show a VNC viewer attached to a desktop. My finding is **successful password authentication**, not verified desktop takeover.
+I also corrected a terminology issue in the training title: **VNC isn't VPN**. VNC is a remote-display protocol; a VPN connects networks or clients through a secure tunnel.
 
-Despite its PDF title, this is a **VNC**, not **VPN**, activity.
+## What I would do next
 
-## Defensive response
+I would check service ownership, allowed source networks, authentication configuration, encryption, and whether any unexpected connections were logged. Then I'd restrict management access, replace weak passwords, and validate the result with a permitted retest.
 
-I would check network reachability, remote-access ownership, authentication settings, encryption, successful-login records, and intended user permissions. The fix would center on strong nonshared credentials, restricting reachable management interfaces, and any stronger authentication supported by the selected VNC product.
+**Bottom line:** I have evidence of an accepted weak password; I would seek session-level verification before escalating the claim to confirmed remote-desktop access.
 
-A useful follow-up would be an authorized viewer-session test and a post-remediation negative test. Neither is shown in these materials.
+[Practice on an isolated lab VM](../reproduce-and-capture.md)
 
-**Source:** Crops from *Lab Exercise 3 — How to Hack VPN Port 5900*, pp.9 and 15; source notes appear in the [evidence index](evidence/README.md).
+*The screenshot excerpts are from SecurePath Exercise 3; source pages are listed in the [evidence index](evidence/README.md).*
