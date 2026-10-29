@@ -22,9 +22,9 @@
 
 The first example uses:
 
-\`\`\`bash
+```bash
 nmap 10.0.2.4
-\`\`\`
+```
 
 ![Cropped instructor Nmap terminal showing 23 open TCP ports during a basic scan.](evidence/nmap-default-ports.webp)
 
@@ -38,9 +38,9 @@ The output lists common services such as FTP (21), SSH (22), Telnet (23), SMTP (
 
 The example then uses:
 
-\`\`\`bash
+```bash
 nmap -O 10.0.2.4
-\`\`\`
+```
 
 ![Cropped instructor Nmap output showing Linux 2.6.x OS fingerprint and related detection results.](evidence/nmap-os-fingerprint.webp)
 
@@ -52,9 +52,9 @@ Nmap reports a **Linux 2.6.x** fingerprint with an OS-details range rather than 
 
 The next example scans the full 1–65535 TCP range while requesting OS detection:
 
-\`\`\`bash
+```bash
 nmap -O 10.0.2.4 -p 1-65535
-\`\`\`
+```
 
 ![Cropped instructor terminal output showing 30 open ports and Linux fingerprint in a full-range scan.](evidence/nmap-full-port-range.webp)
 
@@ -68,14 +68,14 @@ nmap -O 10.0.2.4 -p 1-65535
 | Reported closed TCP ports | 977 within the default port set | 65,505 in the full range |
 | Higher-numbered ports uncovered beyond the initial list | Not in the screenshot | 3632, 6697, 8787, 34748, 56105, 58029, 60438 |
 
-The full scan shows **seven additional ports** not listed in the initial screenshot. Nmap displays service labels for some of them, including \`distccd\` on 3632, but a port-based service label is **not a validated service identity**. I would use targeted version detection and service-owner confirmation before describing a specific running daemon or vulnerability.
+The full scan shows **seven additional ports** not listed in the initial screenshot. Nmap displays service labels for some of them, including `distccd` on 3632, but a port-based service label is **not a validated service identity**. I would use targeted version detection and service-owner confirmation before describing a specific running daemon or vulnerability.
 
 This is the part of the lab I find most useful: a quick default scan can miss services on unusual ports. That affects both asset visibility and vulnerability-scanning scope.
 
 ## 4. What I would do with these results in a SOC or vulnerability-management role
 
 1. **Confirm scope and asset ownership.** Match the IP and host details to the approved inventory, then determine why each exposed service is running.
-2. **Validate services.** Use authorized targeted version-detection methods such as \`-sV\`, system inventory, or configuration review rather than assuming a port number proves a product.
+2. **Validate services.** Use authorized targeted version-detection methods such as `-sV`, system inventory, or configuration review rather than assuming a port number proves a product.
 3. **Prioritize exposure.** Remote management, legacy protocols, database ports and unexpected listeners deserve context-dependent review. An open port alone is not a finding with proven exploitability.
 4. **Correlate with security monitoring.** Repeated scans or connections against unusual services may be useful SOC leads when reviewed with source IPs, change windows and expected administrative activity.
 5. **Support remediation.** Close unnecessary listeners, restrict required ones, confirm patching and secure configuration, then re-scan after approved changes.
@@ -86,7 +86,7 @@ The retained artifacts are **instructional PDF screenshots**, not original Nmap 
 
 The slide's Linux fingerprint does not identify an exact operating-system patch level. The port table does not verify authentication weaknesses, vulnerabilities, internet reachability, or successful exploitation. I have not assigned a CVSS score.
 
-If recreating the exercise in an authorized lab, I would capture my own timestamped Nmap output, record the VM network configuration, compare \`-sV\` results, and connect the confirmed service inventory to one validated Nessus finding.
+If recreating the exercise in an authorized lab, I would capture my own timestamped Nmap output, record the VM network configuration, compare `-sV` results, and connect the confirmed service inventory to one validated Nessus finding.
 
 ## Why this complements my other work
 

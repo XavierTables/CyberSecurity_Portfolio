@@ -11,7 +11,7 @@
 
 **Work reviewed:** I revisited two guided bootcamp exercises, one against SSH on TCP 22 and one against VNC on TCP 5900. I compared the login-scan output with the follow-up evidence instead of treating every scanner message as equivalent.
 
-**Finding:** The instructional SSH example reports a successful \`msfadmin:msfadmin\` login and shows an interactive SSH session running \`whoami\` as \`msfadmin\`. The VNC example reports successful password authentication with \`password\`, but it does not show an interactive VNC desktop session.
+**Finding:** The instructional SSH example reports a successful `msfadmin:msfadmin` login and shows an interactive SSH session running `whoami` as `msfadmin`. The VNC example reports successful password authentication with `password`, but it does not show an interactive VNC desktop session.
 
 **Assessment:** The two examples illustrate weak authentication controls on deliberately vulnerable lab services. They do **not** establish exposure on a real corporate network, public internet reachability, a flaw in SSH itself, root access, or real-world compromise.
 
@@ -21,8 +21,8 @@
 
 | Service | Reported observation | What it establishes | What remains unverified |
 | --- | --- | --- | --- |
-| SSH / TCP 22 | \`ssh_login\` returned \`Success: 'msfadmin:msfadmin'\` and opened shell session 1 | The sample credentials authenticated to the Metasploitable SSH service, followed by a shell | Whether a real environment would permit the same access; authorization, monitoring, and any broader privileges |
-| VNC / TCP 5900 | Nmap showed VNC open; \`vnc_login\` reported \`Login Successful: :password\` | The demonstration's VNC password check accepted a weak password | Whether a graphical client session could be established, what privileges it would grant, and internet exposure |
+| SSH / TCP 22 | `ssh_login` returned `Success: 'msfadmin:msfadmin'` and opened shell session 1 | The sample credentials authenticated to the Metasploitable SSH service, followed by a shell | Whether a real environment would permit the same access; authorization, monitoring, and any broader privileges |
+| VNC / TCP 5900 | Nmap showed VNC open; `vnc_login` reported `Login Successful: :password` | The demonstration's VNC password check accepted a weak password | Whether a graphical client session could be established, what privileges it would grant, and internet exposure |
 
 ## Evidence excerpt: SSH authentication
 
@@ -30,7 +30,7 @@
 
 *Source: supplied **Lab Exercise 2 — Exploit SSH Server with Metasploit**, page 13. This is a cropped instructor-slide example, not an independently retained console log.*
 
-The important follow-up is that a remote shell is visible and the \`whoami\` response is \`msfadmin\`. I would not call that root access.
+The important follow-up is that a remote shell is visible and the `whoami` response is `msfadmin`. I would not call that root access.
 
 ![Instructional terminal excerpt showing a Metasploit SSH shell session and whoami returning msfadmin.](evidence/ssh-session-whoami.webp)
 
@@ -46,7 +46,7 @@ The important follow-up is that a remote shell is visible and the \`whoami\` res
 
 A listening service is not automatically a vulnerability. The concern in these two lessons is that **reachable remote-access software combined with guessable credentials** can offer an attacker a way to authenticate. SSH and VNC have different consequences:
 
-- With SSH, a successful login can provide command-line access as the authenticated account. The shown \`whoami\` result is the clearest demonstration of achieved access.
+- With SSH, a successful login can provide command-line access as the authenticated account. The shown `whoami` result is the clearest demonstration of achieved access.
 - With VNC, accepted authentication could permit graphical remote access depending on the implementation and configuration, but the saved slide demonstrates only the login scanner result.
 
 An actual report would identify the asset owner, intended users, external/internal exposure, authentication policy, relevant security controls, and whether the observed behavior was authorized.

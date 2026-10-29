@@ -8,7 +8,7 @@ In the guided SSH exercise, did a successful username/password guess actually pr
 
 ## Steps shown in the training material
 
-The instructor example starts the Metasploitable and Kali VMs and opens \`msfconsole\`. The module is \`auxiliary/scanner/ssh/ssh_login\`, configured with a small exercise wordlist for both usernames and passwords. It sets \`RHOSTS\`, enables verbose output, uses \`STOP_ON_SUCCESS\`, and executes the login scanner against TCP 22.
+The instructor example starts the Metasploitable and Kali VMs and opens `msfconsole`. The module is `auxiliary/scanner/ssh/ssh_login`, configured with a small exercise wordlist for both usernames and passwords. It sets `RHOSTS`, enables verbose output, uses `STOP_ON_SUCCESS`, and executes the login scanner against TCP 22.
 
 ![Cropped instructor example showing Metasploit ssh_login module options.](evidence/ssh-module-options.webp)
 
@@ -18,25 +18,25 @@ The instructor example starts the Metasploitable and Kali VMs and opens \`msfcon
 
 The console excerpt on page 13 reports:
 
-\`\`\`text
+```text
 Success: 'msfadmin:msfadmin'
 SSH session 1 opened
 Scanned 1 of 1 hosts (100% complete)
 Auxiliary module execution completed
-\`\`\`
+```
 
 ![SSH login-success excerpt.](evidence/ssh-login-reported.webp)
 
-A second excerpt on page 14 lists shell session 1, selects it with \`sessions -i 1\`, and returns:
+A second excerpt on page 14 lists shell session 1, selects it with `sessions -i 1`, and returns:
 
-\`\`\`text
+```text
 whoami
 msfadmin
-\`\`\`
+```
 
 ![Shell session and whoami output from the instructional exercise.](evidence/ssh-session-whoami.webp)
 
-The combination of login success, an opened session, and \`whoami\` gives more support than the scanner's success message by itself. **The authenticated account was \`msfadmin\`, not \`root\`.**
+The combination of login success, an opened session, and `whoami` gives more support than the scanner's success message by itself. **The authenticated account was `msfadmin`, not `root`.**
 
 ## What I conclude
 

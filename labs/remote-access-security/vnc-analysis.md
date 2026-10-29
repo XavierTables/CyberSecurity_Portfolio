@@ -10,10 +10,10 @@ Could the demonstrated VNC service be discovered and authenticate with a weak pa
 
 The guided material uses Nmap against the deliberately vulnerable Metasploitable VM:
 
-\`\`\`text
+```text
 nmap 192.168.1.106 -sV -p 5900
 5900/tcp open vnc VNC (protocol 3.3)
-\`\`\`
+```
 
 ![Cropped Nmap terminal excerpt showing VNC on port 5900.](evidence/vnc-nmap-port5900.webp)
 
@@ -23,14 +23,14 @@ An open port indicates a reachable service responding to Nmap. It is **not** pro
 
 ## Authentication result shown
 
-The exercise uses Metasploit's \`auxiliary/scanner/vnc/vnc_login\` against the lab IP. The instruction slide describes trying the module's password list. The terminal excerpt reports:
+The exercise uses Metasploit's `auxiliary/scanner/vnc/vnc_login` against the lab IP. The instruction slide describes trying the module's password list. The terminal excerpt reports:
 
-\`\`\`text
+```text
 192.168.1.106:5900 - Starting VNC login sweep
 192.168.1.106:5900 - Login Successful: :password
 Scanned 1 of 1 hosts (100% complete)
 Auxiliary module execution completed
-\`\`\`
+```
 
 ![Cropped Metasploit terminal excerpt indicating accepted password for VNC service.](evidence/vnc-password-reported.webp)
 
