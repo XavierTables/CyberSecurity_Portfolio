@@ -36,4 +36,4 @@ I'd verify which systems could reach the VNC listener, identify its owner and pr
 
 **My takeaway:** Don't confuse an accepted password with a demonstrated remote desktop session.
 
-[Practice the commands and capture your own output](../reproduce-and-capture.md) · [Screenshot source pages](evidence/README.md)
+[Screenshot source pages](evidence/README.md)

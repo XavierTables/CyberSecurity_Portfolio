@@ -57,7 +57,7 @@ My recommendations would be to replace default or shared passwords, limit manage
 
 That's the distinction I'd want to make before escalating a finding or writing a security report.
 
-[SSH details](ssh-analysis.md) · [VNC details](vnc-analysis.md) · [Screenshot sources](evidence/README.md) · [Practice commands](../reproduce-and-capture.md)
+[SSH details](ssh-analysis.md) · [VNC details](vnc-analysis.md) · [Screenshot sources](evidence/README.md)
 
 ## References
 

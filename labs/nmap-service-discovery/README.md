@@ -66,7 +66,7 @@ Those labels are starting clues, not verified application identities. Nmap may a
 
 This is how I'd connect discovery to my [Nessus vulnerability assessment](../../projects/nessus-vulnerability-assessment/README.md): identify the attack surface first, then validate the findings.
 
-[Evidence and source pages](evidence/README.md) · [Nmap commands for independent testing](../reproduce-and-capture.md)
+[Evidence and source pages](evidence/README.md)
 
 ## References
 

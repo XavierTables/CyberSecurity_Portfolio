@@ -149,6 +149,4 @@ Recorded result: jsmith US to Japan in 25 minutes and Japan to US in 15; kbrown 
 
 Only screenshots are currently available. The retained evidence cannot resolve the Windows computer/session/time checks or reproduce every search. If original data is recovered, check the field schema, establish source-time and event-computer scope, review missing values and tied timestamps, and evaluate the exploratory VPN thresholds against suitable history.
 
-## Proposed follow-up searches
 
-The [optional Windows validation runbook](windows-validation.md) contains proposed checks for recovered source data. Those three searches are unexecuted and are not part of the 11-search execution record above.

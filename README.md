@@ -44,7 +44,7 @@ Each report opens with the question, work performed, finding, status, and eviden
 
 [SSH and VNC authentication](labs/remote-access-security/README.md) · [Nmap service discovery](labs/nmap-service-discovery/README.md) · [SMTP enumeration](labs/smtp-enumeration/README.md)
 
-I break down remote-access authentication, port discovery, and account-enumeration results from my CySA+ coursework. Each report focuses on what the evidence shows, the risks I'd investigate, and the remediation I'd recommend. [Practice commands and evidence checklist](labs/reproduce-and-capture.md).
+I break down remote-access authentication, port discovery, and account-enumeration results from my CySA+ coursework. Each report focuses on what the evidence shows, the risks I'd investigate, and the remediation I'd recommend.
 
 ## More work
 

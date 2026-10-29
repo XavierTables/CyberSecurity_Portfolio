@@ -47,7 +47,7 @@ One Event 4739 appeared in the count. I did not retain the event detail needed t
 
 The screenshot review recovered some context: the expanded 4624 names `Hostname=Micheal.Beaven`, while the overview shows one Splunk `host` value and three `Hostname` values. The Sysmon result table does not show its event hostname or Logon ID/GUID, so that computer name cannot be assigned to the three process rows. The Security table also contains a 4688 whose subject Logon ID is `0x3e4` and target Logon ID is `0x551686`; matching the target does not make James the subject actor of every row.
 
-**Final Windows assessment:** The retained views support a James network logon, account-event observations, and separate process ancestry. They do not establish one verified Security/Sysmon session, a successful password reset, the affected group/member, administrative approval, or compromise. Those conclusions remain unavailable with the current evidence. The [optional validation runbook](queries/windows-validation.md) applies only if original data is recovered; its three searches are unexecuted.
+**Final Windows assessment:** The retained views support a James network logon, account-event observations, and separate process ancestry. They do not establish one verified Security/Sysmon session, a successful password reset, the affected group/member, administrative approval, or compromise. Those conclusions remain unavailable with the current evidence.
 
 ## VPN country changes
 

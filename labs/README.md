@@ -12,4 +12,4 @@ These are technical write-ups from topics I studied in Tri-C SecurePath's CySA+ 
 
 The terminal figures and their original source pages are linked in each report's evidence index: [SSH/VNC](remote-access-security/evidence/README.md) · [Nmap](nmap-service-discovery/evidence/README.md).
 
-[Hands-on reproduction guide](reproduce-and-capture.md) · [Evidence capture script](tools/capture-nmap.sh) · [Featured SOC work](../README.md#lab-projects)
+[Featured SOC work](../README.md#lab-projects)

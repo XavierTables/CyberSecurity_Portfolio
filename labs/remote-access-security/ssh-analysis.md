@@ -38,4 +38,4 @@ I'd check whether the account was approved, when and where the connection came f
 
 **Verification after remediation:** Confirm the weak credentials no longer authenticate while approved administrative access continues to work.
 
-[Practice the commands and capture your own output](../reproduce-and-capture.md) · [Screenshot source pages](evidence/README.md)
+[Screenshot source pages](evidence/README.md)

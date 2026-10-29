@@ -84,7 +84,7 @@ Each rare country accounts for `1 / 200 × 100 = 0.5%` of that user's displayed 
 
 The written log records 11 searches. Screenshots directly show selected query/result pairs, not all 11 executions. The exact account/policy search result and separate rarity-query run lack retained captures. The expanded James logon supports its visible fields but does not show the query bar or one-result count. The event-distribution query is partly cropped. These distinctions do not invalidate the displayed findings; they limit independent reproduction.
 
-No search was rerun during this review. The three queries in the [optional validation runbook](queries/windows-validation.md) remain unexecuted and separate from the historical 11.
+No additional Splunk searches were run during this review. The original dataset remains unavailable for unresolved event-computer, session, and timestamp checks.
 
 ## Completion boundary
 
