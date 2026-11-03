@@ -1,51 +1,51 @@
-# Xavier Tables | SOC Analyst Portfolio
+# Xavier Tables | Cybersecurity Portfolio
 
-**CompTIA Security+ (2026) · Seeking SOC Analyst I · Cleveland, Ohio**
+**CompTIA Security+ (2026)** · **Tri-C SecurePath graduate** · **Cleveland, Ohio**  
+**Seeking SOC Analyst I** · Open to security-adjacent IT and support roles
 
-I completed Tri-C's SecurePath cybersecurity training. These labs document how I review Windows and VPN activity, test explanations, and support my conclusions with queries and screenshots.
+I'm working toward my first professional cybersecurity role. I use this portfolio to show how I investigate, not just which tools I've studied. I want a reader to see **what caught my attention, what I checked, and why I made a decision**.
 
-**[Case brief](docs/splunk-incident-brief.md)** · [SOC résumé](resume/Xavier_Tables_SOC_Resume.pdf) · [LinkedIn](https://www.linkedin.com/in/xaviertables/)
+[**SOC résumé**](resume/Xavier_Tables_SOC_Resume.pdf) · [**LinkedIn**](https://www.linkedin.com/in/xaviertables/) · [**IT support work**](it-support/README.md)
 
-## Featured case: Windows and VPN activity in Splunk
+---
 
-I found **two rare-country VPN events** involving users whose other recorded logins came from a different country. Four transitions around those events were **15–57 minutes apart**. The pattern warranted further identity checks; the available fields did not establish account compromise.
+## Projects at a glance
 
-I compared each user's country and source-IP history, then used SPL to calculate the gaps between logins. The supplied TryHackMe datasets contained 2,000 VPN events and 12,256 Windows events; my query log records 11 executed searches across both.
-
-**Status:** Retrospective screenshot review complete. The VPN anomalies are supported; device, MFA, and routing context remain unavailable. The separate Windows lead shows account activity and Sysmon ancestry, but a common computer/session cannot be established from the retained views. Account compromise is unconfirmed.
-
-**[Read the case brief](docs/splunk-incident-brief.md)** · [Full investigation](projects/splunk-siem-investigation/README.md) · [Executed SPL](projects/splunk-siem-investigation/queries/investigation-queries.md) · [Sample handoff](docs/splunk-retrospective-triage-ticket.md)
-
-## Lab projects
-
-| Project | Work demonstrated | Recorded outcome |
+| Investigation | What I worked on | What the evidence showed |
 | --- | --- | --- |
-| **[Splunk investigation](projects/splunk-siem-investigation/README.md)** | SPL searches, Windows account-event review, Sysmon ancestry, VPN baselining | Two leads assessed with explicit evidence limits; compromise unconfirmed |
-| **[Windows Security Log Triage](projects/windows-security-log-triage/README.md)** | Compared four Event Viewer records and their account/process context | Distinguished an Administrator password change from later SYSTEM service activity |
-| **[Nessus Baseline Scan](projects/nessus-vulnerability-assessment/README.md)** | Configured and completed a guided authenticated scan of one lab host | Recorded severity totals; individual finding validation remains open |
+| **[Splunk: VPN and Windows activity](projects/splunk-siem-investigation/README.md)** | SPL searches, VPN baselines, Windows Security events and Sysmon process relationships | Two unusual VPN country events and four rapid transitions; **account compromise not established**. The separate Windows lead needs stronger host/session correlation. |
+| **[Windows Security Log Triage](projects/windows-security-log-triage/README.md)** | Event Viewer, account changes, Logon IDs and privileged activity | Records supported an Administrator password change; later **SYSTEM service activity was a separate event group**. |
+| **[Nessus Baseline Scan](projects/nessus-vulnerability-assessment/README.md)** | Authenticated vulnerability scan of one Windows lab host | Scan completed and reported severity totals; **individual vulnerabilities still need validation**. |
 
-Each report opens with the question, work performed, finding, status, and evidence links.
+These are training and lab investigations. The write-ups link to the evidence I retained and distinguish findings from follow-up work.
 
-## Evidence preview
+## Featured case: unusual VPN logins in Splunk
 
-<a href="projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png"><img src="projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png" width="640" alt="Splunk query and four VPN country transitions, with intervals of 25, 15, 17, and 57 minutes"></a>
+**What caught my attention:** Two users had logins labelled with countries that were rare compared with their usual activity. Each account had **one outlier among 200 events**.
 
-*Open the screenshot for the original query and results, or review the [full evidence index](projects/splunk-siem-investigation/README.md#evidence).*
+**What I checked:** I compared each user's country and source-IP history, then used SPL to measure time gaps. Four transitions around the outliers occurred **15–57 minutes apart**.
 
-## Tools and background
+**My decision:** That was enough to justify investigating, but not enough to say someone stole an account. I would need device and MFA records, source-IP context, and account-owner confirmation before making that call.
 
-**Documented here:** Splunk/SPL, Windows Event Viewer, Security logs, Sysmon, and Nessus.
+I also reviewed a **separate Windows account-activity lead** in the same project. The retained Security and Sysmon views did not establish a common computer/session, so I kept that conclusion open rather than forcing a connection.
 
-**Additional training:** Windows/Linux, Active Directory fundamentals, Wireshark, Nmap, TCP/IP, DNS, and DHCP.
+[**Read the investigation**](projects/splunk-siem-investigation/README.md) · [Case brief](docs/splunk-incident-brief.md) · [Executed SPL](projects/splunk-siem-investigation/queries/investigation-queries.md) · [Sample SOC handoff](docs/splunk-retrospective-triage-ticket.md)
 
-**Education:** Tri-C SecurePath cybersecurity training, completed June 2026; Associate of Arts, Cuyahoga Community College (2022).
+[![Splunk results showing four rapid country transitions](projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png)](projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png)
 
-## Supplemental hands-on labs
+*The original search and results are in the screenshot. The [full report](projects/splunk-siem-investigation/README.md) explains the query choices and what the data cannot prove.*
 
-[SSH and VNC authentication](labs/remote-access-security/README.md) · [Nmap service discovery](labs/nmap-service-discovery/README.md) · [SMTP enumeration](labs/smtp-enumeration/README.md)
+## How I approach an investigation
 
-I break down remote-access authentication, port discovery, and account-enumeration results from my CySA+ coursework. Each report focuses on what the evidence shows, the risks I'd investigate, and the remediation I'd recommend.
+I'm learning that an unusual event and a confirmed incident are not the same thing. I start by narrowing down what stands out, checking the surrounding context, and writing down what I can actually support. If something doesn't line up—like a Windows Logon ID without the right host or time context—I would rather identify the missing check than make a claim I can't defend.
 
-## More work
+## Tools, training and other work
 
-[IT Support and troubleshooting](it-support/README.md) · [Security research](research/README.md) · [All supplemental labs](labs/README.md)
+- **Documented here:** Splunk / SPL, Windows Event Viewer, Security logs, Sysmon and Nessus.
+- **Additional coursework:** Windows/Linux, Active Directory fundamentals, Wireshark, Nmap, TCP/IP, DNS and DHCP.
+- **Training:** Tri-C SecurePath Cybersecurity Program, completed June 2026; CompTIA Security+ certified in 2026.
+- **Education:** Associate of Arts, Cuyahoga Community College, December 2016.
+
+**More lab work:** [Nmap service discovery](labs/nmap-service-discovery/README.md) · [SSH and VNC authentication](labs/remote-access-security/README.md) · [SMTP enumeration](labs/smtp-enumeration/README.md)
+
+**More writing:** [Security research](research/README.md) · [IT support and troubleshooting](it-support/README.md)
