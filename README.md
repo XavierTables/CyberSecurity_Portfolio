@@ -31,7 +31,7 @@ I also reviewed a **separate Windows account-activity lead** in the same project
 
 [**Read the investigation**](projects/splunk-siem-investigation/README.md) · [Case brief](docs/splunk-incident-brief.md) · [Executed SPL](projects/splunk-siem-investigation/queries/investigation-queries.md) · [Sample SOC handoff](docs/splunk-retrospective-triage-ticket.md)
 
-[![Splunk results showing four rapid country transitions](projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png)](projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png)
+<a href="projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png"><img src="projects/splunk-siem-investigation/evidence/09-vpn-rapid-country-switch-detection.png" width="680" alt="Splunk results showing four rapid country transitions"></a>
 
 *The original search and results are in the screenshot. The [full report](projects/splunk-siem-investigation/README.md) explains the query choices and what the data cannot prove.*
 
