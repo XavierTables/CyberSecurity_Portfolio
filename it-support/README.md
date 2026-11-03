@@ -1,23 +1,31 @@
-# IT Support and Troubleshooting
+# IT Support & Troubleshooting
 
-[Portfolio](../README.md) · [LinkedIn](https://www.linkedin.com/in/xaviertables/)
+**Also pursuing:** Service Desk I · Desktop Support · Security-adjacent IT roles  
+[Cybersecurity portfolio](../README.md) · [SOC résumé](../resume/Xavier_Tables_SOC_Resume.pdf) · [LinkedIn](https://www.linkedin.com/in/xaviertables/)
 
-My background includes PC building, informal computer/home-network support, and Windows/Active Directory training through SecurePath.
+I enjoy figuring out why something isn't working and explaining the fix in a way the other person can follow. I've built PCs, helped family with computer and home-network issues, and studied Windows, Active Directory fundamentals and networking through Tri-C SecurePath.
 
-## Documented Windows account review
+## At a glance
 
-**[Windows Security Log Triage: report and evidence](../projects/windows-security-log-triage/README.md)**
-
-I examined password-reset/account-change records, then checked whether a later privileged logon was related. Events 4724 and 4738 supported an Administrator password change. The later 4624/4672 records belonged to SYSTEM and `services.exe`, so I kept that activity separate.
-
-The follow-up is to confirm reset authorization with the responsible administrator. This case demonstrates log review; it does not document an end-user repair.
-
-[Password-reset record](../projects/windows-security-log-triage/evidence/ac5ea633-98af-448d-9494-0c9ae7b92020.png) · [Account-change record](../projects/windows-security-log-triage/evidence/14b8b493-6ed4-4d86-b2e7-7dfeafe523d8.png) · [SYSTEM logon](../projects/windows-security-log-triage/evidence/58554701-3442-490a-b343-e9d28a6551ae.png)
-
-## Additional experience and training
-
-| Area | Background |
+| Area | What I can discuss or show |
 | --- | --- |
-| PC and home support | Built PCs and helped family with hardware, software, and home-network issues |
-| Windows and Active Directory | Training in users, groups, password resets, and permission concepts |
-| Networking | Training with Wireshark, Nmap, command-line tools, TCP/IP, DNS, and DHCP |
+| **Windows account and event review** | [Documented Event Viewer case](../projects/windows-security-log-triage/README.md) with screenshots, a timeline and my reasoning |
+| **PC troubleshooting** | Experience building PCs and helping with hardware and software problems at home |
+| **Network fundamentals** | TCP/IP, DNS, DHCP, basic connectivity checks and [Nmap service discovery](../labs/nmap-service-discovery/README.md) |
+| **Account administration concepts** | Windows users, groups, password resets and permissions covered in SecurePath training |
+
+## Featured case: separating account changes from normal SYSTEM activity
+
+**Question:** Were an Administrator password change and later privileged Windows events part of the same suspicious sequence?
+
+I examined Event IDs **4724, 4738, 4624 and 4672** and compared the accounts, Logon IDs, processes and timestamps. The first two records supported a password change. The later privileged events were associated with `SYSTEM` and `services.exe`, so I did **not** treat them as proof of a related compromise.
+
+**Next check:** Confirm whether the password change was authorized, then examine surrounding authentication activity if needed.
+
+[**Read my walkthrough and see the evidence**](../projects/windows-security-log-triage/README.md)
+
+## How I approach troubleshooting
+
+I want to understand the user's symptoms first, narrow down the possible causes, make one change at a time, and verify the result. I also want to leave notes clear enough that another technician could understand what I checked.
+
+**Next practical project:** Document a full end-user access or shared-folder permissions support case—from reported problem through diagnosis, resolution and verification. My current Windows case is a **log-review investigation**, not a completed end-user support ticket.
