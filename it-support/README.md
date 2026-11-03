@@ -1,9 +1,9 @@
-# IT Support & Troubleshooting
+# Windows & IT Troubleshooting | Supporting Skills
 
-**Also pursuing:** Service Desk I · Desktop Support · Security-adjacent IT roles  
+**Supporting my SOC focus:** Windows troubleshooting · Accounts and permissions · Networking fundamentals  
 [Cybersecurity portfolio](../README.md) · [SOC résumé](../resume/Xavier_Tables_SOC_Resume.pdf) · [LinkedIn](https://www.linkedin.com/in/xaviertables/)
 
-I enjoy figuring out why something isn't working and explaining the fix in a way the other person can follow. I've built PCs, helped family with computer and home-network issues, and studied Windows, Active Directory fundamentals and networking through Tri-C SecurePath.
+I enjoy figuring out why something isn't working and explaining the fix in a way the other person can follow. I've built PCs, helped family with computer and home-network issues, and studied Windows, Active Directory fundamentals and networking through Tri-C SecurePath. These are useful foundations for investigating endpoint and identity alerts in a SOC.
 
 ## At a glance
 
