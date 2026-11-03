@@ -1,6 +1,6 @@
 # Xavier Tables | Cybersecurity Portfolio
 
-**CompTIA Security+ (2026)** · **Tri-C SecurePath graduate** · **Cleveland, Ohio**  
+**CompTIA Security+ (SY0-701, 2026)** · [**Verify credential**](https://cp.certmetrics.com/comptia/en/public/verify/credential/6db4d2287b874b0691ab56167cc0d7ff) · **Tri-C SecurePath graduate** · **Cleveland, Ohio**  
 **Seeking SOC Analyst I** · Open to security-adjacent IT and support roles
 
 I'm working toward my first professional cybersecurity role. I use this portfolio to show how I investigate, not just which tools I've studied. I want a reader to see **what caught my attention, what I checked, and why I made a decision**.
