@@ -4,17 +4,26 @@
 
 [Portfolio](../../README.md) · [Case brief](../../docs/splunk-incident-brief.md) · [Executed queries](queries/investigation-queries.md) · [Sample handoff](../../docs/splunk-retrospective-triage-ticket.md)
 
-## Summary
+## Case at a glance
 
-**Question:** What could rare Windows account changes and unusual VPN country patterns tell me about activity worth investigating?
+| Lead | What I checked | What I could establish |
+| --- | --- | --- |
+| **Unusual VPN logins** | User/country baselines, source IPs, and time gaps between logins | Two rare-country events and four surrounding transitions **15–57 minutes apart**. Worth further identity checks; **not proof of account compromise**. |
+| **Windows account activity** | Security logon/account events, Logon IDs and Sysmon process relationships | Account activity and process ancestry were visible, but I **couldn't verify a shared computer/session** across the retained views. |
 
-**Work performed:** I ran 11 SPL searches across supplied Windows and VPN datasets. I reviewed account/logon events, compared Sysmon process GUIDs, and calculated per-user country baselines and login intervals.
+**My evidence:** [11 recorded SPL searches](queries/investigation-queries.md) · [9 retained screenshots](#evidence) · [Screenshot review](evidence-review.md) · [Sample SOC handoff](../../docs/splunk-retrospective-triage-ticket.md)
 
-**Finding:** The VPN searches found two rare-country events and four surrounding transitions, 15–57 minutes apart. Windows searches identified account activity and separate Sysmon parent-child relationships.
+**Scope:** Supplied TryHackMe datasets (12,256 Windows events and 2,000 VPN events). I revisited the retained screenshots on October 26, 2026. The source logs are no longer available to rerun the missing checks.
 
-**Status:** Retrospective evidence review complete, October 26, 2026. The conclusions are limited to nine retained screenshots and the historical query log; only screenshots are now available for validation. Account compromise is unconfirmed. A common Windows computer/session and reliable cross-source timing cannot be established from the retained views. VPN device, MFA, source-IP, and account-owner context are unavailable.
+## How I worked through it
 
-**Evidence:** [Historical queries](queries/investigation-queries.md) · [Screenshots](#evidence) · [Screenshot review and final decisions](evidence-review.md) · [Case brief](../../docs/splunk-incident-brief.md)
+The VPN activity caught my attention because each account mostly appeared in one country, with just one event from somewhere else. I checked the users' normal history before deciding whether those events were meaningful, then measured the time between their surrounding logins.
+
+The transitions were fast enough to deserve follow-up. But country labels alone don't tell me who was at the keyboard. Device details, MFA results, source-IP ownership and possible VPN/proxy routing would have to be checked before I could call it account misuse.
+
+The Windows lead taught me a different lesson. A matching account or Logon ID looked useful, but I couldn't reliably link the Security events to the Sysmon process rows without confirming the computer and time context. I kept the process ancestry and logon evidence separate rather than turning an incomplete correlation into a definite incident.
+
+**My decision:** Document the unusual activity, explain the evidence gaps, and recommend specific follow-up checks. Neither lead establishes unauthorized access from the material I retained.
 
 ## Data and method
 
