@@ -1,11 +1,12 @@
-# Xavier Tables | Cybersecurity Portfolio
+# Xavier Tables | SOC Analyst I Portfolio
 
 **CompTIA Security+ (SY0-701, 2026)** · [**Verify credential**](https://cp.certmetrics.com/comptia/en/public/verify/credential/6db4d2287b874b0691ab56167cc0d7ff) · **Tri-C SecurePath graduate** · **Cleveland, Ohio**  
-**Seeking SOC Analyst I** · Open to security-adjacent IT and support roles
+**Career focus: SOC Analyst I / Tier 1 Security Operations**  
+*Splunk investigations · Windows security logs · Alert triage · Evidence-based decisions*
 
-I'm working toward my first professional cybersecurity role. I use this portfolio to show how I investigate, not just which tools I've studied. I want a reader to see **what caught my attention, what I checked, and why I made a decision**.
+I'm working toward my first SOC Analyst role. I use this portfolio to show **how I work through an investigation**, not just which tools I've studied: what stood out, how I checked it, and what I could support with the evidence. These are labs and training investigations, not production SOC incidents.
 
-[**SOC résumé**](resume/Xavier_Tables_SOC_Resume.pdf) · [**LinkedIn**](https://www.linkedin.com/in/xaviertables/) · [**IT support work**](it-support/README.md)
+[**SOC résumé**](resume/Xavier_Tables_SOC_Resume.pdf) · [**LinkedIn**](https://www.linkedin.com/in/xaviertables/) · [**Featured investigation**](projects/splunk-siem-investigation/README.md)
 
 ---
 
@@ -39,7 +40,7 @@ I also reviewed a **separate Windows account-activity lead** in the same project
 
 I'm learning that an unusual event and a confirmed incident are not the same thing. I start by narrowing down what stands out, checking the surrounding context, and writing down what I can actually support. If something doesn't line up—like a Windows Logon ID without the right host or time context—I would rather identify the missing check than make a claim I can't defend.
 
-## Tools, training and other work
+## Tools and training
 
 - **Documented here:** Splunk / SPL, Windows Event Viewer, Security logs, Sysmon and Nessus.
 - **Additional coursework:** Windows/Linux, Active Directory fundamentals, Wireshark, Nmap, TCP/IP, DNS and DHCP.
@@ -48,4 +49,4 @@ I'm learning that an unusual event and a confirmed incident are not the same thi
 
 **More lab work:** [Nmap service discovery](labs/nmap-service-discovery/README.md) · [SSH and VNC authentication](labs/remote-access-security/README.md) · [SMTP enumeration](labs/smtp-enumeration/README.md)
 
-**More writing:** [Security research](research/README.md) · [IT support and troubleshooting](it-support/README.md)
+**Additional work:** [Security research](research/README.md) · [Windows and IT troubleshooting fundamentals](it-support/README.md)
