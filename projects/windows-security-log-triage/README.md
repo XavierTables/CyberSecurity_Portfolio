@@ -33,11 +33,11 @@ The source Security log contained **6,530 events**. I manually examined **four**
 | 9:35:47 PM | 4624 | SYSTEM logon; `services.exe`; Logon ID `0x3E7` |
 | 9:35:47 PM | 4672 | Sensitive privileges assigned in the SYSTEM context |
 
-## Why I kept the events separate
+## Evidence behind the SYSTEM assessment
 
-Event 4672 caught my attention because it records sensitive privileges. My interpretation changed when I checked the related 4624 event: the account was SYSTEM, the process was `services.exe`, and the Logon ID was `0x3E7`. Those details pointed toward routine service activity. A four-minute gap alone did not connect it to the password reset.
+The 4624 record showed `NT AUTHORITY\\SYSTEM`, `services.exe` and dashes for source IP and port. Event 4672, at the same displayed time, listed `SeDebugPrivilege`, `SeBackupPrivilege`, `SeRestorePrivilege` and `SeImpersonatePrivilege`.
 
-The 4624 record showed `NT AUTHORITY\SYSTEM`, `services.exe`, and dashes for source IP/port. Event 4672 at the same displayed time listed `SeDebugPrivilege`, `SeBackupPrivilege`, `SeRestorePrivilege`, and `SeImpersonatePrivilege`.
+That event pair occurred roughly four minutes after the account-change records. The time gap alone was not enough to tie the two groups together.
 
 ## Administrator password change
 
