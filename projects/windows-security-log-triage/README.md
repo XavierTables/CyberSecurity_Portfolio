@@ -4,17 +4,21 @@
 
 [Portfolio](../../README.md) · [Evidence index](#evidence)
 
-## Summary
+## Case at a glance
 
-**Question:** Did an Administrator password reset and later privileged SYSTEM activity belong to the same suspicious sequence?
+| My question | What I checked | What I concluded |
+| --- | --- | --- |
+| Did the Administrator password change and later privileged activity belong to the same suspicious sequence? | Four Event Viewer records: **4724, 4738, 4624 and 4672**; account names, Logon IDs, timestamps and processes | The first pair supported an **Administrator password change**. The later pair matched **SYSTEM service activity**, not a proven continuation of the reset. |
 
-**Work performed:** I manually compared four Event Viewer records, checking timestamps, accounts, Logon IDs, processes, and account-change fields.
+**Evidence:** [Event timeline](#scope-and-timeline) · [Original screenshots](#evidence)
 
-**Finding:** Events 4724 and 4738 supported an Administrator password change. The later 4624/4672 records were consistent with SYSTEM service activity, so I kept the two groups separate.
+**Limit:** I reviewed four selected records from a supplied Windows training log. I couldn't verify who approved the password change or assess the rest of the host from those four records alone.
 
-**Status:** Moderate confidence within the four-record scope. Password-reset authorization remains unverified, and these records do not establish a broader host-security conclusion.
+## Why I looked twice
 
-**Evidence:** [Screenshots](#evidence) · [Event timeline](#scope-and-timeline). The raw EVTX is unavailable; the repository retains the export screenshot.
+Event 4672 stood out because it listed sensitive privileges. I didn't want to assume that meant someone had escalated access. I checked the nearby logon and found `NT AUTHORITY\\SYSTEM`, `services.exe`, and Logon ID `0x3E7`. Those details changed how I interpreted the later activity.
+
+I kept the password-change records and the SYSTEM service records separate. My next step in a real support or security workflow would be to verify whether the Administrator change was approved, then review other relevant authentication and process events if it wasn't.
 
 ## Scope and timeline
 
