@@ -16,7 +16,7 @@
 
 ## Why I looked twice
 
-Event 4672 stood out because it listed sensitive privileges. I didn't want to assume that meant someone had escalated access. I checked the nearby logon and found `NT AUTHORITY\\SYSTEM`, `services.exe`, and Logon ID `0x3E7`. Those details changed how I interpreted the later activity.
+Event 4672 stood out because it listed sensitive privileges. I didn't want to assume that meant someone had escalated access. I checked the nearby logon and found `NT AUTHORITY\SYSTEM`, `services.exe`, and Logon ID `0x3E7`. Those details changed how I interpreted the later activity.
 
 I kept the password-change records and the SYSTEM service records separate. My next step in a real support or security workflow would be to verify whether the Administrator change was approved, then review other relevant authentication and process events if it wasn't.
 
@@ -35,7 +35,7 @@ The source Security log contained **6,530 events**. I manually examined **four**
 
 ## Evidence behind the SYSTEM assessment
 
-The 4624 record showed `NT AUTHORITY\\SYSTEM`, `services.exe` and dashes for source IP and port. Event 4672, at the same displayed time, listed `SeDebugPrivilege`, `SeBackupPrivilege`, `SeRestorePrivilege` and `SeImpersonatePrivilege`.
+The 4624 record showed `NT AUTHORITY\SYSTEM`, `services.exe` and dashes for source IP and port. Event 4672, at the same displayed time, listed `SeDebugPrivilege`, `SeBackupPrivilege`, `SeRestorePrivilege` and `SeImpersonatePrivilege`.
 
 That event pair occurred roughly four minutes after the account-change records. The time gap alone was not enough to tie the two groups together.
 
